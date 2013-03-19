@@ -12,7 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using KinectAutoCalibration.Beamer;
 using KinectAutoCalibration.Calibration;
+using KinectAutoCalibration.Beamer.Interfaces;
 
 namespace WindowsTest
 {
@@ -21,17 +23,32 @@ namespace WindowsTest
     /// </summary>
     public partial class MainWindow : Window
     {
+        private IBeamerTest beamer;
+        
         public MainWindow()
         {
             InitializeComponent();
+            beamer = new BeamerTest();
+        }
 
-            KinectAutoCalibration.Calibration.Calibration calib = new Calibration();
-            //Window beamer = new Beamer();
-            //beamer.Show();
-            
+        private void DrawCircle_Click(object sender, RoutedEventArgs e)
+        {
+            beamer.DrawCircle();
+        }
 
+        private void DrawChessboard1_Click(object sender, RoutedEventArgs e)
+        {
+            beamer.DrawChessBoard1(Colors.Black, Colors.White);
+        }
 
+        private void DrawChessboard2_Click(object sender, RoutedEventArgs e)
+        {
+            beamer.DrawChessBoard1(Colors.White, Colors.Black);
+        }
 
+        private void DrawChessboard3_Click(object sender, RoutedEventArgs e)
+        {
+            beamer.DrawChessBoard1(Colors.GreenYellow, Colors.Red);
         }
     }
 }

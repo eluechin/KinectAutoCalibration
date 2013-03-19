@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KinectAutoCalibration.Beame
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KinectAutoCalibration.Calibration", "KinectAutoCalibration.Calibration\KinectAutoCalibration.Calibration.csproj", "{D30A1C6E-21BB-4175-A19D-B152C53E766F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsTest", "WindowsTest\WindowsTest.csproj", "{6B3E53D3-E947-4B05-990D-DFA57D111730}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeamerControl", "WindowsTest\BeamerControl.csproj", "{6B3E53D3-E947-4B05-990D-DFA57D111730}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
