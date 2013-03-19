@@ -39,8 +39,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="2DVector.cs" />
+    <Compile Include="Algorithms\KMeans.cs" />
+    <Compile Include="Interfaces\IPoint2D.cs" />
+    <Compile Include="Interfaces\IVector.cs" />
+    <Compile Include="KinectPoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

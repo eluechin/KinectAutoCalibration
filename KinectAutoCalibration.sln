@@ -1,9 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KinectAutoCalibration", "KinectAutoCalibration\KinectAutoCalibration.csproj", "{E2CD2F16-1FC6-45FE-93C2-7617F94BA6AD}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test_DifferenzBilder", "Test_DifferenzBilder\DifferenzBilder\Test_DifferenzBilder\Test_DifferenzBilder\Test_DifferenzBilder.csproj", "{3E6A9CA9-E520-451C-AB80-D531840FF1A3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Prototype", "Prototype", "{4558ACB8-2C34-425A-82E7-3B24A227B114}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KinectAutoCalibration.Common", "KinectAutoCalibration.Common\KinectAutoCalibration.Common.csproj", "{AD9D77A9-7904-47D3-9526-12D64F6F4ECD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KinectAutoCalibration.Beamer", "KinectAutoCalibration.Beamer\KinectAutoCalibration.Beamer.csproj", "{B7690C6F-242E-46B5-A9BB-7A00D43CFA40}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KinectAutoCalibration.Calibration", "KinectAutoCalibration.Calibration\KinectAutoCalibration.Calibration.csproj", "{D30A1C6E-21BB-4175-A19D-B152C53E766F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsTest", "WindowsTest\WindowsTest.csproj", "{6B3E53D3-E947-4B05-990D-DFA57D111730}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,16 +19,31 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E2CD2F16-1FC6-45FE-93C2-7617F94BA6AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E2CD2F16-1FC6-45FE-93C2-7617F94BA6AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E2CD2F16-1FC6-45FE-93C2-7617F94BA6AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E2CD2F16-1FC6-45FE-93C2-7617F94BA6AD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3E6A9CA9-E520-451C-AB80-D531840FF1A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3E6A9CA9-E520-451C-AB80-D531840FF1A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E6A9CA9-E520-451C-AB80-D531840FF1A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E6A9CA9-E520-451C-AB80-D531840FF1A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD9D77A9-7904-47D3-9526-12D64F6F4ECD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD9D77A9-7904-47D3-9526-12D64F6F4ECD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD9D77A9-7904-47D3-9526-12D64F6F4ECD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD9D77A9-7904-47D3-9526-12D64F6F4ECD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7690C6F-242E-46B5-A9BB-7A00D43CFA40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7690C6F-242E-46B5-A9BB-7A00D43CFA40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7690C6F-242E-46B5-A9BB-7A00D43CFA40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7690C6F-242E-46B5-A9BB-7A00D43CFA40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D30A1C6E-21BB-4175-A19D-B152C53E766F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D30A1C6E-21BB-4175-A19D-B152C53E766F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D30A1C6E-21BB-4175-A19D-B152C53E766F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D30A1C6E-21BB-4175-A19D-B152C53E766F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B3E53D3-E947-4B05-990D-DFA57D111730}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B3E53D3-E947-4B05-990D-DFA57D111730}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B3E53D3-E947-4B05-990D-DFA57D111730}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B3E53D3-E947-4B05-990D-DFA57D111730}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3E6A9CA9-E520-451C-AB80-D531840FF1A3} = {4558ACB8-2C34-425A-82E7-3B24A227B114}
 	EndGlobalSection
 EndGlobal
