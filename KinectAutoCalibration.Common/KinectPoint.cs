@@ -4,18 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Test_DifferenzBilder
+namespace KinectAutoCalibration.Common
 {
-    class KinectPoint
+    public class KinectPoint
     {
-        private int x;
-        private int y;
-        private int z;
-        private int r;
-        private int g;
-        private int b;
-        private int type;
-
         public KinectPoint()
         {
             this.X = 0;
@@ -24,7 +16,7 @@ namespace Test_DifferenzBilder
             this.R = 0;
             this.G = 0;
             this.B = 0;
-            this.type = 0;
+            this.Type = 0;
         }
 
         public KinectPoint(int x, int y, int r, int g, int b) : this()
