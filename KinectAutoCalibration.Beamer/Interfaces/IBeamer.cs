@@ -8,6 +8,6 @@ namespace KinectAutoCalibration.Beamer.Interfaces
 {
     public interface IBeamer
     {
-        void SetWindowFullScreen();
+        void DisplayCalibrationImage(bool isInverted);
     }
 }

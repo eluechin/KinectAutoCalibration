@@ -24,11 +24,13 @@ namespace WindowsTest
     public partial class MainWindow : Window
     {
         private IBeamerTest beamer;
+        private IBeamer beamer2;
         
         public MainWindow()
         {
             InitializeComponent();
             beamer = new BeamerTest();
+            beamer2 = new Beamer();
         }
 
         private void DrawCircle_Click(object sender, RoutedEventArgs e)
@@ -49,6 +51,17 @@ namespace WindowsTest
         private void DrawChessboard3_Click(object sender, RoutedEventArgs e)
         {
             beamer.DrawChessBoard1(Colors.GreenYellow, Colors.Red);
+            
+        }
+
+        private void CalibImg_Click(object sender, RoutedEventArgs e)
+        {
+           beamer2.DisplayCalibrationImage(false);
+        }
+
+        private void CalibImgInv_Click(object sender, RoutedEventArgs e)
+        {
+            beamer2.DisplayCalibrationImage(true);
         }
     }
 }

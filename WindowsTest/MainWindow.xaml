@@ -7,5 +7,7 @@
         <Button Content="Draw Chessboard Black/White" Click="DrawChessboard1_Click"/>
         <Button Content="Draw Chessboard White/Black" Click="DrawChessboard2_Click"></Button>
         <Button Content="Draw Chessboard Green/Red" Click="DrawChessboard3_Click"></Button>
+        <Button Content="Draw Calib img" Click="CalibImg_Click"></Button>
+        <Button Content="Draw Calib img inverted" Click="CalibImgInv_Click"></Button>
     </StackPanel>
 </Window>
