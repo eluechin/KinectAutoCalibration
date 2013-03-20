@@ -10,10 +10,8 @@ namespace KinectAutoCalibration.Common.Algorithms
     public static class KMeans
     {
 
-        public static List<IPoint2D> DoKMeans(List<IPoint2D> points, int centroidCount, int width, int height)
+        public static List<IPoint2D> DoKMeans(List<IVector> vectorPoints, List<IVector> vectorCentroids)
         {
-            var vectorCentroids = CreateCentroids(centroidCount, width, height);
-            var vectorPoints = ConvertPointToVector(points);
             HashSet<IVector> newVectorCentroids = null;
             var finish = true;
             var count = 1;
@@ -29,14 +27,14 @@ namespace KinectAutoCalibration.Common.Algorithms
                     var v2 = newVectorCentroids.ElementAt(i);
                     if (v1 != v2)
                     {
-                        //finish = false;
+                        finish = false;
                     }
                 }
-                if (count == 50)
-                {
-                    finish = false;
-                }
-                count++;
+                //if (count == 50)
+                //{
+                //    finish = false;
+                //}
+                //count++;
             }
 
             return VectorToPoint(newVectorCentroids.ToList());
@@ -78,12 +76,12 @@ namespace KinectAutoCalibration.Common.Algorithms
             foreach (var centroid in centroidsToPoint)
             {
                 var pointList = centroid.Value;
-                var sum = new Vector2D();
+                IVector sum = null;
                 foreach (var p in pointList)
                 {
-                    sum = (Vector2D)sum.Add(p);
+                    sum = p.Add(sum);
                 }
-                sum = (Vector2D) sum.Divide(pointList.Count);
+                sum = sum.Divide(pointList.Count);
 
                 newVectorCentroids.Add(sum);
             }
@@ -92,7 +90,7 @@ namespace KinectAutoCalibration.Common.Algorithms
 
         }
 
-        private static Dictionary<IVector, IVector> MapPointsToNearestCentroids(List<IVector> vectorPoints, HashSet<IVector> vectorCentroids)
+        private static Dictionary<IVector, IVector> MapPointsToNearestCentroids(List<IVector> vectorPoints, List<IVector> vectorCentroids)
         {
             var centroidToPoint = new Dictionary<IVector, IVector>();
             foreach (var point in vectorPoints)
@@ -115,29 +113,6 @@ namespace KinectAutoCalibration.Common.Algorithms
             return centroidToPoint;
         }
 
-        private static HashSet<IVector> CreateCentroids(int centroidCount, int width, int height)
-        {
-            var vectorCentroids = new HashSet<IVector>();
-            var rnd = new Random();
-            for (var i = 0; i < centroidCount; i++)
-            {
-                var x = rnd.Next(0, width - 1);
-                var y = rnd.Next(0, height - 1);
-
-                vectorCentroids.Add(new Vector2D { X = x, Y = y });
-            }
-            return vectorCentroids;
-        }
-
-        private static List<IVector> ConvertPointToVector(IEnumerable<IPoint2D> points)
-        {
-            var vectorPoints = new List<IVector>();
-            foreach (var p in points)
-            {
-                vectorPoints.Add(new Vector2D { X = p.X, Y = p.Y });
-            }
-
-            return vectorPoints;
-        }
+        
     }
 }

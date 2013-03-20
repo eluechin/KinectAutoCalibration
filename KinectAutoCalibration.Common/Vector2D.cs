@@ -7,13 +7,17 @@ using KinectAutoCalibration.Common.Interfaces;
 
 namespace KinectAutoCalibration.Common
 {
-    class Vector2D : IVector
+    public class Vector2D : IVector
     {
         public double X { get; set; }
         public double Y { get; set; }
 
         public IVector Add(IVector vector)
         {
+            if (vector == null)
+            {
+                return this;
+            } 
             return new Vector2D()
                 {
                     X = this.X + vector.X,
