@@ -14,6 +14,7 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeamerControl", "WindowsTest\BeamerControl.csproj", "{6B3E53D3-E947-4B05-990D-DFA57D111730}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KMeansTest", "KMeansTest\KMeansTest.csproj", "{8D7C88D5-A46D-48EC-8737-745BE18A9C0B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KinectAutoCalibration.Kinect", "KinectAutoCalibration.Kinect\KinectAutoCalibration.Kinect.csproj", "{DC908959-89E9-487A-A54E-868465DB099C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +46,10 @@ Global
 		{8D7C88D5-A46D-48EC-8737-745BE18A9C0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D7C88D5-A46D-48EC-8737-745BE18A9C0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8D7C88D5-A46D-48EC-8737-745BE18A9C0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC908959-89E9-487A-A54E-868465DB099C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC908959-89E9-487A-A54E-868465DB099C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC908959-89E9-487A-A54E-868465DB099C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC908959-89E9-487A-A54E-868465DB099C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
