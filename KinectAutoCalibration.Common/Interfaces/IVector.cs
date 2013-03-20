@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace KinectAutoCalibration.Common.Interfaces
 {
-    public interface IVector
+    public interface IVector: IComparable
     {
-        int X { get; set; }
-        int Y { get; set; }
+        double X { get; set; }
+        double Y { get; set; }
 
         IVector Add(IVector vector);
         IVector Multiply(double d);
