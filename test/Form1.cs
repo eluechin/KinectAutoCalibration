@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using KinectAutoCalibration.Common; 
 
 namespace test
 {
@@ -16,10 +17,10 @@ namespace test
         {
             InitializeComponent();
             int tolerance = 0x64;
-            Color red = Color.Red;
-            Color green = Color.Lime;
+            Color color1 = Color.Black;
+            Color color2 = Color.White;
 
-
+            /*
             MessageBox.Show(
                 (
                 (green.R + tolerance <= red.R || green.R - tolerance >= red.R) &&
@@ -28,7 +29,15 @@ namespace test
                 
                 (green.B + tolerance <= red.B || green.B - tolerance >= red.B)
                 ).ToString());
-          
+             */
+
+            Vector3D vector1 = new Vector3D(color1.R, color1.G, color1.B);
+            Vector3D vector2 = new Vector3D(color2.R, color2.G, color2.B);
+            Vector3D diffVector = (Vector3D)vector1.Subtract(vector2);
+            double length = diffVector.GetLength();
+
+            MessageBox.Show((length > 350).ToString());
+
         }
     }
 }

@@ -74,6 +74,12 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\KinectAutoCalibration.Common\KinectAutoCalibration.Common.csproj">
+      <Project>{ad9d77a9-7904-47d3-9526-12d64f6f4ecd}</Project>
+      <Name>KinectAutoCalibration.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
