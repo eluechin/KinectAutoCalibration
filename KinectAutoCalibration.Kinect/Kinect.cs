@@ -56,7 +56,7 @@ namespace KinectAutoCalibration.Kinect
             if (picture1 != null || picture2 != null)
             {
 
-
+                int threshold = 350;
                 int width = _kinect.ColorStream.FrameWidth;
                 int height = _kinect.ColorStream.FrameHeight;
 
@@ -76,7 +76,13 @@ namespace KinectAutoCalibration.Kinect
                             (picture2[x, y].B + tolerance <= picture1[x, y].B || picture2[x, y].B - tolerance >= picture1[x, y].B))
                         { */
 
+                        //Variante 2: Vektor-Differenz
+                        Vector3D vector1 = new Vector3D(picture1[x, y].R, picture1[x, y].G, picture1[x, y].B);
+                        Vector3D vector2 = new Vector3D(picture2[x, y].R, picture2[x, y].G, picture2[x, y].B);
+                        Vector3D diffVector = (Vector3D)vector1.Subtract(vector2);
 
+                        if (diffVector.GetLength() > threshold)
+                        {
                             diffImage[x, y].B = 0x00; //Blue
                             diffImage[x, y].G = 0x00; //Green
                             diffImage[x, y].R = 0x00; //Red

@@ -46,6 +46,7 @@
     <Compile Include="Interfaces\IVector.cs" />
     <Compile Include="KinectPoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Vector3D.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

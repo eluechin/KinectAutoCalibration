@@ -7,11 +7,18 @@ using KinectAutoCalibration.Common.Interfaces;
 
 namespace KinectAutoCalibration.Common
 {
-    class Vector3D : IVector
+    public class Vector3D : IVector
     {
         public double X { get; set; }
         public double Y { get; set; }
         public double Z { get; set; }
+
+        public Vector3D(double x, double y, double z)
+        {
+            this.X = x;
+            this.Y = y;
+            this.Z = z;
+        }
 
         public IVector Add(IVector vector)
         {
@@ -19,42 +26,39 @@ namespace KinectAutoCalibration.Common
             {
                 return this;
             }
-            return new Vector3D()
-            {
-                X = this.X + vector.X,
-                Y = this.Y + vector.Y,
-                Z = this.Z + vector.Z
-            };
+            return new Vector3D(
+                this.X + vector.X,
+                this.Y + vector.Y,
+                this.Z + vector.Z
+            );
         }
 
         public IVector Multiply(double d)
         {
-            return new Vector3D()
-            {
-                X = (int)(X * d),
-                Y = (int)(Y * d),
-                Z = (int)(Z * d)
-            };
+            return new Vector3D(
+                (int)(X * d),
+                (int)(Y * d),
+                (int)(Z * d)
+            );
         }
 
         public IVector Subtract(IVector vector)
         {
-            return new Vector3D()
-            {
-                X = this.X - vector.X,
-                Y = this.Y - vector.Y,
-                Z = this.Z - vector.Z
-            };
+            return new Vector3D(
+                this.X - vector.X,
+                this.Y - vector.Y,
+                this.Z - vector.Z
+            );
         }
 
         public IVector Divide(double d)
         {
-            return new Vector3D()
-            {
-                X = (int)(X / d),
-                Y = (int)(Y / d),
-                Z = (int)(Z / d)
-            };
+            return new Vector3D(
+                
+                (int)(X / d),
+                (int)(Y / d),
+                (int)(Z / d)
+            );
         }
 
         public double GetLength()
