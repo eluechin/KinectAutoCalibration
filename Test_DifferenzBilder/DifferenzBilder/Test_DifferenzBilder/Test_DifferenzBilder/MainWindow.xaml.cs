@@ -50,7 +50,6 @@ namespace Test_DifferenzBilder
         {
             _iKinect = new Kinect();
             InitializeComponent();
-            
             this._kinect = _iKinect.DiscoverKinectSensor();
             Initialize();
 
@@ -58,6 +57,7 @@ namespace Test_DifferenzBilder
             pic1 = _iKinect.GetColorImage(); //2nd Pic: too dark
             pic1 = _iKinect.GetColorImage(); //3rd Pic: not the same brightness as "real" image
             pic1 = _iKinect.GetColorImage(); //4th Pic: okay!
+            
             MessageBox.Show("Please display the playground", "Display Playground", MessageBoxButton.OK,
                             MessageBoxImage.Information);
 
@@ -71,20 +71,6 @@ namespace Test_DifferenzBilder
 
             KinectPoint[,] depthAndColorPic = _iKinect.GetDepthAndColorImage();
 
-
-            //this._colorImageBitmap.WritePixels(this._colorImageBitmapRect, newPic, this._colorImageStride, 0);
-
-
-
-            //this.ColorImageElement.Source = _iKinect.PrintKinectPointArray(newPic, 640, 480);
-            //this.ColorImageElement2.Source = _iKinect.PrintKinectPointArray(depthAndColorPic, 640, 480);
-            //this.ColorImageElement3.Source = _iKinect.PrintKinectPointArray(pic1, 640, 480);
-            //this.ColorImageElement4.Source = _iKinect.PrintKinectPointArray(pic2, 640, 480);
-            //this.DepthImageElement.Source = _iKinect.PrintKinectPointArray(depthAndColorPic, 640, 480);
-            //this._rawDepthImage2.WritePixels(this._rawDepthImageRect, depthPic, this._rawDepthImageStride, 0);
-
-            //PrintKinectPointArray(pic1, 640, 480, this._colorImageBitmap3);
-            //PrintKinectPointArray(pic2, 640, 480, this._colorImageBitmap4);
 
             this._colorImageBitmap.WritePixels(this._colorImageBitmapRect, PrintKinectPointArray(newPic, 640, 480), this._colorImageStride, 0);
             this._colorImageBitmap2.WritePixels(this._colorImageBitmapRect, PrintKinectPointArray(depthAndColorPic, 640, 480), this._colorImageStride, 0);
@@ -101,10 +87,6 @@ namespace Test_DifferenzBilder
 
             if (this._kinect != null)
             {
-                //this._kinect.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
-                //this._kinect.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
-                //this._kinect.Start();
-
                 ColorImageStream colorStream = this._kinect.ColorStream;
                 DepthImageStream depthStream = this._kinect.DepthStream;
 

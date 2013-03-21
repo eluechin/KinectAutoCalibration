@@ -69,9 +69,9 @@ namespace KinectAutoCalibration.Kinect
                     {
                         diffImage[x,y] = new KinectPoint();
 
-                        if (picture2[x, y].R + tolerance <= picture1[x, y].R || picture2[x, y].R - tolerance >= picture1[x, y].R &&
-                            picture2[x, y].G + tolerance <= picture1[x, y].G || picture2[x, y].G - tolerance >= picture1[x, y].G &&
-                            picture2[x, y].B + tolerance <= picture1[x, y].B || picture2[x, y].B - tolerance >= picture1[x, y].B)
+                        if ((picture2[x, y].R + tolerance <= picture1[x, y].R || picture2[x, y].R - tolerance >= picture1[x, y].R) &&
+                            (picture2[x, y].G + tolerance <= picture1[x, y].G || picture2[x, y].G - tolerance >= picture1[x, y].G) &&
+                            (picture2[x, y].B + tolerance <= picture1[x, y].B || picture2[x, y].B - tolerance >= picture1[x, y].B))
                         {
                             diffImage[x, y].B = 0x00; //Blue
                             diffImage[x, y].G = 0x00; //Green
