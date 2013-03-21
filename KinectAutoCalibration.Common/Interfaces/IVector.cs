@@ -10,6 +10,7 @@ namespace KinectAutoCalibration.Common.Interfaces
     {
         double X { get; set; }
         double Y { get; set; }
+        double Z { get; set; }
 
         IVector Add(IVector vector);
         IVector Multiply(double d);
