@@ -63,7 +63,7 @@ namespace Test_DifferenzBilder
 
             KinectPoint[,] pic2 = _iKinect.GetColorImage();
 
-            KinectPoint[,] newPic = _iKinect.GetDifferenceImage(pic2, pic1, 210); //0x64, 0x1E, 0x32
+            KinectPoint[,] newPic = _iKinect.GetDifferenceImage(pic2, pic1, 200); //0x64, 0x1E, 0x32
 
 
             short[] depthPic = _iKinect.GetDepthImage();
