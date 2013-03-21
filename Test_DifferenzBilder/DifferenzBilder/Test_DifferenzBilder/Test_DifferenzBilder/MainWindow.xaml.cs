@@ -50,7 +50,9 @@ namespace Test_DifferenzBilder
         {
             _iKinect = new Kinect();
 
-            DiscoverKinectSensor();
+            //DiscoverKinectSensor();
+            this._kinect = _iKinect.DiscoverKinectSensor();
+            Initialize();
 
             KinectPoint[,] pic1 = _iKinect.GetColorImage(); // 1st Pic: strange area
             pic1 = _iKinect.GetColorImage(); //2nd Pic: too dark
@@ -71,68 +73,71 @@ namespace Test_DifferenzBilder
 
 
             //this._colorImageBitmap.WritePixels(this._colorImageBitmapRect, newPic, this._colorImageStride, 0);
-            //this._colorImageBitmap3.WritePixels(this._colorImageBitmapRect, pic1, this._colorImageStride, 0);
-            //this._colorImageBitmap4.WritePixels(this._colorImageBitmapRect, pic2, this._colorImageStride, 0);
 
 
-            this.ColorImageElement.Source = _iKinect.PrintKinectPointArray(newPic, 640, 480);
-            this.ColorImageElement2.Source = _iKinect.PrintKinectPointArray(depthAndColorPic, 640, 480);
-            this.ColorImageElement3.Source = _iKinect.PrintKinectPointArray(pic1, 640, 480);
-            this.ColorImageElement4.Source = _iKinect.PrintKinectPointArray(pic2, 640, 480);
-            this.DepthImageElement.Source = _iKinect.PrintKinectPointArray(depthAndColorPic, 640, 480);
-            this._rawDepthImage2.WritePixels(this._rawDepthImageRect, depthPic, this._rawDepthImageStride, 0);
 
-            
+            //this.ColorImageElement.Source = _iKinect.PrintKinectPointArray(newPic, 640, 480);
+            //this.ColorImageElement2.Source = _iKinect.PrintKinectPointArray(depthAndColorPic, 640, 480);
+            //this.ColorImageElement3.Source = _iKinect.PrintKinectPointArray(pic1, 640, 480);
+            //this.ColorImageElement4.Source = _iKinect.PrintKinectPointArray(pic2, 640, 480);
+            //this.DepthImageElement.Source = _iKinect.PrintKinectPointArray(depthAndColorPic, 640, 480);
+            //this._rawDepthImage2.WritePixels(this._rawDepthImageRect, depthPic, this._rawDepthImageStride, 0);
+
+            _iKinect.PrintKinectPointArray(pic1, 640, 480, this._colorImageBitmap3);
+            _iKinect.PrintKinectPointArray(pic2, 640, 480, this._colorImageBitmap4);
+
         }
 
 
-        private void DiscoverKinectSensor()
+        private void Initialize()
         {
-            if (this._kinect != null && this._kinect.Status != KinectStatus.Connected)
+
+            if (this._kinect != null)
             {
-                this._kinect = null;
-            }
+                //this._kinect.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
+                //this._kinect.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
+                //this._kinect.Start();
 
+                ColorImageStream colorStream = this._kinect.ColorStream;
+                DepthImageStream depthStream = this._kinect.DepthStream;
 
-            if (this._kinect == null)
-            {
-                this._kinect = KinectSensor.KinectSensors.FirstOrDefault(x => x.Status == KinectStatus.Connected);
+                this._colorImageBitmap = new WriteableBitmap(colorStream.FrameWidth, colorStream.FrameHeight, 96, 96,
+                                                             PixelFormats.Bgr32, null);
+                this._colorImageBitmapRect = new Int32Rect(0, 0, colorStream.FrameWidth, colorStream.FrameHeight);
+                this._colorImageStride = colorStream.FrameWidth*colorStream.FrameBytesPerPixel;
+                this._colorImagePixelData = new byte[colorStream.FramePixelDataLength];
+                this.ColorImageElement = new Image();
+                this.ColorImageElement.Source = this._colorImageBitmap;
 
-                if (this._kinect != null)
-                {
-                    this._kinect.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
-                    this._kinect.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
-                    this._kinect.Start();
+                this._colorImageBitmap2 = new WriteableBitmap(colorStream.FrameWidth, colorStream.FrameHeight, 96, 96,
+                                                              PixelFormats.Bgr32, null);
+                this._colorImagePixelData2 = new byte[colorStream.FramePixelDataLength];
+                this.ColorImageElement2 = new Image();
+                this.ColorImageElement2.Source = this._colorImageBitmap2;
 
-                    ColorImageStream colorStream = this._kinect.ColorStream;
-                    DepthImageStream depthStream = this._kinect.DepthStream;
+                this._colorImageBitmap3 = new WriteableBitmap(colorStream.FrameWidth, colorStream.FrameHeight, 96, 96,
+                                                              PixelFormats.Bgr32, null);
+                this._colorImagePixelData3 = new byte[colorStream.FramePixelDataLength];
+                this.ColorImageElement3 = new Image();
+                this.ColorImageElement3.Source = this._colorImageBitmap3;
 
-                    this._colorImageBitmap = new WriteableBitmap(colorStream.FrameWidth, colorStream.FrameHeight, 96, 96, PixelFormats.Bgr32, null);
-                    this._colorImageBitmapRect = new Int32Rect(0, 0, colorStream.FrameWidth, colorStream.FrameHeight);
-                    this._colorImageStride = colorStream.FrameWidth * colorStream.FrameBytesPerPixel;
-                    this._colorImagePixelData = new byte[colorStream.FramePixelDataLength];
-                    this.ColorImageElement.Source = this._colorImageBitmap;
+                this._colorImageBitmap4 = new WriteableBitmap(colorStream.FrameWidth, colorStream.FrameHeight, 96, 96,
+                                                              PixelFormats.Bgr32, null);
+                this._colorImagePixelData4 = new byte[colorStream.FramePixelDataLength];
+                this.ColorImageElement4 = new Image();
+                this.ColorImageElement4.Source = this._colorImageBitmap4;
 
-                    this._colorImageBitmap2 = new WriteableBitmap(colorStream.FrameWidth, colorStream.FrameHeight, 96, 96, PixelFormats.Bgr32, null);
-                    this._colorImagePixelData2 = new byte[colorStream.FramePixelDataLength];
-                    this.ColorImageElement2.Source = this._colorImageBitmap2;
+                this._rawDepthImage = new WriteableBitmap(depthStream.FrameWidth, depthStream.FrameHeight, 96, 96,
+                                                          PixelFormats.Gray16, null);
+                this._rawDepthImageRect = new Int32Rect(0, 0, depthStream.FrameWidth, depthStream.FrameHeight);
+                this._rawDepthImageStride = depthStream.FrameBytesPerPixel*depthStream.FrameWidth;
+                this.DepthImageElement = new Image();
+                this.DepthImageElement.Source = this._rawDepthImage;
 
-                    this._colorImageBitmap3 = new WriteableBitmap(colorStream.FrameWidth, colorStream.FrameHeight, 96, 96, PixelFormats.Bgr32, null);
-                    this._colorImagePixelData3 = new byte[colorStream.FramePixelDataLength];
-                    this.ColorImageElement3.Source = this._colorImageBitmap3;
-
-                    this._colorImageBitmap4 = new WriteableBitmap(colorStream.FrameWidth, colorStream.FrameHeight, 96, 96, PixelFormats.Bgr32, null);
-                    this._colorImagePixelData4 = new byte[colorStream.FramePixelDataLength];
-                    this.ColorImageElement4.Source = this._colorImageBitmap4;
-
-                    this._rawDepthImage = new WriteableBitmap(depthStream.FrameWidth, depthStream.FrameHeight, 96, 96, PixelFormats.Gray16, null);
-                    this._rawDepthImageRect = new Int32Rect(0, 0, depthStream.FrameWidth, depthStream.FrameHeight);
-                    this._rawDepthImageStride = depthStream.FrameBytesPerPixel * depthStream.FrameWidth;
-                    this.DepthImageElement.Source = this._rawDepthImage;
-
-                    this._rawDepthImage2 = new WriteableBitmap(depthStream.FrameWidth, depthStream.FrameHeight, 96, 96, PixelFormats.Gray16, null);
-                    this.DepthImageElement2.Source = this._rawDepthImage2;
-                }
+                this._rawDepthImage2 = new WriteableBitmap(depthStream.FrameWidth, depthStream.FrameHeight, 96, 96,
+                                                           PixelFormats.Gray16, null);
+                this.DepthImageElement2 = new Image();
+                this.DepthImageElement2.Source = this._rawDepthImage2;
             }
         }
     }
