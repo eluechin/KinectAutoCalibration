@@ -19,8 +19,6 @@ namespace KinectAutoCalibration.Kinect
         private WriteableBitmap _colorImageBitmap;
         private Int32Rect _colorImageBitmapRect;
         private int _colorImageStride;
-       
-
 
         private void DiscoverKinectSensor()
         {
