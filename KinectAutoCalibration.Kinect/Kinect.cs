@@ -19,10 +19,8 @@ namespace KinectAutoCalibration.Kinect
         private WriteableBitmap _colorImageBitmap;
         private Int32Rect _colorImageBitmapRect;
         private int _colorImageStride;
-       
 
-
-        private void DiscoverKinectSensor()
+        public KinectSensor DiscoverKinectSensor()
         {
             if (this._kinect != null && this._kinect.Status != KinectStatus.Connected)
             {
@@ -47,40 +45,63 @@ namespace KinectAutoCalibration.Kinect
                     this._colorImageBitmapRect = new Int32Rect(0, 0, colorStream.FrameWidth, colorStream.FrameHeight);
                     this._colorImageStride = colorStream.FrameWidth * colorStream.FrameBytesPerPixel;
 
+                    return this._kinect;
                 }
             }
+            return null;
         }
 
         public KinectPoint[,] GetDifferenceImage(KinectPoint[,] picture2, KinectPoint[,] picture1, int tolerance)
         {
-            int width = _kinect.ColorStream.FrameWidth;
-            int height = _kinect.ColorStream.FrameHeight;
-
-            KinectPoint[,] diffImage = new KinectPoint[width, height];
-
-
-            for (int y = 0; y < height; ++y)
+            if (picture1 != null || picture2 != null)
             {
-                for (int x = 0; x < width; ++x)
+
+                int width = _kinect.ColorStream.FrameWidth;
+                int height = _kinect.ColorStream.FrameHeight;
+
+                KinectPoint[,] diffImage = new KinectPoint[width,height];
+
+
+                for (int y = 0; y < height; ++y)
                 {
-                    if (picture2[x, y].R + tolerance <= picture1[x, y].R || picture2[x, y].R - tolerance >= picture1[x, y].R &&
-                        picture2[x, y].G + tolerance <= picture1[x, y].G || picture2[x, y].G - tolerance >= picture1[x, y].G &&
-                        picture2[x, y].B + tolerance <= picture1[x, y].B || picture2[x, y].B - tolerance >= picture1[x, y].B)
+                    for (int x = 0; x < width; ++x)
                     {
-                        diffImage[x, y].B = 0x00; //Blue
-                        diffImage[x, y].G = 0x00; //Green
-                        diffImage[x, y].R = 0x00; //Red
-                    }
-                    else
-                    {
-                        diffImage[x, y].B = 0xFF; //Blue
-                        diffImage[x, y].G = 0xFF; //Green
-                        diffImage[x, y].R = 0xFF; //Red
+                        diffImage[x,y] = new KinectPoint();
+
+                        //Variante 1: (Hacking the Kinect) 
+                        /*
+                        if ((picture2[x, y].R + tolerance <= picture1[x, y].R || picture2[x, y].R - tolerance >= picture1[x, y].R) &&
+                            (picture2[x, y].G + tolerance <= picture1[x, y].G || picture2[x, y].G - tolerance >= picture1[x, y].G) &&
+                            (picture2[x, y].B + tolerance <= picture1[x, y].B || picture2[x, y].B - tolerance >= picture1[x, y].B))
+                        { */
+
+                        //Variante 2: Vektor-Differenz
+                        Vector3D vector1 = new Vector3D(picture1[x, y].R, picture1[x, y].G, picture1[x, y].B);
+                        Vector3D vector2 = new Vector3D(picture2[x, y].R, picture2[x, y].G, picture2[x, y].B);
+                        Vector3D diffVector = (Vector3D)vector1.Subtract(vector2);
+                        double length = diffVector.GetLength();
+
+                        if (length > tolerance)
+                        {
+                            diffImage[x, y].B = 0x00; //Blue
+                            diffImage[x, y].G = 0x00; //Green
+                            diffImage[x, y].R = 0x00; //Red
+                        }
+                        else
+                        {
+                            diffImage[x, y].B = 0xFF; //Blue
+                            diffImage[x, y].G = 0xFF; //Green
+                            diffImage[x, y].R = 0xFF; //Red
+                        }
                     }
                 }
-            }
 
-            return diffImage;
+                return diffImage;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         private KinectPoint[,] ConvertToKinectPoint(byte[] bytearray, int width, int height)
@@ -131,7 +152,7 @@ namespace KinectAutoCalibration.Kinect
                         byte[] pixelData1 = new byte[frame.PixelDataLength];
                         frame.CopyPixelDataTo(pixelData1);
 
-                        KinectPoint[,] kinArray = ConvertToKinectPoint(pixelData1, frame.Width, frame.Height);
+                        //KinectPoint[,] kinArray = ConvertToKinectPoint(pixelData1, frame.Width, frame.Height);
 
                         KinectPoint[,] picKin = ConvertToKinectPoint(pixelData1, 640, 480);
                         return picKin;
@@ -180,59 +201,72 @@ namespace KinectAutoCalibration.Kinect
             short[] depthPixelData = new short[_kinect.DepthStream.FramePixelDataLength];
             byte[] colorPixelData = new byte[_kinect.ColorStream.FramePixelDataLength];
 
-
-            using (DepthImageFrame depthFrame = _kinect.DepthStream.OpenNextFrame(0))
+            try
             {
-                DepthImagePixel[] depthImagePixelData = new DepthImagePixel[depthPixelData.Length];
-                ColorImagePoint[] colorImagePixelData = new ColorImagePoint[depthFrame.Height * depthFrame.Width];
 
-                if (depthFrame != null)
+                using (DepthImageFrame depthFrame = _kinect.DepthStream.OpenNextFrame(0))
                 {
-                    byte[] newImage = new byte[depthFrame.Height * depthFrame.Width * 4];
-                    //int newImageIndex = 0;
+                    DepthImagePixel[] depthImagePixelData = new DepthImagePixel[depthPixelData.Length];
+                    ColorImagePoint[] colorImagePixelData = new ColorImagePoint[depthFrame.Height*depthFrame.Width];
 
-                    depthFrame.CopyPixelDataTo(depthPixelData);
-
-                    depthFrame.CopyDepthImagePixelDataTo(depthImagePixelData);
-
-                    _kinect.CoordinateMapper.MapDepthFrameToColorFrame(depthFrame.Format, depthImagePixelData, _kinect.ColorStream.Format, colorImagePixelData);
-
-                    using (ColorImageFrame colorFrame = _kinect.ColorStream.OpenNextFrame(0))
+                    if (depthFrame != null)
                     {
-                        if (colorFrame != null)
+                        byte[] newImage = new byte[depthFrame.Height*depthFrame.Width*4];
+                        //int newImageIndex = 0;
+
+                        depthFrame.CopyPixelDataTo(depthPixelData);
+
+                        depthFrame.CopyDepthImagePixelDataTo(depthImagePixelData);
+
+                        _kinect.CoordinateMapper.MapDepthFrameToColorFrame(depthFrame.Format, depthImagePixelData,
+                                                                           _kinect.ColorStream.Format,
+                                                                           colorImagePixelData);
+
+                        using (ColorImageFrame colorFrame = _kinect.ColorStream.OpenNextFrame(0))
                         {
-                            colorFrame.CopyPixelDataTo(colorPixelData);
-                        }
-                    }
-                }
-
-                int index = 0;
-
-                for (int y = 0; y < depthFrame.Height; ++y)
-                {
-                    for (int x = 0; x < depthFrame.Width; ++x)
-                    {
-                        int depthIndex = x + (y * this._kinect.DepthStream.FrameWidth);
-                        ColorImagePoint colorImagePoint = colorImagePixelData[depthIndex];
-
-                        int colorInDepthX = colorImagePoint.X / (this._kinect.ColorStream.FrameWidth / this._kinect.DepthStream.FrameWidth);
-                        int colorInDepthY = colorImagePoint.Y / (this._kinect.ColorStream.FrameWidth / this._kinect.DepthStream.FrameWidth);
-
-                        if (colorInDepthX > 0 && colorInDepthX < this._kinect.DepthStream.FrameWidth && colorInDepthY >= 0 && colorInDepthY < this._kinect.DepthStream.FrameHeight)
-                        {
-                            kinArray[colorInDepthX, colorInDepthY] = new KinectPoint(colorImagePixelData[depthIndex].X,
-                                                                colorImagePixelData[depthIndex].Y,
-                                                                depthImagePixelData[depthIndex].Depth,
-                                                                colorPixelData[colorImagePixelData[depthIndex].Y * depthFrame.Width * 4 + (colorImagePixelData[depthIndex].X + 1) * 4 + 2],
-                                                                colorPixelData[colorImagePixelData[depthIndex].Y * depthFrame.Width * 4 + (colorImagePixelData[depthIndex].X + 1) * 4 + 1],
-                                                                colorPixelData[colorImagePixelData[depthIndex].Y * depthFrame.Width * 4 + (colorImagePixelData[depthIndex].X + 1) * 4]);
-                            ++index;
+                            if (colorFrame != null)
+                            {
+                                colorFrame.CopyPixelDataTo(colorPixelData);
+                            }
                         }
                     }
 
+                    int index = 0;
+
+                    for (int y = 0; y < depthFrame.Height; ++y)
+                    {
+                        for (int x = 0; x < depthFrame.Width; ++x)
+                        {
+                            int depthIndex = x + (y*this._kinect.DepthStream.FrameWidth);
+                            ColorImagePoint colorImagePoint = colorImagePixelData[depthIndex];
+
+                            int colorInDepthX = colorImagePoint.X/
+                                                (this._kinect.ColorStream.FrameWidth/this._kinect.DepthStream.FrameWidth);
+                            int colorInDepthY = colorImagePoint.Y/
+                                                (this._kinect.ColorStream.FrameWidth/this._kinect.DepthStream.FrameWidth);
+
+                            if (colorInDepthX > 0 && colorInDepthX < this._kinect.DepthStream.FrameWidth &&
+                                colorInDepthY >= 0 && colorInDepthY < this._kinect.DepthStream.FrameHeight)
+                            {
+                                kinArray[colorInDepthX, colorInDepthY] =
+                                    new KinectPoint(colorImagePixelData[depthIndex].X,
+                                                    colorImagePixelData[depthIndex].Y,
+                                                    depthImagePixelData[depthIndex].Depth,
+                                                    colorPixelData[colorImagePixelData[depthIndex].Y*depthFrame.Width*4 + (colorImagePixelData[depthIndex].X + 1)*4 + 2],
+                                                    colorPixelData[colorImagePixelData[depthIndex].Y*depthFrame.Width*4 + (colorImagePixelData[depthIndex].X + 1)*4 + 1],
+                                                    colorPixelData[colorImagePixelData[depthIndex].Y*depthFrame.Width*4 + (colorImagePixelData[depthIndex].X + 1)*4]);
+                                ++index;
+                            }
+                        }
+
+                    }
                 }
+                return kinArray;
             }
-            return kinArray;
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public WriteableBitmap PrintKinectPointArray(KinectPoint[,] newPicKin, int width, int height)
@@ -268,6 +302,37 @@ namespace KinectAutoCalibration.Kinect
 
             this._colorImageBitmap.WritePixels(this._colorImageBitmapRect, pixelData, this._colorImageStride, 0);
             return this._colorImageBitmap;
+        }
+
+
+        public void PrintKinectPointArray(KinectPoint[,] newPicKin, int width, int height, WriteableBitmap wrBitmap)
+        {
+            var stride = width * 4; // bytes per row
+
+            byte[] pixelData = new byte[height * stride];
+            int index = 0;
+
+            for (int y = 0; y < height; ++y)
+            {
+                for (int x = 0; x < width; ++x)
+                {
+                    if (newPicKin[x, y] != null)
+                    {
+                        pixelData[index + 2] = (byte)newPicKin[x, y].R;
+                        pixelData[index + 1] = (byte)newPicKin[x, y].G;
+                        pixelData[index] = (byte)newPicKin[x, y].B;
+                    }
+                    else
+                    {
+                        pixelData[index + 2] = 0xFF;
+                        pixelData[index + 1] = 0x00;
+                        pixelData[index] = 0x00;
+                    }
+                    index += 4;
+                }
+            }
+
+            wrBitmap.WritePixels(this._colorImageBitmapRect, pixelData, this._colorImageStride, 0);
         }
 
 
