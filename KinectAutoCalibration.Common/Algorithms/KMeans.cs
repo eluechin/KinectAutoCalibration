@@ -79,7 +79,11 @@ namespace KinectAutoCalibration.Common.Algorithms
             var centroidToPoint = new Dictionary<Vector2D, Vector2D>();
             foreach (var vectorPoint in vectorPoints)
             {
+<<<<<<< HEAD
+                Vector2D nearestCentroid = new Vector2D{X=0, Y=0};
+=======
                 Vector2D nearestCentroid = null;
+>>>>>>> c536c8ce4d3f4c1e64af9282b2397c25f3d48f28
                 var nearestDistance = double.PositiveInfinity;
 
                 foreach (var vectorCentroid in vectorCentroids)
