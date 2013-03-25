@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace KinectAutoCalibration.Common.Interfaces
 {
-    public interface IVector: IComparable
+    public interface IVector : IEquatable<IVector>
     {
         double X { get; set; }
         double Y { get; set; }

@@ -26,36 +26,38 @@ namespace KMeansTest
                     "..\\..\\Circle.png", true);
 
             var bitmap = new Bitmap(circleImage);
-            var blackPixels = GetBlackPoints(bitmap);
+            var blackPoints = GetBlackPoints(bitmap);
 
             var centroid = new Point();
-            foreach (var p in blackPixels)
+            foreach (var p in blackPoints)
             {
                 centroid.X += p.X;
                 centroid.Y += p.Y;
             }
 
-            centroid.X = centroid.X / blackPixels.Count;
-            centroid.Y = centroid.Y / blackPixels.Count;
+            centroid.X = centroid.X / blackPoints.Count;
+            centroid.Y = centroid.Y / blackPoints.Count;
             List<IVector> centroidsInit = new List<IVector>();
 
             //Set Points Random
-            //centroidsInit = CreateCentroids(2, bitmap.Width, bitmap.Height);
+            centroidsInit = CreateCentroids(4, bitmap.Width, bitmap.Height);
 
-            centroidsInit.Add(new Vector2D{X=0,Y=0});
-            centroidsInit.Add(new Vector2D{X=bitmap.Width-1, Y=0});
-            //centroidsInit.Add(new Vector2D{X=0, Y = bitmap});
+            //centroidsInit.Add(new Vector2D { X = 0, Y = 0 });
+            //centroidsInit.Add(new Vector2D { X = bitmap.Width - 1, Y = 0 });
+            //centroidsInit.Add(new Vector2D { X = 0, Y = bitmap.Height - 1 });
+            //centroidsInit.Add(new Vector2D { X = bitmap.Width - 1, Y = bitmap.Height - 1 });
 
-            List<IPoint2D> centroids = KMeans.DoKMeans(ConvertPointToVector(blackPixels), centroidsInit);
+            List<IVector> centroids = KMeans.DoKMeans(ConvertPointToVector(blackPoints), centroidsInit);
 
             foreach (var v in centroidsInit)
             {
-                bitmap.SetPixel((int)v.X,(int)v.Y, Color.Blue);
+                bitmap.SetPixel((int)v.X, (int)v.Y, Color.Blue);
             }
 
-            foreach (var point2D in centroids)
+            foreach (var vectorCentroid in centroids)
             {
-                bitmap.SetPixel((int)point2D.X, (int)point2D.Y, Color.Red);
+                bitmap.SetPixel((int)vectorCentroid.X, (int)vectorCentroid.Y, Color.Red);
+                MessageBox.Show("X: " + vectorCentroid.X.ToString() + ", Y: " + vectorCentroid.Y.ToString());
             }
 
             pictureBox1.Image = bitmap;
@@ -72,7 +74,7 @@ namespace KMeansTest
                     var c = bmp.GetPixel(x, y);
                     if (c.R - corr < 0 && c.G - corr < 0 && c.B - corr < 0)
                     {
-                        blackPixel.Add(new Point2D() {X = x, Y = y});
+                        blackPixel.Add(new Point2D() { X = x, Y = y });
                     }
                 }
             }

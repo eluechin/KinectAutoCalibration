@@ -17,7 +17,7 @@ namespace KinectAutoCalibration.Common
             if (vector == null)
             {
                 return this;
-            } 
+            }
             return new Vector2D()
                 {
                     X = this.X + vector.X,
@@ -32,11 +32,6 @@ namespace KinectAutoCalibration.Common
                 X = (int)(X * d),
                 Y = (int)(Y * d)
             };
-        }
-
-        public IVector Multiply(IVector vector)
-        {
-            throw new NotImplementedException();
         }
 
         public IVector Subtract(IVector vector)
@@ -57,25 +52,17 @@ namespace KinectAutoCalibration.Common
             };
         }
 
-        public IVector Divide(IVector vector)
-        {
-            throw new NotImplementedException();
-        }
-
         public double GetLength()
         {
             return Math.Sqrt(Math.Pow(X, 2) + Math.Pow(Y, 2));
         }
 
-        public int CompareTo(Object o)
+        public bool Equals(IVector other)
         {
-            var other = (Vector2D)o;
-            if (X == other.X && Y == other.Y)
-            {
-                return 0;
-            }
-            return 1;
+            if (other == null || GetType() != other.GetType())
+                return false;
+            var vector = (Vector2D)other;
+            return (int)X == (int)vector.X && (int)Y == (int)vector.Y;
         }
-
     }
 }

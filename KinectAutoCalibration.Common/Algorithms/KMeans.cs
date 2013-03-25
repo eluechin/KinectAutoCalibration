@@ -10,49 +10,36 @@ namespace KinectAutoCalibration.Common.Algorithms
     public static class KMeans
     {
 
-        public static List<IPoint2D> DoKMeans(List<IVector> vectorPoints, List<IVector> vectorCentroids)
+        public static List<IVector> DoKMeans(List<IVector> vectorPoints, List<IVector> vectorCentroids)
         {
-            HashSet<IVector> newVectorCentroids = null;
+            List<IVector> newVectorCentroids = null;
+            var oldVectorCentroids = new List<IVector>();
             var finish = true;
-            var count = 1;
 
+            var loopCount = 0;
             while (finish)
             {
                 var pointsToCentroids = MapPointsToNearestCentroids(vectorPoints, vectorCentroids);
                 newVectorCentroids = CalculateNewCentroids(pointsToCentroids);
 
-                for (var i = 0; i < newVectorCentroids.Count; i++)
+                foreach (var newVectorCentroid in newVectorCentroids)
                 {
-                    var v1 = vectorCentroids.ElementAt(i);
-                    var v2 = newVectorCentroids.ElementAt(i);
-                    if (v1 != v2)
+                    if (!oldVectorCentroids.Contains(newVectorCentroid))
                     {
-                        finish = false;
+                        break;
                     }
+                    finish = false;
                 }
-                //if (count == 50)
-                //{
-                //    finish = false;
-                //}
-                //count++;
+
+                oldVectorCentroids = newVectorCentroids;
+                loopCount++;
             }
 
-            return VectorToPoint(newVectorCentroids.ToList());
+            return newVectorCentroids.ToList();
         }
 
-        private static List<IPoint2D> VectorToPoint(List<IVector> toList)
+        private static List<IVector> CalculateNewCentroids(Dictionary<IVector, IVector> pointsToCentroids)
         {
-            var newList = new List<IPoint2D>();
-            foreach (var vector in toList)
-            {
-                newList.Add(new Point2D { X = (int) vector.X, Y = (int) vector.Y });
-            }
-            return newList;
-        }
-
-        private static HashSet<IVector> CalculateNewCentroids(Dictionary<IVector, IVector> pointsToCentroids)
-        {
-            // Centroid to point
             var centroidsToPoint = new Dictionary<IVector, List<IVector>>();
             foreach (var e in pointsToCentroids)
             {
@@ -65,13 +52,11 @@ namespace KinectAutoCalibration.Common.Algorithms
                 }
                 else
                 {
-                    pointList = new List<IVector> {e.Value};
+                    pointList = new List<IVector> { e.Value };
                     centroidsToPoint.Add(e.Value, pointList);
                 }
             }
-
-            //var newCentroidsPoints = new Dictionary<IVector, List<IVector>>();
-            var newVectorCentroids = new HashSet<IVector>();
+            var newVectorCentroids = new List<IVector>();
 
             foreach (var centroid in centroidsToPoint)
             {
@@ -85,34 +70,29 @@ namespace KinectAutoCalibration.Common.Algorithms
 
                 newVectorCentroids.Add(sum);
             }
-
             return newVectorCentroids;
-
         }
 
         private static Dictionary<IVector, IVector> MapPointsToNearestCentroids(List<IVector> vectorPoints, List<IVector> vectorCentroids)
         {
             var centroidToPoint = new Dictionary<IVector, IVector>();
-            foreach (var point in vectorPoints)
+            foreach (var vectorPoint in vectorPoints)
             {
-                IVector nearestCentroid = new Vector2D();
+                IVector nearestCentroid = null;
                 var nearestDistance = double.PositiveInfinity;
 
-                foreach (var centroid in vectorCentroids)
+                foreach (var vectorCentroid in vectorCentroids)
                 {
-                    var distance = point.Subtract(centroid).GetLength();
-                    if (distance <= nearestDistance)
-                    {
-                        nearestCentroid = centroid;
-                        nearestDistance = distance;
-                    }
+                    var distance = vectorPoint.Subtract(vectorCentroid).GetLength();
+                    if (distance > nearestDistance) { continue; }
+                    nearestCentroid = vectorCentroid;
+                    nearestDistance = distance;
                 }
-                centroidToPoint.Add(point, nearestCentroid);
-
+                centroidToPoint.Add(vectorPoint, nearestCentroid);
             }
             return centroidToPoint;
         }
 
-        
+
     }
 }
