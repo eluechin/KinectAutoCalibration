@@ -7,7 +7,7 @@ using KinectAutoCalibration.Common.Interfaces;
 
 namespace KinectAutoCalibration.Common
 {
-    public class Vector3D : IVector
+    public class Vector3D
     {
         public double X { get; set; }
         public double Y { get; set; }
@@ -20,7 +20,7 @@ namespace KinectAutoCalibration.Common
             this.Z = z;
         }
 
-        public IVector Add(IVector vector)
+        public Vector3D Add(Vector3D vector)
         {
             if (vector == null)
             {
@@ -33,7 +33,7 @@ namespace KinectAutoCalibration.Common
             );
         }
 
-        public IVector Multiply(double d)
+        public Vector3D Multiply(double d)
         {
             return new Vector3D(
                 (int)(X * d),
@@ -42,7 +42,7 @@ namespace KinectAutoCalibration.Common
             );
         }
 
-        public IVector Subtract(IVector vector)
+        public Vector3D Subtract(Vector3D vector)
         {
             return new Vector3D(
                 this.X - vector.X,
@@ -51,7 +51,7 @@ namespace KinectAutoCalibration.Common
             );
         }
 
-        public IVector Divide(double d)
+        public Vector3D Divide(double d)
         {
             return new Vector3D(
                 
@@ -65,11 +65,5 @@ namespace KinectAutoCalibration.Common
         {
             return Math.Sqrt(Math.Pow(X, 2) + Math.Pow(Y, 2) + Math.Pow(Z, 2));
         }
-
-        public int CompareTo(object obj)
-        {
-            throw new NotImplementedException();
-        }
-
     }
 }

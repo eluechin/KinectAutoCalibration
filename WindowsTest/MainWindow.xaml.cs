@@ -29,8 +29,14 @@ namespace WindowsTest
         public MainWindow()
         {
             InitializeComponent();
-            beamer = new BeamerTest();
-            beamer2 = new Beamer();
+            Window beamerWindow = new Window
+            {
+                WindowStartupLocation = WindowStartupLocation.Manual,
+                WindowStyle = WindowStyle.None,
+                AllowsTransparency = true
+            };
+            beamer = new BeamerTest(beamerWindow);
+            beamer2 = new Beamer(beamerWindow);
         }
 
         private void DrawCircle_Click(object sender, RoutedEventArgs e)

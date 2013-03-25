@@ -15,9 +15,9 @@ namespace KinectAutoCalibration.Calibration
 
         public Calibration()
         {
-            beamer = new BeamerTest();
-            beamer.DrawChessBoard1(Colors.Red, Colors.Blue);
-            beamer.DrawCircle();
+            //beamer = new BeamerTest();
+            //beamer.DrawChessBoard1(Colors.Red, Colors.Blue);
+            //beamer.DrawCircle();
         }
     }
 }

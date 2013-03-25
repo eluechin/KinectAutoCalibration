@@ -7,13 +7,13 @@ using KinectAutoCalibration.Common.Interfaces;
 
 namespace KinectAutoCalibration.Common
 {
-    public class Vector2D : IVector
+    public class Vector2D : IEquatable<Vector2D>
     {
         public double X { get; set; }
         public double Y { get; set; }
         public double Z { get; set;  }
 
-        public IVector Add(IVector vector)
+        public Vector2D Add(Vector2D vector)
         {
             if (vector == null)
             {
@@ -26,7 +26,7 @@ namespace KinectAutoCalibration.Common
                 };
         }
 
-        public IVector Multiply(double d)
+        public Vector2D Multiply(double d)
         {
             return new Vector2D()
             {
@@ -35,7 +35,7 @@ namespace KinectAutoCalibration.Common
             };
         }
 
-        public IVector Subtract(IVector vector)
+        public Vector2D Subtract(Vector2D vector)
         {
             return new Vector2D()
             {
@@ -44,7 +44,7 @@ namespace KinectAutoCalibration.Common
             };
         }
 
-        public IVector Divide(double d)
+        public Vector2D Divide(double d)
         {
             return new Vector2D()
             {
@@ -58,12 +58,11 @@ namespace KinectAutoCalibration.Common
             return Math.Sqrt(Math.Pow(X, 2) + Math.Pow(Y, 2));
         }
 
-        public bool Equals(IVector other)
+        public bool Equals(Vector2D other)
         {
             if (other == null || GetType() != other.GetType())
                 return false;
-            var vector = (Vector2D)other;
-            return (int)X == (int)vector.X && (int)Y == (int)vector.Y;
+            return (int)X == (int)other.X && (int)Y == (int)other.Y;
         }
     }
 }
