@@ -37,17 +37,17 @@ namespace KMeansTest
 
             centroid.X = centroid.X / blackPoints.Count;
             centroid.Y = centroid.Y / blackPoints.Count;
-            List<IVector> centroidsInit = new List<IVector>();
+            List<Vector2D> centroidsInit = new List<Vector2D>();
 
             //Set Points Random
-            centroidsInit = CreateCentroids(4, bitmap.Width, bitmap.Height);
+            //centroidsInit = CreateCentroids(4, bitmap.Width, bitmap.Height);
 
-            //centroidsInit.Add(new Vector2D { X = 0, Y = 0 });
-            //centroidsInit.Add(new Vector2D { X = bitmap.Width - 1, Y = 0 });
-            //centroidsInit.Add(new Vector2D { X = 0, Y = bitmap.Height - 1 });
-            //centroidsInit.Add(new Vector2D { X = bitmap.Width - 1, Y = bitmap.Height - 1 });
+            centroidsInit.Add(new Vector2D { X = 0, Y = 0 });
+            centroidsInit.Add(new Vector2D { X = bitmap.Width - 1, Y = 0 });
+            centroidsInit.Add(new Vector2D { X = 0, Y = bitmap.Height - 1 });
+            centroidsInit.Add(new Vector2D { X = bitmap.Width - 1, Y = bitmap.Height - 1 });
 
-            List<IVector> centroids = KMeans.DoKMeans(ConvertPointToVector(blackPoints), centroidsInit);
+            List<Vector2D> centroids = KMeans.DoKMeans(ConvertPointToVector(blackPoints), centroidsInit);
 
             foreach (var v in centroidsInit)
             {
@@ -57,7 +57,7 @@ namespace KMeansTest
             foreach (var vectorCentroid in centroids)
             {
                 bitmap.SetPixel((int)vectorCentroid.X, (int)vectorCentroid.Y, Color.Red);
-                MessageBox.Show("X: " + vectorCentroid.X.ToString() + ", Y: " + vectorCentroid.Y.ToString());
+                //MessageBox.Show("X: " + vectorCentroid.X.ToString() + ", Y: " + vectorCentroid.Y.ToString());
             }
 
             pictureBox1.Image = bitmap;
@@ -81,9 +81,9 @@ namespace KMeansTest
             return blackPixel;
         }
 
-        private List<IVector> ConvertPointToVector(IEnumerable<IPoint2D> points)
+        private List<Vector2D> ConvertPointToVector(IEnumerable<IPoint2D> points)
         {
-            var vectorPoints = new List<IVector>();
+            var vectorPoints = new List<Vector2D>();
             foreach (var p in points)
             {
                 vectorPoints.Add(new Vector2D { X = p.X, Y = p.Y });
@@ -92,9 +92,9 @@ namespace KMeansTest
             return vectorPoints;
         }
 
-        private static List<IVector> CreateCentroids(int centroidCount, int width, int height)
+        private static List<Vector2D> CreateCentroids(int centroidCount, int width, int height)
         {
-            var vectorCentroids = new List<IVector>();
+            var vectorCentroids = new List<Vector2D>();
             var rnd = new Random();
             for (var i = 0; i < centroidCount; i++)
             {

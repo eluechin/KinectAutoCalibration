@@ -25,17 +25,13 @@ namespace KinectAutoCalibration.Beamer
         protected const int TILE_WIDTH = 70;
         protected const int TILE_HEIGHT = 70;
 
-        public Beamer()
+        public Beamer(Window win)
         {
-            beamerWindow = new Window
-                {
-                    WindowStartupLocation = WindowStartupLocation.Manual,
-                    WindowStyle = WindowStyle.None,
-                    AllowsTransparency = true
-                };
 
+            beamerWindow = win;
             GetBeamerScreen();
             SetWindowFullScreen();
+            beamerWindow = win;
             beamerWindow.Show();
         }
 

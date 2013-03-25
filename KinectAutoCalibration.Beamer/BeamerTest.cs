@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -12,6 +13,10 @@ namespace KinectAutoCalibration.Beamer
 {
     public class BeamerTest : Beamer, IBeamerTest
     {
+        public BeamerTest(Window window) : base(window)
+        {
+            
+        }
 
         public void DrawCircle()
         {
@@ -44,8 +49,8 @@ namespace KinectAutoCalibration.Beamer
 
         public void DrawChessBoard1(Color c1, Color c2)
         {
-            const int tileWidth = 700;
-            const int tileHeight = 525;
+            const int tileWidth = 70;
+            const int tileHeight = 70;
             double width = screen.Bounds.Width;
             double height = screen.Bounds.Height;
 

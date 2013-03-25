@@ -10,10 +10,10 @@ namespace KinectAutoCalibration.Common.Algorithms
     public static class KMeans
     {
 
-        public static List<IVector> DoKMeans(List<IVector> vectorPoints, List<IVector> vectorCentroids)
+        public static List<Vector2D> DoKMeans(List<Vector2D> vectorPoints, List<Vector2D> vectorCentroids)
         {
-            List<IVector> newVectorCentroids = null;
-            var oldVectorCentroids = new List<IVector>();
+            List<Vector2D> newVectorCentroids = null;
+            var oldVectorCentroids = new List<Vector2D>();
             var finish = true;
 
             var loopCount = 0;
@@ -38,12 +38,12 @@ namespace KinectAutoCalibration.Common.Algorithms
             return newVectorCentroids.ToList();
         }
 
-        private static List<IVector> CalculateNewCentroids(Dictionary<IVector, IVector> pointsToCentroids)
+        private static List<Vector2D> CalculateNewCentroids(Dictionary<Vector2D, Vector2D> pointsToCentroids)
         {
-            var centroidsToPoint = new Dictionary<IVector, List<IVector>>();
+            var centroidsToPoint = new Dictionary<Vector2D, List<Vector2D>>();
             foreach (var e in pointsToCentroids)
             {
-                List<IVector> pointList;
+                List<Vector2D> pointList;
 
                 if (centroidsToPoint.TryGetValue(e.Value, out pointList))
                 {
@@ -52,16 +52,16 @@ namespace KinectAutoCalibration.Common.Algorithms
                 }
                 else
                 {
-                    pointList = new List<IVector> { e.Value };
+                    pointList = new List<Vector2D> { e.Value };
                     centroidsToPoint.Add(e.Value, pointList);
                 }
             }
-            var newVectorCentroids = new List<IVector>();
+            var newVectorCentroids = new List<Vector2D>();
 
             foreach (var centroid in centroidsToPoint)
             {
                 var pointList = centroid.Value;
-                IVector sum = null;
+                Vector2D sum = null;
                 foreach (var p in pointList)
                 {
                     sum = p.Add(sum);
@@ -73,12 +73,12 @@ namespace KinectAutoCalibration.Common.Algorithms
             return newVectorCentroids;
         }
 
-        private static Dictionary<IVector, IVector> MapPointsToNearestCentroids(List<IVector> vectorPoints, List<IVector> vectorCentroids)
+        private static Dictionary<Vector2D, Vector2D> MapPointsToNearestCentroids(List<Vector2D> vectorPoints, List<Vector2D> vectorCentroids)
         {
-            var centroidToPoint = new Dictionary<IVector, IVector>();
+            var centroidToPoint = new Dictionary<Vector2D, Vector2D>();
             foreach (var vectorPoint in vectorPoints)
             {
-                IVector nearestCentroid = null;
+                Vector2D nearestCentroid = null;
                 var nearestDistance = double.PositiveInfinity;
 
                 foreach (var vectorCentroid in vectorCentroids)
