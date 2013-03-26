@@ -71,6 +71,11 @@ namespace KinectAutoCalibration.Common
                 );
         }
 
+        public double ScalarProduct(Vector3D vector)
+        {
+            return (double) (this.X*vector.X + this.Y*vector.Y + this.Z*vector.Z);
+        }
+
         public double GetLength()
         {
             return Math.Sqrt(Math.Pow(X, 2) + Math.Pow(Y, 2) + Math.Pow(Z, 2));

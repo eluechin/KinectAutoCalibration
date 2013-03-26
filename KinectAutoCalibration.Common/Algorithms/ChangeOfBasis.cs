@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace KinectAutoCalibration.Common.Algorithms
 {
-    class ChangeOfBasis
+    public static class ChangeOfBasis
     {
         /*
         1) Bestimme n --> normieren 
@@ -28,6 +28,12 @@ namespace KinectAutoCalibration.Common.Algorithms
             5) alle Vektoren normalisieren
          */
 
+        private static Vector3D point1;
+        private static Vector3D point2;
+        private static Vector3D point3;
+        private static Vector3D e1;
+        private static Vector3D e2;
+
         /// <summary>
         /// 
         /// </summary>
@@ -35,23 +41,46 @@ namespace KinectAutoCalibration.Common.Algorithms
         /// <param name="point2"></param>
         /// <param name="point3"></param>
         /// <returns></returns>
-        public Vector3D GetNormalVector(Vector3D point1, Vector3D point2, Vector3D point3)
+        private static Vector3D GetNormalVector(Vector3D point1, Vector3D point2, Vector3D point3)
         {
             Vector3D e1 = point1.Subtract(point2);
             Vector3D temp = point3.Subtract(point2);
+
             Vector3D n = e1.CrossProduct(temp);
-            Vector3D e2 = n.CrossProduct(e1);
-
-            e1 = e1.GetNormedVector();
-            e2 = e2.GetNormedVector();
             n = n.GetNormedVector();
-           
-
-
-
-
-            return new Vector3D(1,1,1);
+            return n;
         }
+
+        private static Vector3D GetE1Vector(Vector3D point1, Vector3D point2)
+        {
+            Vector3D e1 = point1.Subtract(point2);
+            e1 = e1.GetNormedVector();
+            return e1;
+        }
+
+        private static Vector3D GetE2Vector(Vector3D n, Vector3D e1)
+        {
+            Vector3D e2 = n.CrossProduct(e1);
+            e2 = e2.GetNormedVector();
+            return e2;
+        }
+
+        public static Vector2D GetVectorInNewBasis(Vector3D pointInKinSpace)
+        {
+            return new Vector2D{X = e1.ScalarProduct(pointInKinSpace.Subtract(point1)), 
+                                Y = e2.ScalarProduct(pointInKinSpace.Subtract(point1))};
+        }
+
+        public static void InitializeChangeOfBasis(Vector3D point1, Vector3D point2, Vector3D point3)
+        {
+            ChangeOfBasis.point1 = point1;
+
+            Vector3D n = GetNormalVector(point1,point2,point3); //evtl umschreiben und anstatt point1 gerade e1 übergeben!
+            e1 = GetE1Vector(point1, point2);
+            e2 = GetE2Vector(n, e1);
+
+        }
+
 
     }
 }
