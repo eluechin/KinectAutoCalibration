@@ -36,9 +36,9 @@ namespace KinectAutoCalibration.Common
         public Vector3D Multiply(double d)
         {
             return new Vector3D(
-                (int)(X * d),
-                (int)(Y * d),
-                (int)(Z * d)
+                (X * d),
+                (Y * d),
+                (Z * d)
             );
         }
 
@@ -55,18 +55,18 @@ namespace KinectAutoCalibration.Common
         {
             return new Vector3D(
                 
-                (int)(X / d),
-                (int)(Y / d),
-                (int)(Z / d)
+                (X / d),
+                (Y / d),
+                (Z / d)
             );
         }
 
         public Vector3D CrossProduct(Vector3D vector)
         {
             return new Vector3D(
-                    (int)(this.Y * vector.Z - this.Z * vector.Y),
-                    (int)(this.Z * vector.X - this.X * vector.Z),
-                    (int)(this.X * vector.Y - this.Y * vector.X)
+                    (this.Y * vector.Z - this.Z * vector.Y),
+                    (this.Z * vector.X - this.X * vector.Z),
+                    (this.X * vector.Y - this.Y * vector.X)
                 
                 );
         }
@@ -81,9 +81,9 @@ namespace KinectAutoCalibration.Common
             double magnitude = this.GetLength();
 
             return new Vector3D(
-                    (int)(this.X / magnitude),
-                    (int)(this.Y / magnitude),
-                    (int)(this.Z / magnitude)
+                    (this.X / magnitude),
+                    (this.Y / magnitude),
+                    (this.Z / magnitude)
                 );
         }
     }
