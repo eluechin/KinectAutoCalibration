@@ -75,5 +75,16 @@ namespace KinectAutoCalibration.Common
         {
             return Math.Sqrt(Math.Pow(X, 2) + Math.Pow(Y, 2) + Math.Pow(Z, 2));
         }
+
+        public Vector3D GetNormedVector()
+        {
+            double magnitude = this.GetLength();
+
+            return new Vector3D(
+                    (this.X / magnitude),
+                    (this.Y / magnitude),
+                    (this.Z / magnitude)
+                );
+        }
     }
 }
