@@ -81,9 +81,9 @@ namespace KinectAutoCalibration.Common
             double magnitude = this.GetLength();
 
             return new Vector3D(
-                    (this.X / magnitude),
-                    (this.Y / magnitude),
-                    (this.Z / magnitude)
+                    (int)(this.X / magnitude),
+                    (int)(this.Y / magnitude),
+                    (int)(this.Z / magnitude)
                 );
         }
     }

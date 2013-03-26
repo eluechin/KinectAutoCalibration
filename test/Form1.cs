@@ -45,6 +45,9 @@ namespace test
             Vector3D vector3 = vector1.CrossProduct(vector2);
             MessageBox.Show("CrossProduct: X:" + vector3.X + " /Y:" + vector3.Y + " /Z:" + vector3.Z);
 
+            Vector3D vector4 = vector2.GetNormedVector();
+            MessageBox.Show("NormedVector: X:" + vector4.X + " /Y:" + vector4.Y + " /Z:" + vector4.Z);
+
 
         }
     }
