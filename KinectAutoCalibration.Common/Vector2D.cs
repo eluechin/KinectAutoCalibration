@@ -21,8 +21,8 @@ namespace KinectAutoCalibration.Common
             }
             return new Vector2D()
                 {
-                    X = this.X + vector.X,
-                    Y = this.Y + vector.Y
+                    X = X + vector.X,
+                    Y = Y + vector.Y
                 };
         }
 
@@ -30,8 +30,8 @@ namespace KinectAutoCalibration.Common
         {
             return new Vector2D()
             {
-                X = (int)(X * d),
-                Y = (int)(Y * d)
+                X = (X * d),
+                Y = (Y * d)
             };
         }
 
@@ -39,8 +39,8 @@ namespace KinectAutoCalibration.Common
         {
             return new Vector2D()
             {
-                X = this.X - vector.X,
-                Y = this.Y - vector.Y
+                X = X - vector.X,
+                Y = Y - vector.Y
             };
         }
 
@@ -48,8 +48,8 @@ namespace KinectAutoCalibration.Common
         {
             return new Vector2D()
             {
-                X = (int)(X / d),
-                Y = (int)(Y / d)
+                X = (X / d),
+                Y = (Y / d)
             };
         }
 
