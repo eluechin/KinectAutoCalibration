@@ -66,7 +66,8 @@ namespace KinectAutoCalibration.Kinect
                 {
                     for (int x = 0; x < width; ++x)
                     {
-                        diffImage[x,y] = new KinectPoint();
+                        diffImage[x,y] = new KinectPoint{X=x, Y=y};
+                         
 
                         //Variante 1: (Hacking the Kinect) 
                         /*

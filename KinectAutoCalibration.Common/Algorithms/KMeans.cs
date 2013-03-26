@@ -17,8 +17,9 @@ namespace KinectAutoCalibration.Common.Algorithms
             var finish = true;
 
             var loopCount = 0;
+            /*
             while (finish)
-            {
+            {*/
                 var pointsToCentroids = MapPointsToNearestCentroids(vectorPoints, vectorCentroids);
                 newVectorCentroids = CalculateNewCentroids(pointsToCentroids);
 
@@ -33,7 +34,7 @@ namespace KinectAutoCalibration.Common.Algorithms
 
                 oldVectorCentroids = newVectorCentroids;
                 loopCount++;
-            }
+            //}
 
             return newVectorCentroids.ToList();
         }

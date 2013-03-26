@@ -67,40 +67,7 @@ namespace Test_DifferenzBilder
 
             KinectPoint[,] newPic = _iKinect.GetDifferenceImage(pic2, pic1, 200); //0x64, 0x1E, 0x32
 
-            var blackPixel = new List<Vector2D>();
-            const int corr = 10;
-            for (var i = 0; i < 639; i++)
-            {
-                for (var j = 0; j < 489; j++)
-                {
-                    KinectPoint p = newPic[i,j];
-                    if (p.R - corr < 0 && p.G - corr < 0 && p.B - corr < 0)
-                    {
-                        blackPixel.Add(new Vector2D() { X = p.X, Y = p.Y });
-                    }
-                }
-            }
-
-            List<Vector2D> centroidsInit = new List<Vector2D>();
-
-            //Set Points Random
-            //centroidsInit = CreateCentroids(4, bitmap.Width, bitmap.Height);
-
-            centroidsInit.Add(new Vector2D { X = 0, Y = 0 });
-            centroidsInit.Add(new Vector2D { X = 640 - 1, Y = 0 });
-            centroidsInit.Add(new Vector2D { X = 0, Y = 480 - 1 });
-            centroidsInit.Add(new Vector2D { X = 640 - 1, Y = 480 - 1 });
-
-            List<Vector2D> centroids = KMeans.DoKMeans(blackPixel, centroidsInit);
-
-            foreach (var vectorCentroid in centroids)
-            {
-                newPic[(int) vectorCentroid.X, (int) vectorCentroid.Y].R = 255;
-                newPic[(int)vectorCentroid.X, (int)vectorCentroid.Y].G = 0;
-                newPic[(int)vectorCentroid.X, (int)vectorCentroid.Y].B = 0;
-                //bitmap.SetPixel((int)vectorCentroid.X, (int)vectorCentroid.Y, Color.Red);
-                //MessageBox.Show("X: " + vectorCentroid.X.ToString() + ", Y: " + vectorCentroid.Y.ToString());
-            }
+            newPic = CalculateKMeans(newPic);
 
             short[] depthPic = _iKinect.GetDepthImage();
 
@@ -115,6 +82,53 @@ namespace Test_DifferenzBilder
             this._rawDepthImage.WritePixels(this._rawDepthImageRect, PrintKinectPointArray(depthAndColorPic, 640, 480), this._rawDepthImageStride,0);
             this._rawDepthImage2.WritePixels(this._rawDepthImageRect, depthPic, this._rawDepthImageStride, 0);
 
+        }
+
+        private KinectPoint[,] CalculateKMeans(KinectPoint[,] newPic)
+        {
+            var blackPixel = new List<Vector2D>();
+            const int corr = 10;
+            for (var i = 0; i < 639; i++)
+            {
+                for (var j = 0; j < 479; j++)
+                {
+                    KinectPoint p = newPic[i, j];
+                    if (p.R - corr < 0 && p.G - corr < 0 && p.B - corr < 0)
+                    {
+                        blackPixel.Add(new Vector2D() {X = p.X, Y = p.Y});
+                    }
+                }
+            }
+
+            List<Vector2D> centroidsInit = new List<Vector2D>();
+
+            //Set Points Random
+            //centroidsInit = CreateCentroids(4, bitmap.Width, bitmap.Height);
+
+            centroidsInit.Add(new Vector2D {X = 0, Y = 0});
+            centroidsInit.Add(new Vector2D {X = 640 - 1, Y = 0});
+            centroidsInit.Add(new Vector2D {X = 0, Y = 480 - 1});
+            centroidsInit.Add(new Vector2D {X = 640 - 1, Y = 480 - 1});
+            try
+            {
+                List<Vector2D> centroids = KMeans.DoKMeans(blackPixel, centroidsInit);
+
+                foreach (var vectorCentroid in centroids)
+                {
+                    newPic[(int) vectorCentroid.X, (int) vectorCentroid.Y].R = 255;
+                    newPic[(int) vectorCentroid.X, (int) vectorCentroid.Y].G = 0;
+                    newPic[(int) vectorCentroid.X, (int) vectorCentroid.Y].B = 0;
+                    //bitmap.SetPixel((int)vectorCentroid.X, (int)vectorCentroid.Y, Color.Red);
+                    MessageBox.Show("X: " + vectorCentroid.X.ToString() + ", Y: " + vectorCentroid.Y.ToString());
+                }
+            }
+
+            catch (Exception e)
+            {
+                MessageBox.Show(e.StackTrace);
+            }
+
+            return newPic;
         }
 
 
