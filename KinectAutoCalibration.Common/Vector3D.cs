@@ -61,6 +61,16 @@ namespace KinectAutoCalibration.Common
             );
         }
 
+        public Vector3D CrossProduct(Vector3D vector)
+        {
+            return new Vector3D(
+                    (int)(this.Y * vector.Z - this.Z * vector.Y),
+                    (int)(this.Z * vector.X - this.X * vector.Z),
+                    (int)(this.X * vector.Y - this.Y * vector.X)
+                
+                );
+        }
+
         public double GetLength()
         {
             return Math.Sqrt(Math.Pow(X, 2) + Math.Pow(Y, 2) + Math.Pow(Z, 2));

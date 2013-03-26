@@ -31,12 +31,20 @@ namespace test
                 ).ToString());
              */
 
+            /*
             Vector3D vector1 = new Vector3D(color1.R, color1.G, color1.B);
             Vector3D vector2 = new Vector3D(color2.R, color2.G, color2.B);
             Vector3D diffVector = (Vector3D)vector1.Subtract(vector2);
             double length = diffVector.GetLength();
 
             MessageBox.Show((length > 350).ToString());
+            */
+
+            Vector3D vector1 = new Vector3D(13, -100, 17);
+            Vector3D vector2 = new Vector3D(-21, 42, -119);
+            Vector3D vector3 = vector1.CrossProduct(vector2);
+            MessageBox.Show("CrossProduct: X:" + vector3.X + " /Y:" + vector3.Y + " /Z:" + vector3.Z);
+
 
         }
     }
