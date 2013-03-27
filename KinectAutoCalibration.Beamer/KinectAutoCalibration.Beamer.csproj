@@ -49,6 +49,12 @@
     <Compile Include="Interfaces\IBeamerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\KinectAutoCalibration.Common\KinectAutoCalibration.Common.csproj">
+      <Project>{AD9D77A9-7904-47D3-9526-12D64F6F4ECD}</Project>
+      <Name>KinectAutoCalibration.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

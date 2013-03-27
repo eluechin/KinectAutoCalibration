@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KinectAutoCalibration.Kinec
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test", "test\test.csproj", "{78559586-85DE-4C82-94AA-1BE9D73D60EF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApplication1", "WpfApplication1\WpfApplication1.csproj", "{3746A200-6FF2-420A-8D6F-6A7A16867271}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{78559586-85DE-4C82-94AA-1BE9D73D60EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78559586-85DE-4C82-94AA-1BE9D73D60EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{78559586-85DE-4C82-94AA-1BE9D73D60EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3746A200-6FF2-420A-8D6F-6A7A16867271}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3746A200-6FF2-420A-8D6F-6A7A16867271}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3746A200-6FF2-420A-8D6F-6A7A16867271}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3746A200-6FF2-420A-8D6F-6A7A16867271}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

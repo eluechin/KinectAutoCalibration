@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,10 +12,13 @@ using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using KinectAutoCalibration.Beamer.Interfaces;
+using KinectAutoCalibration.Common;
+using Color = System.Windows.Media.Color;
+using Rectangle = System.Windows.Shapes.Rectangle;
 
 namespace KinectAutoCalibration.Beamer
 {
@@ -57,13 +61,13 @@ namespace KinectAutoCalibration.Beamer
 
         public void DisplayCalibrationImage(bool isInverted)
         {
-            var imageCanvas = new Canvas{Height = screen.Bounds.Height, Width = screen.Bounds.Width};
+            var imageCanvas = new Canvas { Height = screen.Bounds.Height, Width = screen.Bounds.Width };
             imageCanvas.Background = new SolidColorBrush(Colors.Black);
 
             var width = screen.Bounds.Width;
             var height = screen.Bounds.Height;
-            var rightOffset = width - 2*TILE_WIDTH;
-            var topOffset = height - 2*TILE_HEIGHT;
+            var rightOffset = width - 2 * TILE_WIDTH;
+            var topOffset = height - 2 * TILE_HEIGHT;
 
             var topLeft = CreateRectangles(0, 0, isInverted);
             var topRight = CreateRectangles(rightOffset, 0, isInverted);
@@ -77,6 +81,17 @@ namespace KinectAutoCalibration.Beamer
             }
 
             beamerWindow.Content = imageCanvas;
+        }
+
+        public void DisplayBitmap(Bitmap bmp)
+        {
+            var resizedBmp = BitmapHelper.ResizeImage(bmp, screen.Bounds.Width, screen.Bounds.Height);
+
+            beamerWindow.Background = new ImageBrush(Imaging.CreateBitmapSourceFromHBitmap(resizedBmp.GetHbitmap(),
+                                                                            IntPtr.Zero,
+                                                                            Int32Rect.Empty,
+                                                                            BitmapSizeOptions.FromEmptyOptions()
+            ));
         }
 
         private List<Rectangle> CreateRectangles(int leftOffset, int topOffset, bool isInverted)
@@ -101,7 +116,7 @@ namespace KinectAutoCalibration.Beamer
             Canvas.SetTop(rectTopLeft, topOffset);
             rectTopLeft.Width = TILE_WIDTH;
             rectTopLeft.Height = TILE_HEIGHT;
-            rectTopLeft.Fill = new SolidColorBrush(){Color = c1};
+            rectTopLeft.Fill = new SolidColorBrush() { Color = c1 };
             recList.Add(rectTopLeft);
 
             var rectTopRight = new Rectangle();
