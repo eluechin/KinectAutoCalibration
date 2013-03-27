@@ -44,7 +44,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Calibration.cs" />
+    <Compile Include="KinectCalibration.cs" />
+    <Compile Include="Interfaces\IKinectCalibration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

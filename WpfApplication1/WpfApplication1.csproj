@@ -94,9 +94,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\KinectAutoCalibration.Calibration\KinectAutoCalibration.Calibration.csproj">
+    <ProjectReference Include="..\KinectAutoCalibration.Calibration\KinectAutoCalibration.KinectCalibration.csproj">
       <Project>{d30a1c6e-21bb-4175-a19d-b152c53e766f}</Project>
-      <Name>KinectAutoCalibration.Calibration</Name>
+      <Name>KinectAutoCalibration.KinectCalibration</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
