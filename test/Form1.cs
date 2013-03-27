@@ -51,8 +51,8 @@ namespace test
             MessageBox.Show("NormedVector: X:" + vector4.X + " /Y:" + vector4.Y + " /Z:" + vector4.Z);
             */
             
-            Vector3D vector1 = new Vector3D(13, -100, 17);
-            Vector3D vector2 = new Vector3D(-21, 42, -119);
+            Vector3D vector1 = new Vector3D(13, 100, 17);
+            Vector3D vector2 = new Vector3D(21, 42, 119);
             Vector3D vector3 = new Vector3D(17, 22, 30);
 
             Vector3D kinVector = new Vector3D(15, 30, 24);
