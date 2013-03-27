@@ -24,7 +24,7 @@ namespace WpfApplication1
         public MainWindow()
         {
             InitializeComponent();
-            var s = new Calibration();
+            var s = new KinectCalibration();
             s.ShowArea();
         }
     }

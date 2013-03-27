@@ -13,7 +13,7 @@ using KinectAutoCalibration.Kinect.Interfaces;
 
 namespace KinectAutoCalibration.Calibration
 {
-    public class Calibration
+    public class KinectCalibration : IKinectCalibration
     {
         private const int WIDTH = 640;
         private const int HEIGHT = 480;
@@ -22,7 +22,7 @@ namespace KinectAutoCalibration.Calibration
 
         private Bitmap area;
 
-        public Calibration()
+        public KinectCalibration()
         {
             Window beamerWindow = new Window
             {
@@ -41,6 +41,26 @@ namespace KinectAutoCalibration.Calibration
         public void ShowArea()
         {
             beamer.DisplayBitmap(area);
+        }
+
+        public void StartCalibration()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Bitmap GetColorBitmap()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Bitmap GetDifferenceBitmap()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Bitmap GetAreaBitmap()
+        {
+            throw new NotImplementedException();
         }
     }
 }
