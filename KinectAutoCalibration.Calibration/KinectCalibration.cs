@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -15,8 +16,8 @@ namespace KinectAutoCalibration.Calibration
 {
     public class KinectCalibration : IKinectCalibration
     {
-        private const int WIDTH = 640;
-        private const int HEIGHT = 480;
+        private readonly int WIDTH = Convert.ToInt32(ConfigurationManager.AppSettings["AREA_WIDTH"]);
+        private readonly int HEIGHT = Convert.ToInt32(ConfigurationManager.AppSettings["AREA_WIDTH"]);
         private IBeamer beamer;
         private IKinect kinect;
 

@@ -82,7 +82,7 @@ namespace KinectAutoCalibration.Common.Algorithms
             return newVectorCentroids;
         }
 
-        private static Dictionary<Vector2D, Vector2D> MapPointsToNearestCentroids(List<Vector2D> vectorPoints, List<Vector2D> vectorCentroids)
+        private static Dictionary<Vector2D, Vector2D> MapPointsToNearestCentroids(IEnumerable<Vector2D> vectorPoints, List<Vector2D> vectorCentroids)
         {
             var centroidToPoint = new Dictionary<Vector2D, Vector2D>();
             foreach (var vectorPoint in vectorPoints)
