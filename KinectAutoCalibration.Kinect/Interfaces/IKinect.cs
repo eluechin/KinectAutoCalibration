@@ -21,6 +21,7 @@ namespace KinectAutoCalibration.Kinect.Interfaces
         WriteableBitmap PrintKinectPointArray(KinectPoint[,] newPicKin, int width, int height);
         void PrintKinectPointArray(KinectPoint[,] newPicKin, int width, int height, WriteableBitmap wrBitmap);
 
+        List<Vector3D> GetCornerPoints(KinectPoint[,] diffImage);
 
     }
 }
