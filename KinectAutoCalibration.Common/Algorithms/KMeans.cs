@@ -7,9 +7,17 @@ using KinectAutoCalibration.Common.Interfaces;
 
 namespace KinectAutoCalibration.Common.Algorithms
 {
+    /// <summary>
+    /// Holds the KMeans cluster algorithm.
+    /// </summary>
     public static class KMeans
     {
-
+        /// <summary>
+        /// Execute KMeans algorithm with given points and centroids.
+        /// </summary>
+        /// <param name="vectorPoints">List of all points (as Vectors) available</param>
+        /// <param name="vectorCentroids">List of centroids</param>
+        /// <returns>List of the calculated centroids</returns>
         public static List<Vector2D> DoKMeans(List<Vector2D> vectorPoints, List<Vector2D> vectorCentroids)
         {
             List<Vector2D> newVectorCentroids = null;
