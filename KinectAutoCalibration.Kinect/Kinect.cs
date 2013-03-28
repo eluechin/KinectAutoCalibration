@@ -20,6 +20,10 @@ namespace KinectAutoCalibration.Kinect
         private Int32Rect _colorImageBitmapRect;
         private int _colorImageStride;
 
+        /// <summary>
+        /// This method must be used to discover a already connected kinect.</summary>
+        /// <returns>
+        /// Returns the discovered KinectSensor-Object if a Kinect is connected. Otherwise "null" will be returned.</returns>
         public KinectSensor DiscoverKinectSensor()
         {
             if (this._kinect != null && this._kinect.Status != KinectStatus.Connected)
@@ -51,9 +55,21 @@ namespace KinectAutoCalibration.Kinect
             return null;
         }
 
-        public KinectPoint[,] GetDifferenceImage(KinectPoint[,] picture2, KinectPoint[,] picture1, int tolerance)
+        /// <summary>
+        /// This method compares two images and generates a difference image.
+        /// The difference is calculated only on the basis of the color difference.
+        /// The pixels which change from the first image to the second will be black. All other will be white.
+        /// So the black pixels are the difference between the two images.</summary>
+        /// <param name="image2">second image</param>
+        /// <param name="image1">first image</param>
+        /// <param name="threshold">the threshold value defines how sensitive the difference between the two pictures are calculated. 
+        ///     A small threshold detects pixels with a slightly color change. </param>
+        /// <returns>
+        /// Returns the difference image as a KinectPoint-array (2-dimensional array).
+        /// Can also return "null" if at least one of the passed images is null.</returns>
+        public KinectPoint[,] GetDifferenceImage(KinectPoint[,] image2, KinectPoint[,] image1, int threshold)
         {
-            if (picture1 != null || picture2 != null)
+            if (image1 != null || image2 != null)
             {
 
                 int width = _kinect.ColorStream.FrameWidth;
@@ -71,28 +87,28 @@ namespace KinectAutoCalibration.Kinect
 
                         //Variante 1: (Hacking the Kinect) 
                         /*
-                        if ((picture2[x, y].R + tolerance <= picture1[x, y].R || picture2[x, y].R - tolerance >= picture1[x, y].R) &&
-                            (picture2[x, y].G + tolerance <= picture1[x, y].G || picture2[x, y].G - tolerance >= picture1[x, y].G) &&
-                            (picture2[x, y].B + tolerance <= picture1[x, y].B || picture2[x, y].B - tolerance >= picture1[x, y].B))
+                        if ((image2[x, y].R + threshold <= image1[x, y].R || image2[x, y].R - threshold >= image1[x, y].R) &&
+                            (image2[x, y].G + threshold <= image1[x, y].G || image2[x, y].G - threshold >= image1[x, y].G) &&
+                            (image2[x, y].B + threshold <= image1[x, y].B || image2[x, y].B - threshold >= image1[x, y].B))
                         { */
 
                         //Variante 2: Vektor-Differenz
-                        Vector3D vector1 = new Vector3D(picture1[x, y].R, picture1[x, y].G, picture1[x, y].B);
-                        Vector3D vector2 = new Vector3D(picture2[x, y].R, picture2[x, y].G, picture2[x, y].B);
+                        Vector3D vector1 = new Vector3D(image1[x, y].R, image1[x, y].G, image1[x, y].B);
+                        Vector3D vector2 = new Vector3D(image2[x, y].R, image2[x, y].G, image2[x, y].B);
                         Vector3D diffVector = (Vector3D)vector1.Subtract(vector2);
                         double length = diffVector.GetLength();
 
-                        if (length > tolerance)
+                        if (length > threshold)
                         {
-                            diffImage[x, y].B = 0x00; //Blue
-                            diffImage[x, y].G = 0x00; //Green
-                            diffImage[x, y].R = 0x00; //Red
+                            diffImage[x, y].B = 0x00;
+                            diffImage[x, y].G = 0x00; 
+                            diffImage[x, y].R = 0x00; 
                         }
                         else
                         {
-                            diffImage[x, y].B = 0xFF; //Blue
-                            diffImage[x, y].G = 0xFF; //Green
-                            diffImage[x, y].R = 0xFF; //Red
+                            diffImage[x, y].B = 0xFF; 
+                            diffImage[x, y].G = 0xFF;
+                            diffImage[x, y].R = 0xFF;
                         }
                     }
                 }
@@ -105,6 +121,12 @@ namespace KinectAutoCalibration.Kinect
             }
         }
 
+        /// <summary>
+        /// This method converts a byte array into an array of KinectPoints</summary>
+        /// <param name="bytearray">the array which should be converted</param>
+        /// <param name="width">the width of the new 2D-array, e.g. 640</param>
+        /// <param name="height">the height of the new 2D-array, e.g. 480</param>
+        /// <returns>Returns the converted byte array as an array of KinectPoints</returns>
         private KinectPoint[,] ConvertToKinectPoint(byte[] bytearray, int width, int height)
         {
             int bitPositionByteArray = 0;
@@ -130,8 +152,16 @@ namespace KinectAutoCalibration.Kinect
         }
 
 
+        /// <summary>
+        /// This method is used to get a specific x/y-point out of a KinectPoint-array.</summary>
+        /// <param name="kinArray">the array where the needed point is contained in.</param>
+        /// <param name="x">x-coordinate of the needed point</param>
+        /// <param name="y">y-coordinate of the needed point</param>
+        /// <returns>Returns the requested KinectPoint</returns>
         public KinectPoint GetKinectPoint(KinectPoint[,] kinArray, int x, int y)
         {
+            //TODO: Exception Handling
+
             KinectPoint kinPoint = new KinectPoint();
 
             kinPoint = kinArray[x, y];
@@ -140,6 +170,10 @@ namespace KinectAutoCalibration.Kinect
         }
 
 
+        /// <summary>
+        /// This method requests an image from the Color Stream of a connected kinect</summary>
+        /// <returns>
+        /// returns the retrieved color data as an array of KinectPoints</returns>
         public KinectPoint[,] GetColorImage()
         {
 
@@ -170,6 +204,10 @@ namespace KinectAutoCalibration.Kinect
 
         }
 
+        /// <summary>
+        /// This method requests an image from the Depth Stream of a connected kinect</summary>
+        /// <returns>
+        /// returns the retrieved depth data as a short-array</returns>
         public short[] GetDepthImage()
         {
             try
@@ -195,7 +233,11 @@ namespace KinectAutoCalibration.Kinect
             }
         }
 
-
+        /// <summary>
+        /// This method requests one image of the color stream and one of the depth stream.
+        /// Then it maps the pixels of the depth data with the pixels of the color data</summary>
+        /// <returns>
+        /// Returns an array which contains the merged color and depth data</returns>
         public KinectPoint[,] GetDepthAndColorImage()
         {
             KinectPoint[,] kinArray = new KinectPoint[_kinect.DepthStream.FrameWidth, _kinect.DepthStream.FrameHeight];
@@ -270,6 +312,13 @@ namespace KinectAutoCalibration.Kinect
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="point1"></param>
+        /// <param name="point2"></param>
+        /// <param name="point3"></param>
+        /// <returns></returns>
         public WriteableBitmap PrintKinectPointArray(KinectPoint[,] newPicKin, int width, int height)
         {
             var stride = width * 4; // bytes per row
@@ -305,7 +354,13 @@ namespace KinectAutoCalibration.Kinect
             return this._colorImageBitmap;
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="point1"></param>
+        /// <param name="point2"></param>
+        /// <param name="point3"></param>
+        /// <returns></returns>
         public void PrintKinectPointArray(KinectPoint[,] newPicKin, int width, int height, WriteableBitmap wrBitmap)
         {
             var stride = width * 4; // bytes per row

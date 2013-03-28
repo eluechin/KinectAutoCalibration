@@ -13,7 +13,7 @@ namespace KinectAutoCalibration.Kinect.Interfaces
     public interface IKinect
     {
         KinectSensor DiscoverKinectSensor();
-        KinectPoint[,] GetDifferenceImage(KinectPoint[,] picture2, KinectPoint[,] picture1, int tolerance);
+        KinectPoint[,] GetDifferenceImage(KinectPoint[,] image2, KinectPoint[,] image1, int threshold);
         KinectPoint GetKinectPoint(KinectPoint[,] kinArray, int x, int y);
         KinectPoint[,] GetColorImage();
         short[] GetDepthImage();

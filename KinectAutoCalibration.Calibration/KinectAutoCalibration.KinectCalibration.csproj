@@ -44,8 +44,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="KinectCalibration.cs" />
     <Compile Include="Interfaces\IKinectCalibration.cs" />
+    <Compile Include="KinectCalibration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -57,6 +57,9 @@
       <Project>{DC908959-89E9-487A-A54E-868465DB099C}</Project>
       <Name>KinectAutoCalibration.Kinect</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="NewFolder1\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
