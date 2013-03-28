@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KinectAutoCalibration.Commo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KinectAutoCalibration.Beamer", "KinectAutoCalibration.Beamer\KinectAutoCalibration.Beamer.csproj", "{B7690C6F-242E-46B5-A9BB-7A00D43CFA40}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KinectAutoCalibration.Calibration", "KinectAutoCalibration.Calibration\KinectAutoCalibration.Calibration.csproj", "{D30A1C6E-21BB-4175-A19D-B152C53E766F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeamerControl", "WindowsTest\BeamerControl.csproj", "{6B3E53D3-E947-4B05-990D-DFA57D111730}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KMeansTest", "KMeansTest\KMeansTest.csproj", "{8D7C88D5-A46D-48EC-8737-745BE18A9C0B}"
@@ -20,6 +18,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test", "test\test.csproj", "{78559586-85DE-4C82-94AA-1BE9D73D60EF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApplication1", "WpfApplication1\WpfApplication1.csproj", "{3746A200-6FF2-420A-8D6F-6A7A16867271}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KinectAutoCalibration.KinectCalibration", "KinectAutoCalibration.Calibration\KinectAutoCalibration.KinectCalibration.csproj", "{D30A1C6E-21BB-4175-A19D-B152C53E766F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,10 +39,6 @@ Global
 		{B7690C6F-242E-46B5-A9BB-7A00D43CFA40}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7690C6F-242E-46B5-A9BB-7A00D43CFA40}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B7690C6F-242E-46B5-A9BB-7A00D43CFA40}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D30A1C6E-21BB-4175-A19D-B152C53E766F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D30A1C6E-21BB-4175-A19D-B152C53E766F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D30A1C6E-21BB-4175-A19D-B152C53E766F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D30A1C6E-21BB-4175-A19D-B152C53E766F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6B3E53D3-E947-4B05-990D-DFA57D111730}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6B3E53D3-E947-4B05-990D-DFA57D111730}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B3E53D3-E947-4B05-990D-DFA57D111730}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -63,6 +59,10 @@ Global
 		{3746A200-6FF2-420A-8D6F-6A7A16867271}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3746A200-6FF2-420A-8D6F-6A7A16867271}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3746A200-6FF2-420A-8D6F-6A7A16867271}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D30A1C6E-21BB-4175-A19D-B152C53E766F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D30A1C6E-21BB-4175-A19D-B152C53E766F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D30A1C6E-21BB-4175-A19D-B152C53E766F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D30A1C6E-21BB-4175-A19D-B152C53E766F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
