@@ -86,32 +86,9 @@ namespace Test_DifferenzBilder
 
         private KinectPoint[,] CalculateKMeans(KinectPoint[,] newPic)
         {
-            var blackPixel = new List<Vector2D>();
-            const int corr = 10;
-            for (var i = 0; i < 639; i++)
-            {
-                for (var j = 0; j < 479; j++)
-                {
-                    KinectPoint p = newPic[i, j];
-                    if (p.R - corr < 0 && p.G - corr < 0 && p.B - corr < 0)
-                    {
-                        blackPixel.Add(new Vector2D() {X = p.X, Y = p.Y});
-                    }
-                }
-            }
-
-            List<Vector2D> centroidsInit = new List<Vector2D>();
-
-            //Set Points Random
-            //centroidsInit = CreateCentroids(4, bitmap.Width, bitmap.Height);
-
-            centroidsInit.Add(new Vector2D {X = 0, Y = 0});
-            centroidsInit.Add(new Vector2D {X = 640 - 1, Y = 0});
-            centroidsInit.Add(new Vector2D {X = 0, Y = 480 - 1});
-            centroidsInit.Add(new Vector2D {X = 640 - 1, Y = 480 - 1});
             try
             {
-                List<Vector2D> centroids = KMeans.DoKMeans(blackPixel, centroidsInit);
+                List<Vector2D> centroids = KMeans.DoKMeans(KMeansHelper.ExtractBlackPointsAs2dVector(newPic), KMeansHelper.CreateInitialCentroids(640, 480));
 
                 foreach (var vectorCentroid in centroids)
                 {

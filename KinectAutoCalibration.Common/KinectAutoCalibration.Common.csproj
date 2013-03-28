@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Algorithms\ChangeOfBasis.cs" />
     <Compile Include="BitmapHelper.cs" />
+    <Compile Include="KMeansHelper.cs" />
     <Compile Include="Point2D.cs" />
     <Compile Include="Vector2D.cs" />
     <Compile Include="Algorithms\KMeans.cs" />
