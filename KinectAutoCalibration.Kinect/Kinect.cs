@@ -313,13 +313,12 @@ namespace KinectAutoCalibration.Kinect
         }
 
         /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="point1"></param>
-        /// <param name="point2"></param>
-        /// <param name="point3"></param>
-        /// <returns></returns>
-        public WriteableBitmap PrintKinectPointArray(KinectPoint[,] newPicKin, int width, int height)
+        /// This method is used to convert an array of KinectPoints to a WriteableBitmap.</summary>
+        /// <param name="kinArray">the array that should be printed</param>
+        /// <param name="width">the width of the passed array, e.g. 640</param>
+        /// <param name="height">the height of the passed array, e.g. 480</param>
+        /// <returns>Returns the passed array written to a Bitmap ready to use it in a WPF- or WinForms-Project</returns>
+        public WriteableBitmap ConvertKinectPointArrayToBitmap(KinectPoint[,] kinArray, int width, int height)
         {
             var stride = width * 4; // bytes per row
 
@@ -332,11 +331,11 @@ namespace KinectAutoCalibration.Kinect
                 {
                     //var color = colorArray[y, x];
                     //var index = (y * stride) + (x * 4);
-                    if (newPicKin[x, y] != null)
+                    if (kinArray[x, y] != null)
                     {
-                        pixelData[index + 2] = (byte)newPicKin[x, y].R;
-                        pixelData[index + 1] = (byte)newPicKin[x, y].G;
-                        pixelData[index] = (byte)newPicKin[x, y].B;
+                        pixelData[index + 2] = (byte)kinArray[x, y].R;
+                        pixelData[index + 1] = (byte)kinArray[x, y].G;
+                        pixelData[index] = (byte)kinArray[x, y].B;
                         //pixelData[index + 3] = color.A; // color.A;
 
                     }
@@ -354,14 +353,14 @@ namespace KinectAutoCalibration.Kinect
             return this._colorImageBitmap;
         }
 
+
         /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="point1"></param>
-        /// <param name="point2"></param>
-        /// <param name="point3"></param>
-        /// <returns></returns>
-        public void PrintKinectPointArray(KinectPoint[,] newPicKin, int width, int height, WriteableBitmap wrBitmap)
+        /// This method prints the image information of an array of KinectPoints directly to a bitmap.</summary>
+        /// <param name="kinArray">the array that should be printed</param>
+        /// <param name="width">the width of the passed array, e.g. 640</param>
+        /// <param name="height">the height of the passed array, e.g. 480</param>
+        /// <param name="wrBitmap">the bitmap to which the passed array should be printed to</param>
+        public void PrintKinectPointArray(KinectPoint[,] kinArray, int width, int height, WriteableBitmap wrBitmap)
         {
             var stride = width * 4; // bytes per row
 
@@ -372,11 +371,11 @@ namespace KinectAutoCalibration.Kinect
             {
                 for (int x = 0; x < width; ++x)
                 {
-                    if (newPicKin[x, y] != null)
+                    if (kinArray[x, y] != null)
                     {
-                        pixelData[index + 2] = (byte)newPicKin[x, y].R;
-                        pixelData[index + 1] = (byte)newPicKin[x, y].G;
-                        pixelData[index] = (byte)newPicKin[x, y].B;
+                        pixelData[index + 2] = (byte)kinArray[x, y].R;
+                        pixelData[index + 1] = (byte)kinArray[x, y].G;
+                        pixelData[index] = (byte)kinArray[x, y].B;
                     }
                     else
                     {
