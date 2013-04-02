@@ -14,7 +14,6 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using KinectAutoCalibration.Beamer;
 using KinectAutoCalibration.Calibration;
-using KinectAutoCalibration.Beamer.Interfaces;
 
 namespace WindowsTest
 {

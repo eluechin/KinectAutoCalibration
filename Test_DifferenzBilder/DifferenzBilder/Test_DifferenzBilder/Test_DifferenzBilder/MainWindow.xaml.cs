@@ -17,7 +17,6 @@ using KinectAutoCalibration.Common.Interfaces;
 using Microsoft.Kinect;
 using KinectAutoCalibration.Common;
 using KinectAutoCalibration.Kinect;
-using KinectAutoCalibration.Kinect.Interfaces;
 
 namespace Test_DifferenzBilder
 {

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KinectAutoCalibration.Beamer.Interfaces
+namespace KinectAutoCalibration.Beamer
 {
     public interface IBeamer
     {

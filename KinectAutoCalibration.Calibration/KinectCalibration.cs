@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using KinectAutoCalibration.Beamer;
-using KinectAutoCalibration.Beamer.Interfaces;
-using KinectAutoCalibration.Kinect.Interfaces;
+using KinectAutoCalibration.Kinect;
 
 
 namespace KinectAutoCalibration.Calibration

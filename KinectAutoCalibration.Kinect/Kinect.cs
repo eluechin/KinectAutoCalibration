@@ -10,7 +10,6 @@ using System.Windows.Media.Imaging;
 using KinectAutoCalibration.Common.Algorithms;
 using Microsoft.Kinect;
 using KinectAutoCalibration.Common;
-using KinectAutoCalibration.Kinect.Interfaces;
 
 namespace KinectAutoCalibration.Kinect
 {

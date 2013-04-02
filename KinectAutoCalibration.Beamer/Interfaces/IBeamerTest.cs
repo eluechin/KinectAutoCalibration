@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 
-namespace KinectAutoCalibration.Beamer.Interfaces
+namespace KinectAutoCalibration.Beamer
 {
     public interface IBeamerTest
     {

@@ -8,7 +8,7 @@ using KinectAutoCalibration.Common;
 using System.Windows.Media.Imaging;
 using Microsoft.Kinect;
 
-namespace KinectAutoCalibration.Kinect.Interfaces
+namespace KinectAutoCalibration.Kinect
 {
     public interface IKinect
     {

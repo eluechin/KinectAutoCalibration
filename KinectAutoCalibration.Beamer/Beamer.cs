@@ -15,7 +15,6 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using KinectAutoCalibration.Beamer.Interfaces;
 using KinectAutoCalibration.Common;
 using Color = System.Windows.Media.Color;
 using Rectangle = System.Windows.Shapes.Rectangle;
