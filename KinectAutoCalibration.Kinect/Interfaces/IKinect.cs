@@ -19,9 +19,7 @@ namespace KinectAutoCalibration.Kinect
         short[] GetDepthImage();
         KinectPoint[,] GetDepthAndColorImage();
         WriteableBitmap ConvertKinectPointArrayToBitmap(KinectPoint[,] kinArray, int width, int height);
-        void PrintKinectPointArray(KinectPoint[,] kinArray, int width, int height, WriteableBitmap wrBitmap);
 
-        List<Vector3D> GetCornerPoints(KinectPoint[,] diffImage);
-
+        
     }
 }

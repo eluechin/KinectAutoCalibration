@@ -54,6 +54,10 @@
       <Project>{b7690c6f-242e-46b5-a9bb-7a00d43cfa40}</Project>
       <Name>KinectAutoCalibration.Beamer</Name>
     </ProjectReference>
+    <ProjectReference Include="..\KinectAutoCalibration.Common\KinectAutoCalibration.Common.csproj">
+      <Project>{AD9D77A9-7904-47D3-9526-12D64F6F4ECD}</Project>
+      <Name>KinectAutoCalibration.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\KinectAutoCalibration.Kinect\KinectAutoCalibration.Kinect.csproj">
       <Project>{DC908959-89E9-487A-A54E-868465DB099C}</Project>
       <Name>KinectAutoCalibration.Kinect</Name>

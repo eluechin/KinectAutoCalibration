@@ -389,19 +389,5 @@ namespace KinectAutoCalibration.Kinect
 
             wrBitmap.WritePixels(this._colorImageBitmapRect, pixelData, this._colorImageStride, 0);
         }
-
-        public List<Vector3D> GetCornerPoints(KinectPoint[,] diffImage)
-        {
-            List<Vector3D> corners = new List<Vector3D>();
-            var centroids = KMeans.DoKMeans(KMeansHelper.ExtractBlackPointsAs2dVector(diffImage), KMeansHelper.CreateInitialCentroids(640, 480));
-
-            foreach (var vectorCentroid in centroids)
-            {
-                var p = diffImage[(int)vectorCentroid.X, (int)vectorCentroid.Y];
-                corners.Add(new Vector3D{X = p.X, Y = p.Y, Z = p.Z});
-            }
-
-            return corners;
-        }
     }
 }
