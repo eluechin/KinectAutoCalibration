@@ -79,8 +79,8 @@ namespace KinectAutoCalibration.Common.Algorithms
         /// <returns>Returns the calculated 2D point in the new coordinate system</returns>
         public static Vector2D GetVectorInNewBasis(Vector3D pointInKinSpace)
         {
-            return new Vector2D{X = _e1Normed.ScalarProduct(pointInKinSpace.Subtract(_point1)), 
-                                Y = _e2Normed.ScalarProduct(pointInKinSpace.Subtract(_point1))};
+            return new Vector2D{X = _e1Normed.ScalarProduct(pointInKinSpace.Subtract(_point2)), 
+                                Y = _e2Normed.ScalarProduct(pointInKinSpace.Subtract(_point2))};
         }
 
 
@@ -102,7 +102,5 @@ namespace KinectAutoCalibration.Common.Algorithms
             _e2 = GetE2Vector();
 
         }
-
-
     }
 }

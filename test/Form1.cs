@@ -58,7 +58,7 @@ namespace test
             Vector3D kinVector = new Vector3D(15, 30, 24);
             
             ChangeOfBasis.InitializeChangeOfBasis(vector1, vector2, vector3);
-            Vector2D newBaseVector = ChangeOfBasis.GetVectorInNewBasis(kinVector);
+            Vector2D newBaseVector = ChangeOfBasis.GetVectorInNewBasis(vector2);
 
             MessageBox.Show("newBaseVector: X:" + newBaseVector.X + " /Y:" + newBaseVector.Y);
 

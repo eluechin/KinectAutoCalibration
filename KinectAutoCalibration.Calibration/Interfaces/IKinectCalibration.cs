@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using KinectAutoCalibration.Common;
-using Vector3D = System.Windows.Media.Media3D.Vector3D;
+//using Vector3D = System.Windows.Media.Media3D.Vector3D;
 
 namespace KinectAutoCalibration.Calibration
 {
@@ -17,5 +17,6 @@ namespace KinectAutoCalibration.Calibration
         Bitmap GetAreaBitmap();
 
         List<Vector3D> GetCornerPoints(KinectPoint[,] diffImage);
+        List<Vector2D> GetObstacles();
     }
 }

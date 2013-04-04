@@ -14,6 +14,7 @@ namespace KinectAutoCalibration.Kinect
     {
         KinectSensor DiscoverKinectSensor();
         KinectPoint[,] GetDifferenceImage(KinectPoint[,] image2, KinectPoint[,] image1, int threshold);
+        // !Q: Wieso kinArray als Parameter
         KinectPoint GetKinectPoint(KinectPoint[,] kinArray, int x, int y);
         KinectPoint[,] GetColorImage();
         short[] GetDepthImage();

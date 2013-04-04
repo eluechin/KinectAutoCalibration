@@ -86,7 +86,7 @@ namespace KinectAutoCalibration.Beamer
         {
             var resizedBmp = BitmapHelper.ResizeImage(bmp, screen.Bounds.Width, screen.Bounds.Height);
 
-            beamerWindow.Background = new ImageBrush(Imaging.CreateBitmapSourceFromHBitmap(resizedBmp.GetHbitmap(),
+            beamerWindow.Background = new ImageBrush(Imaging.CreateBitmapSourceFromHBitmap(bmp.GetHbitmap(),
                                                                             IntPtr.Zero,
                                                                             Int32Rect.Empty,
                                                                             BitmapSizeOptions.FromEmptyOptions()
