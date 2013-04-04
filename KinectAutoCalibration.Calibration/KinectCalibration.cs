@@ -53,9 +53,10 @@ namespace KinectAutoCalibration.Calibration
 
             KinectPoint[,] diff = kinect.GetDifferenceImage(p1, p2, 200);
             List<Vector3D> corners = GetCornerPoints(diff);
+            corners.Sort((first, second) => first != null ? first.X.CompareTo(second.X) : 0);
             // Punkt mit niedrigstem Abstand(z) als mittelpunkt (param2)
             // Punkt mit höchstem Abstand(z) nicht nehmen!!!!
-            ChangeOfBasis.InitializeChangeOfBasis(corners[0], corners[1], corners[2]);
+            ChangeOfBasis.InitializeChangeOfBasis(corners[1], corners[0], corners[2]);
 
             List<Vector2D> corners2d = new List<Vector2D>();
             foreach (var vector3D in corners)
@@ -65,16 +66,12 @@ namespace KinectAutoCalibration.Calibration
 
             Dictionary<Vector2D, int> lengthDic = calculateLength(corners2d);
             List<KeyValuePair<Vector2D, int>> myList = lengthDic.ToList();
-            myList.Sort((firstPair, nextPair) =>
-                {
-                    return firstPair.Value.CompareTo(nextPair.Value);
-                }
-            );
+            myList.Sort((firstPair, nextPair) => firstPair.Value.CompareTo(nextPair.Value));
 
             int height = myList[1].Value;
             int width = myList[2].Value;
 
-            Bitmap area = new Bitmap(width,height);
+            Bitmap area = new Bitmap(width, height);
             beamer.DisplayBitmap(area);
         }
 
