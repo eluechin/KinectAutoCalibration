@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using KinectAutoCalibration.Calibration;
 using KinectAutoCalibration.Common;
 using KinectAutoCalibration.Common.Algorithms;
 
@@ -51,6 +52,7 @@ namespace test
             MessageBox.Show("NormedVector: X:" + vector4.X + " /Y:" + vector4.Y + " /Z:" + vector4.Z);
             */
             
+            /*
             Vector3D vector1 = new Vector3D(13, 100, 17);
             Vector3D vector2 = new Vector3D(21, 42, 119);
             Vector3D vector3 = new Vector3D(17, 22, 30);
@@ -61,7 +63,9 @@ namespace test
             Vector2D newBaseVector = ChangeOfBasis.GetVectorInNewBasis(vector2);
 
             MessageBox.Show("newBaseVector: X:" + newBaseVector.X + " /Y:" + newBaseVector.Y);
-
+            */
+            KinectAutoCalibration.Calibration.KinectCalibration test = new KinectCalibration();
+            test.StartCalibration();
 
 
         }

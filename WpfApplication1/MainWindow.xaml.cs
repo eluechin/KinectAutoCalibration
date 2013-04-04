@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using KinectAutoCalibration.Beamer;
 using KinectAutoCalibration.Calibration;
 
 namespace WpfApplication1
@@ -24,8 +25,17 @@ namespace WpfApplication1
         public MainWindow()
         {
             InitializeComponent();
-            var s = new KinectCalibration();
-            s.ShowArea();
+            //var s = new KinectCalibration();
+            //s.ShowArea();
+            //MessageBox.Show("aaa");
+            //var beamer2 = new Beamer(beamerWindow);
+            //beamer2.DisplayCalibrationImage(true);
+            //beamerWindow.Show();
+            
+           
+            //MessageBox.Show("hallo");
+            KinectAutoCalibration.Calibration.KinectCalibration test = new KinectCalibration();
+            test.StartCalibration();
         }
     }
 }

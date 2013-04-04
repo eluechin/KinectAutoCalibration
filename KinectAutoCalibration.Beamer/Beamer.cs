@@ -34,8 +34,10 @@ namespace KinectAutoCalibration.Beamer
             beamerWindow = win;
             GetBeamerScreen();
             SetWindowFullScreen();
-            beamerWindow = win;
+            //beamerWindow = win;
+            //beamerWindow.Content = Colors.Red;
             beamerWindow.Show();
+            beamerWindow.Content = Colors.Red;
         }
 
         private void GetBeamerScreen()
@@ -80,6 +82,8 @@ namespace KinectAutoCalibration.Beamer
             }
 
             beamerWindow.Content = imageCanvas;
+            beamerWindow.Close();
+            //beamerWindow.Content = Colors.Red;
         }
 
         public void DisplayBitmap(Bitmap bmp)

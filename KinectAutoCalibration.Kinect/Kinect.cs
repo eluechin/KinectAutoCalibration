@@ -20,6 +20,11 @@ namespace KinectAutoCalibration.Kinect
         private Int32Rect _colorImageBitmapRect;
         private int _colorImageStride;
 
+        public Kinect()
+        {
+            DiscoverKinectSensor();
+        }
+
         /// <summary>
         /// This method must be used to discover a already connected kinect.</summary>
         /// <returns>

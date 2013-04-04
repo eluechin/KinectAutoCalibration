@@ -75,6 +75,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\KinectAutoCalibration.Calibration\KinectAutoCalibration.KinectCalibration.csproj">
+      <Project>{d30a1c6e-21bb-4175-a19d-b152c53e766f}</Project>
+      <Name>KinectAutoCalibration.KinectCalibration</Name>
+    </ProjectReference>
     <ProjectReference Include="..\KinectAutoCalibration.Common\KinectAutoCalibration.Common.csproj">
       <Project>{ad9d77a9-7904-47d3-9526-12d64f6f4ecd}</Project>
       <Name>KinectAutoCalibration.Common</Name>

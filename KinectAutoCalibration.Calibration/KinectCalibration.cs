@@ -18,8 +18,10 @@ namespace KinectAutoCalibration.Calibration
 {
     public class KinectCalibration : IKinectCalibration
     {
-        private readonly int WIDTH = Convert.ToInt32(ConfigurationManager.AppSettings["AREA_WIDTH"]);
-        private readonly int HEIGHT = Convert.ToInt32(ConfigurationManager.AppSettings["AREA_WIDTH"]);
+        //private readonly int WIDTH = Convert.ToInt32(ConfigurationManager.AppSettings["AREA_WIDTH"]);
+        //private readonly int HEIGHT = Convert.ToInt32(ConfigurationManager.AppSettings["AREA_WIDTH"]);
+        private readonly int WIDTH = 1400;
+        private readonly int HEIGHT = 1050;
         private IBeamer beamer;
         private IKinect kinect;
         private Bitmap area;
@@ -34,10 +36,16 @@ namespace KinectAutoCalibration.Calibration
             };
             beamer = new Beamer.Beamer(beamerWindow);
             kinect = new Kinect.Kinect();
-            area = new Bitmap(WIDTH, HEIGHT);
-            area.SetPixel(100, 100, System.Drawing.Color.Red);
+            //area = new Bitmap(WIDTH, HEIGHT);
+            //area.SetPixel(100, 100, System.Drawing.Color.Red);
             //beamer.DrawChessBoard1(Colors.Red, Colors.Blue);
             //beamer.DrawCircle();
+        }
+
+        public KinectCalibration(Window beamerWindow)
+        {
+            beamer = new Beamer.Beamer(beamerWindow);
+            kinect = new Kinect.Kinect();
         }
 
         public void ShowArea()
@@ -47,8 +55,11 @@ namespace KinectAutoCalibration.Calibration
 
         public void StartCalibration()
         {
+            beamer.DisplayCalibrationImage(false);
             KinectPoint[,] p1 = kinect.GetColorImage();
             //Verzögerung
+            Console.Read();
+            beamer.DisplayCalibrationImage(true);
             KinectPoint[,] p2 = kinect.GetColorImage();
 
             KinectPoint[,] diff = kinect.GetDifferenceImage(p1, p2, 200);
