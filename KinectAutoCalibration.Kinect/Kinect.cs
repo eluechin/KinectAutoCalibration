@@ -238,7 +238,7 @@ namespace KinectAutoCalibration.Kinect
         /// Then it maps the pixels of the depth data with the pixels of the color data</summary>
         /// <returns>
         /// Returns an array which contains the merged color and depth data</returns>
-        public KinectPoint[,] GetDepthAndColorImage()
+        public KinectPoint[,] CreateKinectPointArray()
         {
             KinectPoint[,] kinArray = new KinectPoint[_kinect.DepthStream.FrameWidth, _kinect.DepthStream.FrameHeight];
             short[] depthPixelData = new short[_kinect.DepthStream.FramePixelDataLength];
@@ -389,5 +389,86 @@ namespace KinectAutoCalibration.Kinect
 
             wrBitmap.WritePixels(this._colorImageBitmapRect, pixelData, this._colorImageStride, 0);
         }
+
+        /// <summary>
+        /// TO DO</summary>
+        /// <param name="kinArray">TO DO</param>
+        /// <returns>TO DO</returns>
+        public KinectPoint[,] CreateRealWorldArray(KinectPoint[,] kinArray)
+        {
+            KinectPoint[,] rwArray = new KinectPoint[640, 480];
+
+            for (int y = 0; y < 480; ++y )
+            {
+                for (int x = 0; x < 640; ++x)
+                {
+                    if (kinArray[x, y] != null)
+                    {
+                        KinectPoint temp = kinArray[x,y];
+                        temp.X = GetXinMillimeters(kinArray[x, y]);
+                        temp.Y = GetXinMillimeters(kinArray[x, y]);
+                        rwArray[x, y] = temp;
+                    }
+                    else
+                    {
+                        rwArray[x, y] = kinArray[x, y];
+                    }
+                }
+            }
+
+            return rwArray;
+        }
+
+        /// <summary>
+        /// TO DO</summary>
+        /// <param name="kinArray">TO DO</param>
+        /// <returns>TO DO</returns>
+        private int GetXinMillimeters(KinectPoint kPoint)
+        {
+            const double WIDTH_CONST = 544.945;
+            const int WIDTH_X_AXIS = 640;
+            const int MID_X_AXIS = 320;
+
+            double s = kPoint.Z*WIDTH_CONST;
+            int widthPixel = (int)(s / WIDTH_X_AXIS);
+
+            if (kPoint.X < MID_X_AXIS)
+            {
+                int x = (MID_X_AXIS - kPoint.X)*widthPixel;
+                return x;
+            }
+            else
+            {
+                int x = (WIDTH_X_AXIS - kPoint.X)*widthPixel;
+                return -x;
+            }
+            
+        }
+
+        /// <summary>
+        /// TO DO</summary>
+        /// <param name="kinArray">TO DO</param>
+        /// <returns>TO DO</returns>
+        private int GetYinMillimeters(KinectPoint kPoint)
+        {
+            const double HEIGHT_CONST = 585.258;
+            const int HEIGHT_Y_AXIS = 480;
+            const int MID_Y_AXIS = 240;
+
+            double s = kPoint.Z * HEIGHT_CONST;
+            int heightPixel = (int)(s / HEIGHT_Y_AXIS);
+
+            if (kPoint.Y < MID_Y_AXIS)
+            {
+                int y = (MID_Y_AXIS - kPoint.Y) * heightPixel;
+                return -y;
+            }
+            else
+            {
+                int y = (HEIGHT_Y_AXIS - kPoint.Y) * heightPixel;
+                return y;
+            }
+        }
+
     }
 }

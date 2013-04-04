@@ -71,7 +71,7 @@ namespace Test_DifferenzBilder
             short[] depthPic = _iKinect.GetDepthImage();
 
 
-            KinectPoint[,] depthAndColorPic = _iKinect.GetDepthAndColorImage();
+            KinectPoint[,] depthAndColorPic = _iKinect.CreateKinectPointArray();
 
 
             this._colorImageBitmap.WritePixels(this._colorImageBitmapRect, PrintKinectPointArray(newPic, 640, 480), this._colorImageStride, 0);
