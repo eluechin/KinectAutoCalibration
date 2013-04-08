@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -34,8 +35,16 @@ namespace WpfApplication1
             
            
             //MessageBox.Show("hallo");
-            KinectAutoCalibration.Calibration.KinectCalibration test = new KinectCalibration();
-            test.StartCalibration();
+            Thread newThread = new Thread(new ThreadStart(() =>
+                {
+                    new KinectCalibration().StartCalibration();
+                    System.Windows.Threading.Dispatcher.Run();
+                }));
+            newThread.SetApartmentState(ApartmentState.STA);
+            newThread.IsBackground = true;
+            newThread.Start();
+
+
         }
     }
 }

@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
 using KinectAutoCalibration.Beamer;
 using KinectAutoCalibration.Common;
 using KinectAutoCalibration.Common.Algorithms;
@@ -54,7 +55,19 @@ namespace KinectAutoCalibration.Calibration
 
         public void StartCalibration()
         {
-            beamer.DisplayCalibrationImage(true);
+            //ThreadStart start = delegate()
+            //{
+               
+            //    Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal,
+            //                      new Action(() => beamer.DisplayCalibrationImage(true)));
+            //};
+            //// Create the thread and kick it started!
+            //new Thread(start).Start();
+
+            Application.Current.Dispatcher.Invoke(
+            DispatcherPriority.Background,
+            new Action(() => beamer.DisplayCalibrationImage(true)));
+            
             //KinectPoint[,] p1 = kinect.GetColorImage();
             ////Verzögerung
             //  DispatcherTimer setup
