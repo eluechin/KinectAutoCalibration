@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 using KinectAutoCalibration.Beamer;
 using KinectAutoCalibration.Common;
@@ -28,25 +29,7 @@ namespace KinectAutoCalibration.Calibration
         private IKinect kinect;
         private Bitmap area;
 
-        private readonly BackgroundWorker worker = new BackgroundWorker();
-
         public KinectCalibration()
-        {
-            
-            //worker.DoWork += worker_DoWork;
-            //kinect = new Kinect.Kinect();
-            Thread newWindowThread = new Thread(new ThreadStart(ThreadStartingPoint));
-            newWindowThread.SetApartmentState(ApartmentState.STA);
-            newWindowThread.IsBackground = true;
-            newWindowThread.Start();
-
-            //area = new Bitmap(WIDTH, HEIGHT);
-            //area.SetPixel(100, 100, System.Drawing.Color.Red);
-            //beamer.DrawChessBoard1(Colors.Red, Colors.Blue);
-            //beamer.DrawCircle();
-        }
-
-        private void ThreadStartingPoint()
         {
             Window beamerWindow = new Window
             {
@@ -56,18 +39,6 @@ namespace KinectAutoCalibration.Calibration
             };
 
             beamer = new Beamer.Beamer(beamerWindow);
-            beamer.DisplayCalibrationImage(true);
-            Thread.Sleep(3000);
-            beamer.DisplayCalibrationImage(false);
-
-            System.Windows.Threading.Dispatcher.Run();
-        }
-
-        private void worker_DoWork(object sender, DoWorkEventArgs e)
-        {
-            beamer.DisplayCalibrationImage(false);
-            Thread.Sleep(3000);
-            beamer.DisplayCalibrationImage(true);
         }
 
         public KinectCalibration(Window beamerWindow)
@@ -83,11 +54,14 @@ namespace KinectAutoCalibration.Calibration
 
         public void StartCalibration()
         {
-            //worker.RunWorkerAsync();
-
+            beamer.DisplayCalibrationImage(true);
             //KinectPoint[,] p1 = kinect.GetColorImage();
             ////Verzögerung
-            //Thread.Sleep(3000);
+            //  DispatcherTimer setup
+            var dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
+            dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 3);
+            dispatcherTimer.Start();
             
             //Console.Read();
             //beamer.DisplayCalibrationImage(true);
@@ -115,6 +89,13 @@ namespace KinectAutoCalibration.Calibration
 
             //Bitmap area = new Bitmap(width, height);
             //beamer.DisplayBitmap(area);
+        }
+
+        private void dispatcherTimer_Tick(object sender, EventArgs e)
+        {
+            beamer.DisplayCalibrationImage(false);
+            // Forcing the CommandManager to raise the RequerySuggested event
+            CommandManager.InvalidateRequerySuggested();
         }
 
         public Bitmap GetColorBitmap()
