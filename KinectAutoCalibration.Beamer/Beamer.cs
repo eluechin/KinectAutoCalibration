@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 using System.Windows;
@@ -30,15 +31,15 @@ namespace KinectAutoCalibration.Beamer
 
         public Beamer(Window win)
         {
-
             beamerWindow = win;
             GetBeamerScreen();
             SetWindowFullScreen();
-            //beamerWindow = win;
-            //beamerWindow.Content = Colors.Red;
             beamerWindow.Show();
-            beamerWindow.Content = Colors.Red;
+            //System.Windows.Threading.Dispatcher.Run();
+            
         }
+
+        
 
         private void GetBeamerScreen()
         {
@@ -82,8 +83,8 @@ namespace KinectAutoCalibration.Beamer
             }
 
             beamerWindow.Content = imageCanvas;
-            beamerWindow.Close();
-            //beamerWindow.Content = Colors.Red;
+
+            //System.Windows.Threading.Dispatcher.Run();
         }
 
         public void DisplayBitmap(Bitmap bmp)
