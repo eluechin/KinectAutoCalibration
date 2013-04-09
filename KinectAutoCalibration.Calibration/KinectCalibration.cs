@@ -64,10 +64,13 @@ namespace KinectAutoCalibration.Calibration
             //// Create the thread and kick it started!
             //new Thread(start).Start();
 
-            Application.Current.Dispatcher.Invoke(
-            DispatcherPriority.Background,
-            new Action(() => beamer.DisplayCalibrationImage(true)));
-            
+            //Application.Current.Dispatcher.Invoke(
+            //DispatcherPriority.Background,
+            //new Action(() => beamer.DisplayCalibrationImage(true)));
+
+
+            beamer.DisplayCalibrationImage(true);
+            //MessageBox.Show("test");
             //KinectPoint[,] p1 = kinect.GetColorImage();
             ////Verzögerung
             //  DispatcherTimer setup

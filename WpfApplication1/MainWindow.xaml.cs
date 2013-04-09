@@ -35,15 +35,19 @@ namespace WpfApplication1
             
            
             //MessageBox.Show("hallo");
-            Thread newThread = new Thread(new ThreadStart(() =>
-                {
-                    new KinectCalibration().StartCalibration();
-                    System.Windows.Threading.Dispatcher.Run();
-                }));
-            newThread.SetApartmentState(ApartmentState.STA);
-            newThread.IsBackground = true;
-            newThread.Start();
+            
 
+            //Thread newThread = new Thread(new ThreadStart(() =>
+            //    {
+            //        new KinectCalibration().StartCalibration();
+            //        System.Windows.Threading.Dispatcher.Run();
+            //    }));
+            //newThread.SetApartmentState(ApartmentState.STA);
+            //newThread.IsBackground = true;
+            //newThread.Start();
+            //MessageBox.Show("test");
+            var a = new KinectCalibration();
+            a.StartCalibration();
 
         }
     }

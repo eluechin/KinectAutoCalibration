@@ -16,7 +16,9 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using KinectAutoCalibration.Common;
+using Application = System.Windows.Application;
 using Color = System.Windows.Media.Color;
 using Rectangle = System.Windows.Shapes.Rectangle;
 
@@ -82,8 +84,14 @@ namespace KinectAutoCalibration.Beamer
                 imageCanvas.Children.Add(rectangle);
             }
 
-            beamerWindow.Content = imageCanvas;
 
+            //Application.Current.Dispatcher.Invoke(
+            beamerWindow.Dispatcher.Invoke(
+            DispatcherPriority.Render,
+            new Action(() =>  beamerWindow.Content = imageCanvas));
+            
+            //beamerWindow.Hide(); 
+            //beamerWindow.Show();
             //System.Windows.Threading.Dispatcher.Run();
         }
 
