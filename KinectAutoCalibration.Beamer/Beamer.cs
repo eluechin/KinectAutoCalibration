@@ -89,7 +89,8 @@ namespace KinectAutoCalibration.Beamer
             beamerWindow.Dispatcher.Invoke(
             DispatcherPriority.Render,
             new Action(() =>  beamerWindow.Content = imageCanvas));
-            
+            beamerWindow.WindowState = WindowState.Minimized;
+            beamerWindow.WindowState = WindowState.Maximized;
             //beamerWindow.Hide(); 
             //beamerWindow.Show();
             //System.Windows.Threading.Dispatcher.Run();

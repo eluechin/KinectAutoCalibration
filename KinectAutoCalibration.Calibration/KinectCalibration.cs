@@ -67,21 +67,24 @@ namespace KinectAutoCalibration.Calibration
             //Application.Current.Dispatcher.Invoke(
             //DispatcherPriority.Background,
             //new Action(() => beamer.DisplayCalibrationImage(true)));
-
+            //MessageBox.Show("start");
 
             beamer.DisplayCalibrationImage(true);
             //MessageBox.Show("test");
-            //KinectPoint[,] p1 = kinect.GetColorImage();
+            KinectPoint[,] p1 = kinect.GetColorImage();
+            Thread.Sleep(3000);
             ////Verzögerung
             //  DispatcherTimer setup
-            var dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
-            dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
-            dispatcherTimer.Interval = new TimeSpan(0, 0, 3);
-            dispatcherTimer.Start();
-            
+            //var dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
+            //dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
+            //dispatcherTimer.Interval = new TimeSpan(0, 0, 3);
+            //dispatcherTimer.Start();
+
+            //MessageBox.Show("finish");
+
             //Console.Read();
-            //beamer.DisplayCalibrationImage(true);
-            //KinectPoint[,] p2 = kinect.GetColorImage();
+            beamer.DisplayCalibrationImage(false);
+            KinectPoint[,] p2 = kinect.GetColorImage();
 
             //KinectPoint[,] diff = kinect.GetDifferenceImage(p1, p2, 200);
             //List<Vector3D> corners = GetCornerPoints(diff);
