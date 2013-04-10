@@ -28,11 +28,11 @@ namespace KinectAutoCalibration.Common
         {
             var blackPixel = new List<Vector2D>();
             const int BLACK_TRESHOLD = 10;
-            for (var i = 0; i < 639; i++)
+            for (var i = 0; i < 480; i++)
             {
-                for (var j = 0; j < 479; j++)
+                for (var j = 0; j < 640; j++)
                 {
-                    KinectPoint p = kinectPoints[i, j];
+                    KinectPoint p = kinectPoints[j, i];
                     if (p.R - BLACK_TRESHOLD < 0 && p.G - BLACK_TRESHOLD < 0 && p.B - BLACK_TRESHOLD < 0)
                     {
                         blackPixel.Add(Get2dVectorFromKinectPoint(p));

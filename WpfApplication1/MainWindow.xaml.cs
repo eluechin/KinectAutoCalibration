@@ -23,6 +23,15 @@ namespace WpfApplication1
     /// </summary>
     public partial class MainWindow : Window
     {
+        private WriteableBitmap _colorImageBitmap1;
+        private WriteableBitmap _colorImageBitmap2;
+        private WriteableBitmap _colorImageBitmap3;
+        private Int32Rect _colorImageBitmapRect;
+        private int _colorImageStride;
+        private byte[] _colorImagePixelData1;
+        private byte[] _colorImagePixelData2;
+        private byte[] _colorImagePixelData3;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -46,9 +55,35 @@ namespace WpfApplication1
             //newThread.IsBackground = true;
             //newThread.Start();
             //MessageBox.Show("test");
-            var a = new KinectCalibration();
-            a.StartCalibration();
+
+
+            try
+            {
+                var kC = new KinectCalibration();
+                kC.StartCalibration();
+
+                //WriteableBitmap _colorImageBitmap1 = new WriteableBitmap(640, 480, 96, 96, PixelFormats.Bgr32, null);
+                //WriteableBitmap _colorImageBitmap2 = new WriteableBitmap(640, 480, 96, 96, PixelFormats.Bgr32, null);
+                //WriteableBitmap _colorImageBitmap3 = new WriteableBitmap(640, 480, 96, 96, PixelFormats.Bgr32, null);
+
+                //this.ColorImageElement1.Source = _colorImageBitmap1;
+                //this.ColorImageElement2.Source = _colorImageBitmap2;
+                //this.ColorImageElement3.Source = _colorImageBitmap3;
+
+
+                this.ColorImageElement1.Source = kC.GetDifferenceBitmap();
+                this.ColorImageElement2.Source = kC.GetPic1Bitmap();
+                //this.ColorImageElement3.Source = kC.GetPic2Bitmap();
+
+            }
+            catch (Exception e)
+            { 
+                Console.Error.WriteLine(e.StackTrace);
+            }
+           
 
         }
+
     }
+
 }

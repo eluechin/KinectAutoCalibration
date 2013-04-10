@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,7 +21,8 @@ namespace KinectAutoCalibration.Kinect
         short[] GetDepthImage();
         KinectPoint[,] CreateKinectPointArray();
         KinectPoint[,] CreateRealWorldArray(KinectPoint[,] kinArray);
-        WriteableBitmap ConvertKinectPointArrayToBitmap(KinectPoint[,] kinArray, int width, int height);
+        Bitmap ConvertKinectPointArrayToBitmap(KinectPoint[,] kinArray, int width, int height);
+        WriteableBitmap ConvertKinectPointArrayToWritableBitmap(KinectPoint[,] kinArray, int width, int height);
 
         
     }

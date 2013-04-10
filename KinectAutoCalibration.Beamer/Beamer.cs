@@ -16,10 +16,12 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 using System.Windows.Threading;
 using KinectAutoCalibration.Common;
 using Application = System.Windows.Application;
 using Color = System.Windows.Media.Color;
+using Image = System.Windows.Controls.Image;
 using Rectangle = System.Windows.Shapes.Rectangle;
 
 namespace KinectAutoCalibration.Beamer
@@ -100,12 +102,69 @@ namespace KinectAutoCalibration.Beamer
         {
             var resizedBmp = BitmapHelper.ResizeImage(bmp, screen.Bounds.Width, screen.Bounds.Height);
 
-            beamerWindow.Background = new ImageBrush(Imaging.CreateBitmapSourceFromHBitmap(bmp.GetHbitmap(),
-                                                                            IntPtr.Zero,
-                                                                            Int32Rect.Empty,
-                                                                            BitmapSizeOptions.FromEmptyOptions()
-            ));
+            //beamerWindow.Content = new ImageBrush(Imaging.CreateBitmapSourceFromHBitmap(bmp.GetHbitmap(),
+            //                                                                IntPtr.Zero,
+            //                                                                Int32Rect.Empty,
+            //                                                                BitmapSizeOptions.FromEmptyOptions()
+            //));
+            
+            beamerWindow.Content = bmp;
+            beamerWindow.WindowState = WindowState.Minimized;
+            beamerWindow.WindowState = WindowState.Maximized;
         }
+
+        public void DisplayBitmap(WriteableBitmap bmp)
+        {
+            //var resizedBmp = BitmapHelper.ResizeImage(bmp, screen.Bounds.Width, screen.Bounds.Height);
+
+            //beamerWindow.Content = new ImageBrush(Imaging.CreateBitmapSourceFromHBitmap(bmp.GetHbitmap(),
+            //                                                                IntPtr.Zero,
+            //                                                                Int32Rect.Empty,
+            //                                                                BitmapSizeOptions.FromEmptyOptions()
+            //));
+            beamerWindow.Content = bmp;
+            beamerWindow.WindowState = WindowState.Minimized;
+            beamerWindow.WindowState = WindowState.Maximized;
+        }
+
+        public void DisplayRectangle(List<Vector2D> list)
+        {
+            var imageCanvas = new Canvas { Height = screen.Bounds.Height, Width = screen.Bounds.Width };
+            imageCanvas.Background = new SolidColorBrush(Colors.White);
+
+            var width = screen.Bounds.Width;
+            var height = screen.Bounds.Height;
+            var rightOffset = width - 2 * TILE_WIDTH;
+            var topOffset = height - 2 * TILE_HEIGHT;
+
+            Polygon ente = new Polygon();
+            ente.Fill = new SolidColorBrush(Colors.Red);
+            PointCollection c = new PointCollection();
+            foreach (var vector2D in list)
+            {
+                c.Add(new System.Windows.Point(vector2D.X, vector2D.Y));
+            }
+
+            ente.Points = c;
+            imageCanvas.Children.Add(ente);
+            beamerWindow.Dispatcher.Invoke(
+            DispatcherPriority.Render,
+            new Action(() => beamerWindow.Content = imageCanvas));
+            beamerWindow.WindowState = WindowState.Minimized;
+            beamerWindow.WindowState = WindowState.Maximized;
+        }
+
+        public void DisplayBlank()
+        {
+            var imageCanvas = new Canvas { Height = screen.Bounds.Height, Width = screen.Bounds.Width };
+            imageCanvas.Background = new SolidColorBrush(Colors.White);
+            beamerWindow.Dispatcher.Invoke(
+            DispatcherPriority.Render,
+            new Action(() => beamerWindow.Content = imageCanvas));
+            beamerWindow.WindowState = WindowState.Minimized;
+            beamerWindow.WindowState = WindowState.Maximized;
+        }
+
 
         private List<Rectangle> CreateRectangles(int leftOffset, int topOffset, bool isInverted)
         {

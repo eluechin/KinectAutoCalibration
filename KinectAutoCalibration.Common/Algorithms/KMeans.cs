@@ -98,7 +98,15 @@ namespace KinectAutoCalibration.Common.Algorithms
                     nearestCentroid = vectorCentroid;
                     nearestDistance = distance;
                 }
-                centroidToPoint.Add(vectorPoint, nearestCentroid);
+                try
+                {
+                    centroidToPoint.Add(vectorPoint, nearestCentroid);
+
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.StackTrace);
+                }
             }
             return centroidToPoint;
         }

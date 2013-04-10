@@ -57,7 +57,7 @@ namespace KinectAutoCalibration.Kinect
                     return this._kinect;
                 }
             }
-            return null;
+            return this._kinect;
         }
 
         /// <summary>
@@ -185,7 +185,7 @@ namespace KinectAutoCalibration.Kinect
             try
             {
 
-                using (ColorImageFrame frame = this._kinect.ColorStream.OpenNextFrame(1000))
+                using (ColorImageFrame frame = this._kinect.ColorStream.OpenNextFrame(10))
                 {
                     if (frame != null)
                     {
@@ -323,7 +323,7 @@ namespace KinectAutoCalibration.Kinect
         /// <param name="width">the width of the passed array, e.g. 640</param>
         /// <param name="height">the height of the passed array, e.g. 480</param>
         /// <returns>Returns the passed array written to a Bitmap ready to use it in a WPF- or WinForms-Project</returns>
-        public WriteableBitmap ConvertKinectPointArrayToBitmap(KinectPoint[,] kinArray, int width, int height)
+        public WriteableBitmap ConvertKinectPointArrayToWritableBitmap(KinectPoint[,] kinArray, int width, int height)
         {
             var stride = width * 4; // bytes per row
 
@@ -356,6 +356,28 @@ namespace KinectAutoCalibration.Kinect
 
             this._colorImageBitmap.WritePixels(this._colorImageBitmapRect, pixelData, this._colorImageStride, 0);
             return this._colorImageBitmap;
+        }
+
+        public Bitmap ConvertKinectPointArrayToBitmap(KinectPoint[,] kinArray, int width, int height)
+        {
+            Bitmap bmp = new Bitmap(width,height);
+
+            for (int y = 0; y < height; ++y)
+            {
+                for (int x = 0; x < width; ++x)
+                {
+                    //var color = colorArray[y, x];
+                    //var index = (y * stride) + (x * 4);
+                    KinectPoint p = kinArray[x, y];
+                    if (p != null)
+                    {
+                        System.Drawing.Color c = System.Drawing.Color.FromArgb(0,p.R,p.G,p.B);
+                        bmp.SetPixel(p.X,p.Y,c);
+
+                    }
+                }
+            }
+            return bmp;
         }
 
 
