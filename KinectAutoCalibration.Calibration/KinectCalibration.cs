@@ -72,11 +72,13 @@ namespace KinectAutoCalibration.Calibration
             beamer.DisplayCalibrationImage(true);
             Thread.Sleep(1000);
             p1 = kinect.GetColorImage();
+            //p1 = kinect.CreateKinectPointArray();
             //pic1 = kinect.ConvertKinectPointArrayToWritableBitmap(p1, 640, 480);
             Thread.Sleep(1000);
             beamer.DisplayCalibrationImage(false);
             Thread.Sleep(1000);
             p2 = kinect.GetColorImage();
+            //p2 = kinect.CreateKinectPointArray();
             pic2 = kinect.ConvertKinectPointArrayToWritableBitmap(p2, 640, 480);
 
             _differenceImage = kinect.GetDifferenceImage(p1, p2, 80);
