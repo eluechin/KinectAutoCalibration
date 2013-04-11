@@ -4,9 +4,16 @@
         Title="MainWindow" Height="800" Width="1600" WindowState="Maximized">
     <Grid>
         <StackPanel Orientation="Horizontal">
-            <Image x:Name="ColorImageElement1" Height="350" Width="525"/>
-            <Image x:Name="ColorImageElement2" Height="350" Width="525"/>
-            <Image x:Name="ColorImageElement3" Height="350" Width="525"/>
+            <Border BorderThickness="1" BorderBrush="#FF000000">
+                <Image x:Name="ColorImageElement1" Height="350" Width="525"/>
+            </Border>
+            <Border BorderThickness="1" BorderBrush="#FF000000">
+                <Image x:Name="ColorImageElement2" Height="350" Width="525"/>
+            </Border>
+            <Border BorderThickness="1" BorderBrush="#FF000000">
+                <Image x:Name="ColorImageElement3" Height="350" Width="525"/>
+            </Border>
+            <Button Content="obstacle" Click="click"></Button>
         </StackPanel>
     </Grid>
 </Window>

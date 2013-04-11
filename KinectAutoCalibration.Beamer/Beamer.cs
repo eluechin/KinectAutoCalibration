@@ -98,6 +98,57 @@ namespace KinectAutoCalibration.Beamer
             //System.Windows.Threading.Dispatcher.Run();
         }
 
+        public void DisplayCalibrationImage(bool isInverted, int corner)
+        {
+            var imageCanvas = new Canvas { Height = screen.Bounds.Height, Width = screen.Bounds.Width };
+            imageCanvas.Background = new SolidColorBrush(Colors.Black);
+
+            var width = screen.Bounds.Width;
+            var height = screen.Bounds.Height;
+            var rightOffset = width - 2 * TILE_WIDTH;
+            var topOffset = height - 2 * TILE_HEIGHT;
+            var recList = new List<Rectangle>();
+            if(corner == 1)
+            {
+                recList.AddRange(CreateRectangles(0, 0, isInverted));
+                //recList = (List<Rectangle>) recList.Union(CreateRectangles(0, 0, isInverted));
+            }
+            if(corner == 2)
+            {
+                recList.AddRange(CreateRectangles(rightOffset, 0, isInverted));
+            }
+
+            if(corner == 3)
+            {
+                recList.AddRange(CreateRectangles(rightOffset, topOffset, isInverted));
+            }
+            if (corner == 4)
+            {
+                recList.AddRange(CreateRectangles(0, topOffset, isInverted));
+            }
+            var topLeft = CreateRectangles(0, 0, isInverted);
+            var topRight = CreateRectangles(rightOffset, 0, isInverted);
+            var botRight = CreateRectangles(rightOffset, topOffset, isInverted);
+            var botLeft = CreateRectangles(0, topOffset, isInverted);
+
+            //var recList = topLeft.Union(topRight).Union(botRight).Union(botLeft).ToList();
+            foreach (var rectangle in recList)
+            {
+                imageCanvas.Children.Add(rectangle);
+            }
+
+
+            //Application.Current.Dispatcher.Invoke(
+            beamerWindow.Dispatcher.Invoke(
+            DispatcherPriority.Render,
+            new Action(() => beamerWindow.Content = imageCanvas));
+            beamerWindow.WindowState = WindowState.Minimized;
+            beamerWindow.WindowState = WindowState.Maximized;
+            //beamerWindow.Hide(); 
+            //beamerWindow.Show();
+            //System.Windows.Threading.Dispatcher.Run();
+        }
+
         public void DisplayBitmap(Bitmap bmp)
         {
             var resizedBmp = BitmapHelper.ResizeImage(bmp, screen.Bounds.Width, screen.Bounds.Height);

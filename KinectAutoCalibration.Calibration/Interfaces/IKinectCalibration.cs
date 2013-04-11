@@ -10,14 +10,15 @@ using KinectAutoCalibration.Common;
 
 namespace KinectAutoCalibration.Calibration
 {
-    interface IKinectCalibration
+    public interface IKinectCalibration
     {
         void StartCalibration();
         Bitmap GetColorBitmap();
         WriteableBitmap GetDifferenceBitmap();
+        WriteableBitmap GetPic1Bitmap();
         Bitmap GetAreaBitmap();
 
         List<Vector3D> GetCornerPoints(KinectPoint[,] diffImage);
-        List<Vector2D> GetObstacles();
+       void GetObstacles();
     }
 }

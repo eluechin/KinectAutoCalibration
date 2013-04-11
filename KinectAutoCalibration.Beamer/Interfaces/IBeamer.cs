@@ -16,5 +16,6 @@ namespace KinectAutoCalibration.Beamer
         void DisplayBitmap(WriteableBitmap bmp);
         void DisplayRectangle(List<Vector2D> list);
         void DisplayBlank();
+        void DisplayCalibrationImage(bool isInverted, int corner);
     }
 }

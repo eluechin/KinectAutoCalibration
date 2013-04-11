@@ -31,6 +31,7 @@ namespace WpfApplication1
         private byte[] _colorImagePixelData1;
         private byte[] _colorImagePixelData2;
         private byte[] _colorImagePixelData3;
+        private IKinectCalibration _kC;
 
         public MainWindow()
         {
@@ -59,8 +60,8 @@ namespace WpfApplication1
 
             try
             {
-                var kC = new KinectCalibration();
-                kC.StartCalibration();
+                _kC = new KinectCalibration();
+                _kC.StartCalibration();
 
                 //WriteableBitmap _colorImageBitmap1 = new WriteableBitmap(640, 480, 96, 96, PixelFormats.Bgr32, null);
                 //WriteableBitmap _colorImageBitmap2 = new WriteableBitmap(640, 480, 96, 96, PixelFormats.Bgr32, null);
@@ -71,8 +72,8 @@ namespace WpfApplication1
                 //this.ColorImageElement3.Source = _colorImageBitmap3;
 
 
-                this.ColorImageElement1.Source = kC.GetDifferenceBitmap();
-                this.ColorImageElement2.Source = kC.GetPic1Bitmap();
+                //this.ColorImageElement1.Source = kC.GetDifferenceBitmap();
+                
                 //this.ColorImageElement3.Source = kC.GetPic2Bitmap();
 
             }
@@ -82,6 +83,14 @@ namespace WpfApplication1
             }
            
 
+        }
+
+        private void click(object sender, RoutedEventArgs e)
+        {
+            _kC.GetObstacles();
+            this.ColorImageElement2.Source = _kC.GetPic1Bitmap();
+            this.WindowState = WindowState.Minimized;
+            this.WindowState = WindowState.Maximized;
         }
 
     }
