@@ -28,19 +28,18 @@ namespace KinectAutoCalibration.Calibration
         //private readonly int HEIGHT = Convert.ToInt32(ConfigurationManager.AppSettings["AREA_WIDTH"]);
         private readonly int WIDTH = 1400;
         private readonly int HEIGHT = 1050;
-        private static IBeamer beamer;
-        private static IKinect kinect;
-        private static Bitmap area;
-        private static WriteableBitmap diffBitmap;
-        private static WriteableBitmap pic1;
-        private static WriteableBitmap pic2;
-        private static int _height;
-        private static int _width;
-        private static KinectPoint[,] _differenceImage;
-        private static KinectPoint[,] p1;
-        private static KinectPoint[,] p2;
-        private static List<Vector3D> corners;
-
+        private IBeamer beamer;
+        private IKinect kinect;
+        private WriteableBitmap diffBitmap;
+        private WriteableBitmap pic1;
+        private WriteableBitmap pic2;
+        private int _height;
+        private int _width;
+        private KinectPoint[,] _differenceImage;
+        private KinectPoint[,] p1;
+        private KinectPoint[,] p2;
+        private List<Vector3D> corners;
+        private List<Vector2D> _corners2D;
 
         public KinectCalibration()
         {
@@ -50,39 +49,24 @@ namespace KinectAutoCalibration.Calibration
                 WindowStyle = WindowStyle.None,
                 AllowsTransparency = true
             };
-
             beamer = new Beamer.Beamer(beamerWindow);
             kinect = new Kinect.Kinect();
         }
 
-        public KinectCalibration(Window beamerWindow)
+        public void InitialCalibration()
         {
-            beamer = new Beamer.Beamer(beamerWindow);
-            kinect = new Kinect.Kinect();
-        }
-
-        public void ShowArea()
-        {
-            beamer.DisplayBitmap(area);
-        }
-
-        public void StartCalibration()
-        {
-
             beamer.DisplayCalibrationImage(true);
             Thread.Sleep(1000);
             p1 = kinect.GetColorImage();
-            //p1 = kinect.CreateKinectPointArray();
-            //pic1 = kinect.ConvertKinectPointArrayToWritableBitmap(p1, 640, 480);
             Thread.Sleep(1000);
             beamer.DisplayCalibrationImage(false);
             Thread.Sleep(1000);
             p2 = kinect.GetColorImage();
-            //p2 = kinect.CreateKinectPointArray();
-            pic2 = kinect.ConvertKinectPointArrayToWritableBitmap(p2, 640, 480);
 
             _differenceImage = kinect.GetDifferenceImage(p1, p2, 80);
             diffBitmap = kinect.ConvertKinectPointArrayToWritableBitmap(_differenceImage, 640, 480);
+            
+            //var realWorldArray = kinect.CreateRealWorldArray(kinArray);
             
             corners = GetCornerPoints(_differenceImage);
             corners.Sort((first, second) => first != null ? first.Z.CompareTo(second.Z) : 0);
@@ -91,69 +75,58 @@ namespace KinectAutoCalibration.Calibration
             //// Punkt mit höchstem Abstand(z) nicht nehmen!!!!
             ChangeOfBasis.InitializeChangeOfBasis(corners[2], corners[0], corners[1]);
 
-            
-
-        }
-
-        public static void GetObstacles()
-        {
-            beamer.DisplayCalibrationImage(true,3);
-            //beamer.DisplayBlank();
-            Thread.Sleep(1000);
-            p1 = kinect.GetColorImage();
-            //MessageBox.Show("Start Object scanning");
-            Thread.Sleep(2000);
-            beamer.DisplayCalibrationImage(false,3);
-            Thread.Sleep(1000);
-            p2 = kinect.GetColorImage();
-            _differenceImage = kinect.GetDifferenceImage(p1, p2, 80);
-            //pic1 = kinect.ConvertKinectPointArrayToWritableBitmap(diff, 640, 480);
-
-            List<Vector2D> corners2d = new List<Vector2D>();
-            corners2d.Add(ChangeOfBasis.GetVectorInNewBasis(corners[0]));
-            corners2d.Add(ChangeOfBasis.GetVectorInNewBasis(corners[1]));
-            corners2d.Add(ChangeOfBasis.GetVectorInNewBasis(corners[3]));
-            corners2d.Add(ChangeOfBasis.GetVectorInNewBasis(corners[2]));
+            _corners2D = new List<Vector2D>();
+            _corners2D.Add(ChangeOfBasis.GetVectorInNewBasis(corners[0]));
+            _corners2D.Add(ChangeOfBasis.GetVectorInNewBasis(corners[1]));
+            _corners2D.Add(ChangeOfBasis.GetVectorInNewBasis(corners[3]));
+            _corners2D.Add(ChangeOfBasis.GetVectorInNewBasis(corners[2]));
             //foreach (var vector3D in corners)
             //{
             //    corners2d.Add(ChangeOfBasis.GetVectorInNewBasis(vector3D));
             //}
 
-            Dictionary<Vector2D, int> lengthDic = calculateLength(corners2d);
+            Dictionary<Vector2D, int> lengthDic = CalculateLength(_corners2D);
             List<KeyValuePair<Vector2D, int>> myList = lengthDic.ToList();
             myList.Sort((firstPair, nextPair) => firstPair.Value.CompareTo(nextPair.Value));
 
             _height = myList[1].Value;
             _width = myList[2].Value;
+        }
 
-            KinectPoint[,] diff;
-            int width = _width;
-            int height = _height;
+        public void GetObstacles(int c)
+        {
+            beamer.DisplayCalibrationImage(true, c);
+            Thread.Sleep(1000);
+            p1 = kinect.GetColorImage();
+            Thread.Sleep(500);
+            beamer.DisplayCalibrationImage(false, c);
+            Thread.Sleep(1000);
+            p2 = kinect.GetColorImage();
+            _differenceImage = kinect.GetDifferenceImage(p1, p2, 80);
+
             List<Vector3D> objs = KMeansHelper.ExtractBlackPointsAs3dVector(_differenceImage);
-            List<Vector2D> objs2D = new List<Vector2D>();
+            var objs2D = new List<Vector2D>();
             foreach (var v in objs)
             {
                 objs2D.Add(ChangeOfBasis.GetVectorInNewBasis(v));
             }
 
-            var stride = width*4; // bytes per row
+            var stride = _width * 4; // bytes per row
 
-            byte[] pixelData = new byte[height*stride];
-            int index = 0;
-            //pixelData[2] = (byte) 0xFF;
+            var pixelData = new byte[_height * stride];
             try
             {
                 foreach (var v2 in objs2D)
                 {
-                    var x = (int) v2.X;
-                    var y = (int) v2.Y;
-                    index = y*width*4 + x*4;
-                    if (index > height*stride || index < 0)
+                    var x = (int)v2.X;
+                    var y = (int)v2.Y;
+                    int index = y * _width * 4 + x * 4;
+                    if (index > _height * stride || index < 0)
                         continue;
 
-                    pixelData[index + 2] = (byte) 0xFF;
-                    pixelData[index + 1] = (byte) 0;
-                    pixelData[index] = (byte) 0;
+                    pixelData[index + 2] = (byte)0xFF;
+                    pixelData[index + 1] = (byte)0;
+                    pixelData[index] = (byte)0;
                 }
             }
             catch (Exception e)
@@ -161,20 +134,8 @@ namespace KinectAutoCalibration.Calibration
                 Console.Error.WriteLine(e.StackTrace);
             }
 
-            //pic1.WritePixels(this._colorImageBitmapRect, pixelData, this._colorImageStride, 0);
-            pic1 = new WriteableBitmap(width, height, 96, 96, PixelFormats.Bgr32, null);
-            pic1.WritePixels(new Int32Rect(0, 0, width, height), pixelData, width*4, 0);
-            //beamer.DisplayRectangle(corners2d);
-
-            //Bitmap area = new Bitmap(width, height);
-            //beamer.DisplayBitmap(area);
-        }
-
-        private void dispatcherTimer_Tick(object sender, EventArgs e)
-        {
-            beamer.DisplayCalibrationImage(false);
-            // Forcing the CommandManager to raise the RequerySuggested event
-            CommandManager.InvalidateRequerySuggested();
+            diffBitmap = new WriteableBitmap(_width, _height, 96, 96, PixelFormats.Bgr32, null);
+            diffBitmap.WritePixels(new Int32Rect(0, 0, _width, _height), pixelData, _width * 4, 0);
         }
 
         public Bitmap GetColorBitmap()
@@ -182,17 +143,7 @@ namespace KinectAutoCalibration.Calibration
             throw new NotImplementedException();
         }
 
-        public WriteableBitmap GetDifferenceBitmap()
-        {
-            return diffBitmap;
-        }
-
-        public Bitmap GetAreaBitmap()
-        {
-            return area;
-        }
-
-        private static Dictionary<Vector2D, int> calculateLength(List<Vector2D> corners)
+        private static Dictionary<Vector2D, int> CalculateLength(IEnumerable<Vector2D> corners)
         {
             Dictionary<Vector2D, int> lengthDict = new Dictionary<Vector2D, int>();
 
@@ -206,32 +157,38 @@ namespace KinectAutoCalibration.Calibration
 
         public List<Vector3D> GetCornerPoints(KinectPoint[,] diffImage)
         {
-            List<Vector3D> corners = new List<Vector3D>();
-            //KinectPoint[,] realDiffImage = kinect.CreateRealWorldArray(diffImage);
+            var kinArray = kinect.CreateKinectPointArray();
+            var realWorldArray = kinect.CreateRealWorldArray(kinArray);
+            var corners = new List<Vector3D>();
             var centroids = KMeans.DoKMeans(KMeansHelper.ExtractBlackPointsAs2dVector(diffImage), KMeansHelper.CreateInitialCentroids(640, 480));
-
             foreach (var vectorCentroid in centroids)
             {
-                var p = diffImage[(int)vectorCentroid.X, (int)vectorCentroid.Y];
-                corners.Add(new Vector3D { X = p.X, Y = p.Y, Z = p.Z });
+                corners.Add(kinect.CreateRealWorldVector(kinArray[(int)vectorCentroid.X, (int)vectorCentroid.Y]));
             }
             return corners;
         }
 
-        void IKinectCalibration.GetObstacles()
+        void IKinectCalibration.GetObstacles(int c)
         {
-            GetObstacles();
+            GetObstacles(c);
         }
-
 
         public WriteableBitmap GetPic1Bitmap()
         {
+            pic1 = kinect.ConvertKinectPointArrayToWritableBitmap(p1, 640, 480);
             return pic1;
         }
 
         public WriteableBitmap GetPic2Bitmap()
         {
+            pic2 = kinect.ConvertKinectPointArrayToWritableBitmap(p2, 640, 480);
             return pic2;
+        }
+
+        public WriteableBitmap GetDifferenceBitmap()
+        {
+            
+            return diffBitmap;
         }
     }
 }

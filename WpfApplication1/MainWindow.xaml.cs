@@ -36,32 +36,10 @@ namespace WpfApplication1
         public MainWindow()
         {
             InitializeComponent();
-            //var s = new KinectCalibration();
-            //s.ShowArea();
-            //MessageBox.Show("aaa");
-            //var beamer2 = new Beamer(beamerWindow);
-            //beamer2.DisplayCalibrationImage(true);
-            //beamerWindow.Show();
-            
-           
-            //MessageBox.Show("hallo");
-            
-
-            //Thread newThread = new Thread(new ThreadStart(() =>
-            //    {
-            //        new KinectCalibration().StartCalibration();
-            //        System.Windows.Threading.Dispatcher.Run();
-            //    }));
-            //newThread.SetApartmentState(ApartmentState.STA);
-            //newThread.IsBackground = true;
-            //newThread.Start();
-            //MessageBox.Show("test");
-
-
             try
             {
                 _kC = new KinectCalibration();
-                _kC.StartCalibration();
+                //_kC.InitialCalibration();
 
                 //WriteableBitmap _colorImageBitmap1 = new WriteableBitmap(640, 480, 96, 96, PixelFormats.Bgr32, null);
                 //WriteableBitmap _colorImageBitmap2 = new WriteableBitmap(640, 480, 96, 96, PixelFormats.Bgr32, null);
@@ -81,18 +59,49 @@ namespace WpfApplication1
             { 
                 Console.Error.WriteLine(e.StackTrace);
             }
-           
-
         }
 
-        private void click(object sender, RoutedEventArgs e)
+        private void InitialCalibration(object sender, RoutedEventArgs e)
         {
-            _kC.GetObstacles();
-            this.ColorImageElement2.Source = _kC.GetPic1Bitmap();
+            _kC.InitialCalibration();
+            this.ColorImageElement1.Source = _kC.GetPic1Bitmap();
+            this.ColorImageElement2.Source = _kC.GetPic2Bitmap();
+            this.ColorImageElement3.Source = _kC.GetDifferenceBitmap();
             this.WindowState = WindowState.Minimized;
             this.WindowState = WindowState.Maximized;
         }
 
+        private void ObstTopLeft(object sender, RoutedEventArgs e)
+        {
+            _kC.GetObstacles(1);
+            this.ColorImageElement3.Source = _kC.GetDifferenceBitmap();
+            this.WindowState = WindowState.Minimized;
+            this.WindowState = WindowState.Maximized;
+        }
+
+        private void ObstTopRight(object sender, RoutedEventArgs e)
+        {
+            _kC.GetObstacles(2);
+            this.ColorImageElement3.Source = _kC.GetDifferenceBitmap();
+            this.WindowState = WindowState.Minimized;
+            this.WindowState = WindowState.Maximized;
+        }
+
+        private void ObstBtmLeft(object sender, RoutedEventArgs e)
+        {
+            _kC.GetObstacles(4);
+            this.ColorImageElement3.Source = _kC.GetDifferenceBitmap();
+            this.WindowState = WindowState.Minimized;
+            this.WindowState = WindowState.Maximized;
+        }
+
+        private void ObstBtmRight(object sender, RoutedEventArgs e)
+        {
+            _kC.GetObstacles(3);
+            this.ColorImageElement3.Source = _kC.GetDifferenceBitmap();
+            this.WindowState = WindowState.Minimized;
+            this.WindowState = WindowState.Maximized;
+        }
     }
 
 }

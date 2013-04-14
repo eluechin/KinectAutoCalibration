@@ -12,13 +12,13 @@ namespace KinectAutoCalibration.Calibration
 {
     public interface IKinectCalibration
     {
-        void StartCalibration();
-        Bitmap GetColorBitmap();
+        void InitialCalibration();
+
         WriteableBitmap GetDifferenceBitmap();
         WriteableBitmap GetPic1Bitmap();
-        Bitmap GetAreaBitmap();
+        WriteableBitmap GetPic2Bitmap();
 
         List<Vector3D> GetCornerPoints(KinectPoint[,] diffImage);
-       void GetObstacles();
+       void GetObstacles(int c);
     }
 }

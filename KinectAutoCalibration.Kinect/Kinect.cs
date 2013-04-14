@@ -181,7 +181,6 @@ namespace KinectAutoCalibration.Kinect
         /// returns the retrieved color data as an array of KinectPoints</returns>
         public KinectPoint[,] GetColorImage()
         {
-
             try
             {
 
@@ -360,7 +359,7 @@ namespace KinectAutoCalibration.Kinect
 
         public Bitmap ConvertKinectPointArrayToBitmap(KinectPoint[,] kinArray, int width, int height)
         {
-            Bitmap bmp = new Bitmap(width,height);
+            Bitmap bmp = new Bitmap(width, height);
 
             for (int y = 0; y < height; ++y)
             {
@@ -371,8 +370,8 @@ namespace KinectAutoCalibration.Kinect
                     KinectPoint p = kinArray[x, y];
                     if (p != null)
                     {
-                        System.Drawing.Color c = System.Drawing.Color.FromArgb(0,p.R,p.G,p.B);
-                        bmp.SetPixel(p.X,p.Y,c);
+                        System.Drawing.Color c = System.Drawing.Color.FromArgb(0, p.R, p.G, p.B);
+                        bmp.SetPixel(p.X, p.Y, c);
 
                     }
                 }
@@ -425,13 +424,13 @@ namespace KinectAutoCalibration.Kinect
         {
             KinectPoint[,] rwArray = new KinectPoint[640, 480];
 
-            for (int y = 0; y < 480; ++y )
+            for (int y = 0; y < 480; ++y)
             {
                 for (int x = 0; x < 640; ++x)
                 {
                     if (kinArray[x, y] != null)
                     {
-                        KinectPoint temp = kinArray[x,y];
+                        KinectPoint temp = kinArray[x, y];
                         temp.X = GetXinMillimeters(kinArray[x, y]);
                         temp.Y = GetXinMillimeters(kinArray[x, y]);
                         rwArray[x, y] = temp;
@@ -446,6 +445,11 @@ namespace KinectAutoCalibration.Kinect
             return rwArray;
         }
 
+        public Vector3D CreateRealWorldVector(KinectPoint p)
+        {
+            return new Vector3D { X = GetXinMillimeters(p), Y = GetYinMillimeters(p), Z = p.Z };
+        }
+
         /// <summary>
         /// TO DO</summary>
         /// <param name="kinArray">TO DO</param>
@@ -456,20 +460,19 @@ namespace KinectAutoCalibration.Kinect
             const int WIDTH_X_AXIS = 640;
             const int MID_X_AXIS = 320;
 
-            double s = kPoint.Z*WIDTH_CONST;
+            double s = kPoint.Z * WIDTH_CONST;
             int widthPixel = (int)(s / WIDTH_X_AXIS);
 
             if (kPoint.X < MID_X_AXIS)
             {
-                int x = (MID_X_AXIS - kPoint.X)*widthPixel;
+                int x = (MID_X_AXIS - kPoint.X) * widthPixel;
                 return x;
             }
             else
             {
-                int x = (WIDTH_X_AXIS - kPoint.X)*widthPixel;
+                int x = (WIDTH_X_AXIS - kPoint.X) * widthPixel;
                 return -x;
             }
-            
         }
 
         /// <summary>
