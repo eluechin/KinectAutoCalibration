@@ -172,10 +172,23 @@ namespace KinectAutoCalibration.Beamer
             //                                                                IntPtr.Zero,
             //                                                                Int32Rect.Empty,
             //                                                                BitmapSizeOptions.FromEmptyOptions()
-            //));
-            beamerWindow.Content = bmp;
+            Image img = new Image();
+            img.Source = bmp;
+            RotateTransform rotateTransform1 =
+                new RotateTransform(180);
+            rotateTransform1.CenterX = img.Width/2;
+            rotateTransform1.CenterY = img.Height/
+            2;
+            //img.RenderTransform = rotateTransform1;
+            beamerWindow.Dispatcher.Invoke(
+            DispatcherPriority.Render,
+            new Action(() => beamerWindow.Content = img));
             beamerWindow.WindowState = WindowState.Minimized;
             beamerWindow.WindowState = WindowState.Maximized;
+            //));
+            //beamerWindow.Content = bmp;
+            //beamerWindow.WindowState = WindowState.Minimized;
+            //beamerWindow.WindowState = WindowState.Maximized;
         }
 
         public void DisplayRectangle(List<Vector2D> list)

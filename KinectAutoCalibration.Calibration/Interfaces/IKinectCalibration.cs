@@ -20,5 +20,7 @@ namespace KinectAutoCalibration.Calibration
 
         List<Vector3D> GetCornerPoints(KinectPoint[,] diffImage);
        void GetObstacles(int c);
+       void GetObstacles();
+        void DisplayArea();
     }
 }

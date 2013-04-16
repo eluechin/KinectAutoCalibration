@@ -102,6 +102,19 @@ namespace WpfApplication1
             this.WindowState = WindowState.Minimized;
             this.WindowState = WindowState.Maximized;
         }
+
+        private void Obst(object sender, RoutedEventArgs e)
+        {
+            _kC.GetObstacles();
+            this.ColorImageElement3.Source = _kC.GetDifferenceBitmap();
+            this.WindowState = WindowState.Minimized;
+            this.WindowState = WindowState.Maximized;
+        }
+
+        private void dsplArea(object sender, RoutedEventArgs e)
+        {
+            _kC.DisplayArea();
+        }
     }
 
 }

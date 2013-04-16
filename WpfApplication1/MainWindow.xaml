@@ -21,6 +21,8 @@
             <Button Content="Obstacle TopRight" Click="ObstTopRight"></Button>
             <Button Content="Obstacle BottomLeft" Click="ObstBtmLeft"></Button>
             <Button Content="Obstacle BottomRight" Click="ObstBtmRight"></Button>
+            <Button Content="Obstacle" Click="Obst"></Button>
+            <Button Content="Display Area" Click="dsplArea"></Button>
         </StackPanel>
         <!--<StackPanel Orientation="Horizontal">
             <Border BorderThickness="1" BorderBrush="#FF000000">
