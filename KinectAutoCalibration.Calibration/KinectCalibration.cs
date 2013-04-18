@@ -118,13 +118,23 @@ namespace KinectAutoCalibration.Calibration
                 objs2D.Add(ChangeOfBasis.GetVectorInNewBasis(kinect.CreateRealWorldVector(realWorldArray[(int)v.X,(int)v.Y])));
             }
 
+            //
+            foreach (var realVector in objs2D)
+            {
+                CalculateBeamerCoordinate(realVector);
+            }
+            
+
+
+            //
+
             var gueltig = objs2D.Where(vector2D => vector2D.X > 0 && vector2D.Y > 0).ToList();
 
             var stride = _width * 4; // bytes per row
 
             var pixelData = new byte[_height * stride];
             try
-            {
+            {   
                 foreach (var v2 in objs2D)
                 {
                     var x = (int)v2.X;
@@ -147,6 +157,19 @@ namespace KinectAutoCalibration.Calibration
             diffBitmap.WritePixels(new Int32Rect(0, 0, _width, _height), pixelData, _width * 4, 0);
         }
 
+        private void CalculateBeamerCoordinate(Vector2D realVector)
+        {
+            // 1400 = beamer width
+            // 70 = tile width
+            var s = new Vector2D{X = realVector.X * (1400 - 2*70) / _width, Y = realVector.Y + 70};
+            var b = _corners2D[1];
+            var t = s.Add(b);
+            var u = new Vector2D{X = realVector.X + 70, Y = realVector.Y * (1050 - 2*70) / _height};
+            var c = _corners2D[2];
+            var v = c.Add(u);
+            //s....c.... scRappiJona....s....c....
+        }
+
         public void GetObstacles()
         {
             beamer.DisplayBlank();
@@ -167,8 +190,6 @@ namespace KinectAutoCalibration.Calibration
                     objs2D.Add(ChangeOfBasis.GetVectorInNewBasis(kinect.CreateRealWorldVector(p)));
                 }
             }
-
-            var gueltig = objs2D.Where(vector2D => vector2D.X > 0 && vector2D.Y > 0).ToList();
 
             var stride = _width * 4; // bytes per row
 

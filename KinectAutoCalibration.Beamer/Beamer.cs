@@ -30,8 +30,8 @@ namespace KinectAutoCalibration.Beamer
     {
         protected Window beamerWindow;
         protected Screen screen;
-        protected const int TILE_WIDTH = 70;
-        protected const int TILE_HEIGHT = 70;
+        public const int TILE_WIDTH = 70;
+        public const int TILE_HEIGHT = 70;
 
         public Beamer(Window win)
         {
