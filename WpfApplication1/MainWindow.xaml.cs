@@ -64,8 +64,8 @@ namespace WpfApplication1
         private void InitialCalibration(object sender, RoutedEventArgs e)
         {
             _kC.InitialCalibration();
-            this.ColorImageElement1.Source = _kC.GetPic1Bitmap();
-            this.ColorImageElement2.Source = _kC.GetPic2Bitmap();
+            //this.ColorImageElement1.Source = _kC.GetPic1Bitmap();
+            //this.ColorImageElement2.Source = _kC.GetPic2Bitmap();
             this.ColorImageElement3.Source = _kC.GetDifferenceBitmap();
             this.WindowState = WindowState.Minimized;
             this.WindowState = WindowState.Maximized;
@@ -107,6 +107,7 @@ namespace WpfApplication1
         {
             _kC.GetObstacles();
             this.ColorImageElement3.Source = _kC.GetDifferenceBitmap();
+            this.ColorImageElement2.Source = _kC.GetDifferenceImage();
             this.WindowState = WindowState.Minimized;
             this.WindowState = WindowState.Maximized;
         }
@@ -114,6 +115,11 @@ namespace WpfApplication1
         private void dsplArea(object sender, RoutedEventArgs e)
         {
             _kC.DisplayArea();
+        }
+
+        private void dsplBlank(object sender, RoutedEventArgs e)
+        {
+            _kC.DisplayBlank();
         }
     }
 
