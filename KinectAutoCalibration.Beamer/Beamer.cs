@@ -77,8 +77,9 @@ namespace KinectAutoCalibration.Beamer
             var topRight = CreateRectangles(rightOffset, 0, isInverted);
             var botRight = CreateRectangles(rightOffset, topOffset, isInverted);
             var botLeft = CreateRectangles(0, topOffset, isInverted);
+            var middle = CreateRectangles((width / 2) - TILE_WIDTH, (height / 2) - TILE_HEIGHT, isInverted);
 
-            var recList = topLeft.Union(topRight).Union(botRight).Union(botLeft).ToList();
+            var recList = topLeft.Union(topRight).Union(botRight).Union(botLeft).Union(middle).ToList();
             foreach (var rectangle in recList)
             {
                 imageCanvas.Children.Add(rectangle);

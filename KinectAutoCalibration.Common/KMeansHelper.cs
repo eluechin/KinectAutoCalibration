@@ -49,7 +49,8 @@ namespace KinectAutoCalibration.Common
                     new Vector2D {X = 0, Y = 0},
                     new Vector2D {X = width - 1, Y = 0},
                     new Vector2D {X = 0, Y = height - 1},
-                    new Vector2D {X = width - 1, Y = height - 1}
+                    new Vector2D {X = width - 1, Y = height - 1},
+                    new Vector2D {X = width/2 - 1, Y = height/2 - 1} 
                 };
             return centroidsInit;
         }

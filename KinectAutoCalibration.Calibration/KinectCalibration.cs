@@ -74,13 +74,13 @@ namespace KinectAutoCalibration.Calibration
 
             //// Punkt mit niedrigstem Abstand(z) als mittelpunkt (param2)
             //// Punkt mit höchstem Abstand(z) nicht nehmen!!!!
-            ChangeOfBasis.InitializeChangeOfBasis(corners[2], corners[0], corners[1]);
+            ChangeOfBasis.InitializeChangeOfBasis(corners[3], corners[0], corners[1]);
 
             _corners2D = new List<Vector2D>();
             _corners2D.Add(ChangeOfBasis.GetVectorInNewBasis(corners[0]));
             _corners2D.Add(ChangeOfBasis.GetVectorInNewBasis(corners[1]));
             _corners2D.Add(ChangeOfBasis.GetVectorInNewBasis(corners[3]));
-            _corners2D.Add(ChangeOfBasis.GetVectorInNewBasis(corners[2]));
+            _corners2D.Add(ChangeOfBasis.GetVectorInNewBasis(corners[4]));
             //foreach (var vector3D in corners)
             //{
             //    corners2d.Add(ChangeOfBasis.GetVectorInNewBasis(vector3D));
@@ -90,13 +90,14 @@ namespace KinectAutoCalibration.Calibration
             List<KeyValuePair<Vector2D, int>> myList = lengthDic.ToList();
             myList.Sort((firstPair, nextPair) => firstPair.Value.CompareTo(nextPair.Value));
 
+            var middle = ChangeOfBasis.GetVectorInNewBasis(corners[2]);
             _height = myList[1].Value;
             _width = myList[2].Value;
 
-            Thread.Sleep(1000);
-            beamer.DisplayCalibrationImage(true, 5);
-            Thread.Sleep(1000);
-            beamer.DisplayCalibrationImage(false, 5);
+            //Thread.Sleep(1000);
+            //beamer.DisplayCalibrationImage(true, 5);
+            //Thread.Sleep(1000);
+            //beamer.DisplayCalibrationImage(false, 5);
 
 
             beamer.DisplayBlank();
