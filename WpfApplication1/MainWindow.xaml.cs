@@ -121,6 +121,14 @@ namespace WpfApplication1
         {
             _kC.DisplayBlank();
         }
+
+        private void ObstMid(object sender, RoutedEventArgs e)
+        {
+            _kC.GetObstacles(5);
+            this.ColorImageElement3.Source = _kC.GetDifferenceBitmap();
+            this.WindowState = WindowState.Minimized;
+            this.WindowState = WindowState.Maximized;
+        }
     }
 
 }

@@ -93,6 +93,12 @@ namespace KinectAutoCalibration.Calibration
             _height = myList[1].Value;
             _width = myList[2].Value;
 
+            Thread.Sleep(1000);
+            beamer.DisplayCalibrationImage(true, 5);
+            Thread.Sleep(1000);
+            beamer.DisplayCalibrationImage(false, 5);
+
+
             beamer.DisplayBlank();
             Thread.Sleep(1000);
             _white = kinect.GetColorImage();

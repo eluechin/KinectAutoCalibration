@@ -17,6 +17,7 @@
         <Image x:Name="ColorImageElement3" Grid.Row="0" Grid.Column="2" Height="350" Width="525"/>
         <StackPanel Grid.Row="1" Grid.ColumnSpan="3" Orientation="Horizontal">
             <Button Content="Start Calibration" Click="InitialCalibration"></Button>
+            <!--<Button Content="Obstacle Middle" Click="ObstMid"></Button>-->
             <Button Content="Obstacle TopLeft" Click="ObstTopLeft"></Button>
             <Button Content="Obstacle TopRight" Click="ObstTopRight"></Button>
             <Button Content="Obstacle BottomLeft" Click="ObstBtmLeft"></Button>
