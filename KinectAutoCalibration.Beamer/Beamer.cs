@@ -177,7 +177,7 @@ namespace KinectAutoCalibration.Beamer
             Image img = new Image();
             img.Source = bmp;
             RotateTransform rotateTransform1 =
-                new RotateTransform(180);
+                new RotateTransform(0);
             rotateTransform1.CenterX = img.Width/2;
             rotateTransform1.CenterY = img.Height/
             2;
