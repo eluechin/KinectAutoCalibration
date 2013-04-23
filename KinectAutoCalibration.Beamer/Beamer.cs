@@ -39,8 +39,6 @@ namespace KinectAutoCalibration.Beamer
             GetBeamerScreen();
             SetWindowFullScreen();
             beamerWindow.Show();
-            //System.Windows.Threading.Dispatcher.Run();
-            
         }
 
         
@@ -86,22 +84,21 @@ namespace KinectAutoCalibration.Beamer
                 imageCanvas.Children.Add(rectangle);
             }
 
-
-            //Application.Current.Dispatcher.Invoke(
             beamerWindow.Dispatcher.Invoke(
             DispatcherPriority.Render,
             new Action(() =>  beamerWindow.Content = imageCanvas));
             beamerWindow.WindowState = WindowState.Minimized;
             beamerWindow.WindowState = WindowState.Maximized;
-            //beamerWindow.Hide(); 
-            //beamerWindow.Show();
-            //System.Windows.Threading.Dispatcher.Run();
         }
 
         public void DisplayCalibrationImage(bool isInverted, int corner)
         {
-            var imageCanvas = new Canvas { Height = screen.Bounds.Height, Width = screen.Bounds.Width };
-            imageCanvas.Background = new SolidColorBrush(Colors.Black);
+            var imageCanvas = new Canvas
+                {
+                    Height = screen.Bounds.Height,
+                    Width = screen.Bounds.Width,
+                    Background = new SolidColorBrush(Colors.Black)
+                };
 
             var width = screen.Bounds.Width;
             var height = screen.Bounds.Height;
@@ -125,6 +122,10 @@ namespace KinectAutoCalibration.Beamer
             if (corner == 4)
             {
                 recList.AddRange(CreateRectangles(0, topOffset, isInverted));
+            }
+            if (corner == 5)
+            {
+                recList.AddRange(CreateRectangles((width/2)-TILE_WIDTH, (height/2)-TILE_HEIGHT, isInverted));
             }
             var topLeft = CreateRectangles(0, 0, isInverted);
             var topRight = CreateRectangles(rightOffset, 0, isInverted);
@@ -228,7 +229,6 @@ namespace KinectAutoCalibration.Beamer
             beamerWindow.WindowState = WindowState.Minimized;
             beamerWindow.WindowState = WindowState.Maximized;
         }
-
 
         private List<Rectangle> CreateRectangles(int leftOffset, int topOffset, bool isInverted)
         {
