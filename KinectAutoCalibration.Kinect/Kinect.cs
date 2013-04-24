@@ -145,7 +145,7 @@ namespace KinectAutoCalibration.Kinect
                 for (int x = 0; x < width; ++x)
                 {
                     kinectArray[x, y] = new KinectPoint(
-                                            x,
+                                            639 - x,
                                             y,
                                             (byte)bytearray[bitPositionByteArray + 2],
                                             (byte)bytearray[bitPositionByteArray + 1],
@@ -300,23 +300,23 @@ namespace KinectAutoCalibration.Kinect
                                     depthImagePixelData[depthIndex].Depth != 0x1FFF)
                                 {
                                     kinArray[colorInDepthX, colorInDepthY] =
-                                        new KinectPoint(colorImagePixelData[depthIndex].X,
+                                        new KinectPoint(639 - colorImagePixelData[depthIndex].X,
                                                         colorImagePixelData[depthIndex].Y,
                                                         depthImagePixelData[depthIndex].Depth,
                                                         colorPixelData[
-                                                            colorImagePixelData[depthIndex].Y*depthFrame.Width*4 +
-                                                            (colorImagePixelData[depthIndex].X + 1)*4 + 2],
+                                                            colorImagePixelData[depthIndex].Y * depthFrame.Width * 4 +
+                                                            (colorImagePixelData[depthIndex].X + 1) * 4 + 2],
                                                         colorPixelData[
-                                                            colorImagePixelData[depthIndex].Y*depthFrame.Width*4 +
-                                                            (colorImagePixelData[depthIndex].X + 1)*4 + 1],
+                                                            colorImagePixelData[depthIndex].Y * depthFrame.Width * 4 +
+                                                            (colorImagePixelData[depthIndex].X + 1) * 4 + 1],
                                                         colorPixelData[
-                                                            colorImagePixelData[depthIndex].Y*depthFrame.Width*4 +
-                                                            (colorImagePixelData[depthIndex].X + 1)*4]);
+                                                            colorImagePixelData[depthIndex].Y * depthFrame.Width * 4 +
+                                                            (colorImagePixelData[depthIndex].X + 1) * 4]);
                                 }
                                 else
                                 {
                                     kinArray[colorInDepthX, colorInDepthY] =
-                                        new KinectPoint(colorImagePixelData[depthIndex].X,
+                                        new KinectPoint(639 - colorImagePixelData[depthIndex].X,
                                                         colorImagePixelData[depthIndex].Y,
                                                         0,
                                                         colorPixelData[
@@ -455,14 +455,14 @@ namespace KinectAutoCalibration.Kinect
             {
                 for (int x = 0; x < 640; ++x)
                 {
-                    if (kinArray[x, y] != null && kinArray[x,y].Z != 0)
+                    if (kinArray[x, y] != null && kinArray[x, y].Z != 0)
                     {
                         KinectPoint temp = kinArray[x, y];
                         //temp.X = GetXinMillimeters(kinArray[x, y]);
                         //temp.Y = GetXinMillimeters(kinArray[x, y]);
                         temp.Z = kinArray[x, y].Z;
-                        temp.X = (int)((kinArray[x, y].X - 320)*temp.Z/544.945);
-                        temp.Y = (int)((kinArray[x, y].Y - 240)*temp.Z/585.258);
+                        temp.X = (int)((kinArray[x, y].X - 320) * temp.Z / 544.945);
+                        temp.Y = (int)((kinArray[x, y].Y - 240) * temp.Z / 585.258);
                         rwArray[x, y] = temp;
                     }
                     else
@@ -477,7 +477,7 @@ namespace KinectAutoCalibration.Kinect
 
         public Vector3D CreateRealWorldVector(KinectPoint p)
         {
-            return new Vector3D { X = p.X, Y= p.Y, Z = p.Z };
+            return new Vector3D { X = p.X, Y = p.Y, Z = p.Z };
         }
 
         /// <summary>

@@ -66,21 +66,21 @@ namespace KinectAutoCalibration.Calibration
 
             _differenceImage = kinect.GetDifferenceImage(p1, p2, 80);
             diffBitmap = kinect.ConvertKinectPointArrayToWritableBitmap(_differenceImage, 640, 480);
-            
+
             //var realWorldArray = kinect.CreateRealWorldArray(kinArray);
-            
+
             corners = GetCornerPoints(_differenceImage);
             corners.Sort((first, second) => first != null ? first.Z.CompareTo(second.Z) : 0);
 
             //// Punkt mit niedrigstem Abstand(z) als mittelpunkt (param2)
             //// Punkt mit höchstem Abstand(z) nicht nehmen!!!!
-            ChangeOfBasis.InitializeChangeOfBasis(corners[3], corners[0], corners[1]);
+            ChangeOfBasis.InitializeChangeOfBasis(corners[2], corners[0], corners[1]);
 
             _corners2D = new List<Vector2D>();
             _corners2D.Add(ChangeOfBasis.GetVectorInNewBasis(corners[0]));
             _corners2D.Add(ChangeOfBasis.GetVectorInNewBasis(corners[1]));
+            _corners2D.Add(ChangeOfBasis.GetVectorInNewBasis(corners[2]));
             _corners2D.Add(ChangeOfBasis.GetVectorInNewBasis(corners[3]));
-            _corners2D.Add(ChangeOfBasis.GetVectorInNewBasis(corners[4]));
             //foreach (var vector3D in corners)
             //{
             //    corners2d.Add(ChangeOfBasis.GetVectorInNewBasis(vector3D));
@@ -94,11 +94,13 @@ namespace KinectAutoCalibration.Calibration
             _height = myList[1].Value;
             _width = myList[2].Value;
 
+            //var lookupTable = new Dictionary<Vector2D, Vector2D>();
+            //lookupTable.Add(new Vector2D{X=800,Y=600}, middle);
+
             //Thread.Sleep(1000);
             //beamer.DisplayCalibrationImage(true, 5);
             //Thread.Sleep(1000);
             //beamer.DisplayCalibrationImage(false, 5);
-
 
             beamer.DisplayBlank();
             Thread.Sleep(1000);
@@ -122,25 +124,21 @@ namespace KinectAutoCalibration.Calibration
             var objs2D = new List<Vector2D>();
             foreach (var v in objs)
             {
-                objs2D.Add(ChangeOfBasis.GetVectorInNewBasis(kinect.CreateRealWorldVector(realWorldArray[(int)v.X,(int)v.Y])));
+                objs2D.Add(ChangeOfBasis.GetVectorInNewBasis(kinect.CreateRealWorldVector(realWorldArray[(int)v.X, (int)v.Y])));
             }
 
-            //
             List<Vector2D> beamerCoordinates = new List<Vector2D>();
             foreach (var realVector in objs2D)
             {
                 beamerCoordinates.Add(CalculateBeamerCoordinate(realVector));
             }
-
-            //
-
             var gueltig = objs2D.Where(vector2D => vector2D.X > 0 && vector2D.Y > 0).ToList();
 
             var stride = _width * 4; // bytes per row
 
             var pixelData = new byte[_height * stride];
             try
-            {   
+            {
                 foreach (var v2 in beamerCoordinates)
                 {
                     var x = (int)v2.X;
@@ -163,24 +161,34 @@ namespace KinectAutoCalibration.Calibration
             diffBitmap.WritePixels(new Int32Rect(0, 0, _width, _height), pixelData, _width * 4, 0);
         }
 
-        private Vector2D CalculateBeamerCoordinate(Vector2D realVector)
+        private Vector2D CalculateBeamerCoordinate(Vector2D areaVector)
         {
+            /*
             // 1400 = beamer width
             // 70 = tile width
-            var s = new Vector2D{X = realVector.X * (1400 - 2*70) / _width, Y = realVector.Y + 70};
+            var s = new Vector2D{X = areaVector.X * (1400 - 2*70) / _width, Y = areaVector.Y + 70};
             var b = _corners2D[1];
             var t = s.Add(b);
-            var u = new Vector2D{X = realVector.X + 70, Y = realVector.Y * (1050 - 2*70) / _height};
+            var u = new Vector2D{X = areaVector.X + 70, Y = areaVector.Y * (1050 - 2*70) / _height};
             var c = _corners2D[2];
             var v = c.Add(u);
 
-            var lambdaZaehler = t.Y*(u.X - v.X) - v.Y*(u.X - v.X) - t.X*(u.Y - v.Y) + v.X*(u.Y - v.Y);
-            var lambdaNenner = ((s.X - t.X)*(u.Y - v.Y)) - ((s.Y - t.Y)*(u.Y - v.Y));
+            //var lambdaZaehler = t.Y*(u.X - v.X) - v.Y*(u.X - v.X) - t.X*(u.Y - v.Y) + v.X*(u.Y - v.Y);
+            //var lambdaNenner = ((s.X - t.X)*(u.Y - v.Y)) - ((s.Y - t.Y)*(u.Y - v.Y));
+
+
+            var lambdaZaehler = v.X*u.Y - v.Y*u.X;
+            var lambdaNenner = -s.X*v.Y + s.X*u.Y + s.Y*v.X - s.Y*u.X;
+
             var lambda = lambdaZaehler/lambdaNenner;
 
             var temp = t.Subtract(s).Multiply(lambda);
             var P = s.Add(temp);
-            return P;
+             * */
+            var px = areaVector.X * 1060 / 1900;
+            var py = areaVector.Y * 1060 / 1050;
+
+            return new Vector2D { X = px, Y = py };
         }
 
         public void GetObstacles()
@@ -197,7 +205,7 @@ namespace KinectAutoCalibration.Calibration
             var objs2D = new List<Vector2D>();
             foreach (var v in objs)
             {
-                KinectPoint p = realWorldArray[(int) v.X, (int) v.Y];
+                KinectPoint p = realWorldArray[(int)v.X, (int)v.Y];
                 if (p != null)
                 {
                     objs2D.Add(ChangeOfBasis.GetVectorInNewBasis(kinect.CreateRealWorldVector(p)));
@@ -209,17 +217,17 @@ namespace KinectAutoCalibration.Calibration
             {
                 beamerCoordinates.Add(CalculateBeamerCoordinate(realVector));
             }
-            var stride = 1440 * 4; // bytes per row
+            var stride = 1600 * 4; // bytes per row
 
-            var pixelData = new byte[900 * stride];
+            var pixelData = new byte[1200 * stride];
             try
             {
                 foreach (var v2 in beamerCoordinates)
                 {
                     var x = (int)v2.X;
                     var y = (int)v2.Y;
-                    int index = y * 1440 * 4 + x * 4;
-                    if (index > 900 * stride || index < 0)
+                    int index = y * 1600 * 4 + x * 4;
+                    if (index > 1200 * stride || index < 0)
                         continue;
 
                     pixelData[index + 2] = (byte)0xff;
@@ -232,8 +240,8 @@ namespace KinectAutoCalibration.Calibration
                 Console.Error.WriteLine(e.StackTrace);
             }
 
-            diffBitmap = new WriteableBitmap(1440, 900, 96, 96, PixelFormats.Bgr32, null);
-            diffBitmap.WritePixels(new Int32Rect(0, 0, 1440, 900), pixelData, 1440 * 4, 0);
+            diffBitmap = new WriteableBitmap(1600, 1200, 96, 96, PixelFormats.Bgr32, null);
+            diffBitmap.WritePixels(new Int32Rect(0, 0, 1600, 1200), pixelData, 1600 * 4, 0);
         }
 
         public void DisplayBlank()
@@ -295,7 +303,7 @@ namespace KinectAutoCalibration.Calibration
 
         public WriteableBitmap GetDifferenceBitmap()
         {
-            
+
             return diffBitmap;
         }
 
