@@ -131,9 +131,6 @@ namespace KinectAutoCalibration.Calibration
             {
                 beamerCoordinates.Add(CalculateBeamerCoordinate(realVector));
             }
-            
-
-
 
             //
 
