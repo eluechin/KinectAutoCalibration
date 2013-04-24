@@ -68,12 +68,12 @@ namespace KinectAutoCalibration.Calibration
 
             _differenceImage = kinect.GetDifferenceImage(p1, p2, 80);
             diffBitmap = kinect.ConvertKinectPointArrayToWritableBitmap(_differenceImage, 640, 480);
-
+            
             //var realWorldArray = kinect.CreateRealWorldArray(kinArray);
             kinP = kinect.CreateKinectPointArray();
             corners = GetCornerPoints(_differenceImage);
             corners.Sort((first, second) => first != null ? first.Z.CompareTo(second.Z) : 0);
-
+            
             //// Punkt mit niedrigstem Abstand(z) als mittelpunkt (param2)
             //// Punkt mit höchstem Abstand(z) nicht nehmen!!!!
             ChangeOfBasis.InitializeChangeOfBasis(corners[2], corners[0], corners[1]);
@@ -82,7 +82,7 @@ namespace KinectAutoCalibration.Calibration
             _corners2D.Add(ChangeOfBasis.GetVectorInNewBasis(corners[0]));
             _corners2D.Add(ChangeOfBasis.GetVectorInNewBasis(corners[1]));
             _corners2D.Add(ChangeOfBasis.GetVectorInNewBasis(corners[2]));
-            _corners2D.Add(ChangeOfBasis.GetVectorInNewBasis(corners[3]));
+            //_corners2D.Add(ChangeOfBasis.GetVectorInNewBasis(corners[3]));
             //foreach (var vector3D in corners)
             //{
             //    corners2d.Add(ChangeOfBasis.GetVectorInNewBasis(vector3D));
@@ -103,7 +103,7 @@ namespace KinectAutoCalibration.Calibration
             //beamer.DisplayCalibrationImage(true, 5);
             //Thread.Sleep(1000);
             //beamer.DisplayCalibrationImage(false, 5);
-
+            
             beamer.DisplayBlank();
             Thread.Sleep(1000);
             _white = kinect.GetColorImage();
@@ -224,7 +224,7 @@ namespace KinectAutoCalibration.Calibration
             var pixelData = new byte[1200 * stride];
             try
             {
-                foreach (var v2 in beamerCoordinates)
+                foreach (var v2 in objs2D)
                 {
                     var x = (int)v2.X + 70;
                     var y = 1200-(int)v2.Y -70;
