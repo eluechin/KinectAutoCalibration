@@ -33,11 +33,13 @@ namespace KinectAutoCalibration.Calibration
         private WriteableBitmap diffBitmap;
         private WriteableBitmap pic1;
         private WriteableBitmap pic2;
+        private WriteableBitmap picKinP;
         private int _height;
         private int _width;
         private KinectPoint[,] _differenceImage;
         private KinectPoint[,] p1;
         private KinectPoint[,] p2;
+        private KinectPoint[,] kinP;
         private List<Vector3D> corners;
         private List<Vector2D> _corners2D;
         private KinectPoint[,] _white;
@@ -68,7 +70,7 @@ namespace KinectAutoCalibration.Calibration
             diffBitmap = kinect.ConvertKinectPointArrayToWritableBitmap(_differenceImage, 640, 480);
 
             //var realWorldArray = kinect.CreateRealWorldArray(kinArray);
-
+            kinP = kinect.CreateKinectPointArray();
             corners = GetCornerPoints(_differenceImage);
             corners.Sort((first, second) => first != null ? first.Z.CompareTo(second.Z) : 0);
 
@@ -185,8 +187,8 @@ namespace KinectAutoCalibration.Calibration
             var temp = t.Subtract(s).Multiply(lambda);
             var P = s.Add(temp);
              * */
-            var px = areaVector.X * 1060 / 1900;
-            var py = areaVector.Y * 1060 / 1050;
+            var px = areaVector.X * 1760 / _width;
+            var py = (areaVector.Y) * 1060 / _height;
 
             return new Vector2D { X = px, Y = py };
         }
@@ -224,8 +226,8 @@ namespace KinectAutoCalibration.Calibration
             {
                 foreach (var v2 in beamerCoordinates)
                 {
-                    var x = (int)v2.X;
-                    var y = (int)v2.Y;
+                    var x = (int)v2.X + 70;
+                    var y = 1200-(int)v2.Y -70;
                     int index = y * 1600 * 4 + x * 4;
                     if (index > 1200 * stride || index < 0)
                         continue;
@@ -310,6 +312,11 @@ namespace KinectAutoCalibration.Calibration
         public WriteableBitmap GetDifferenceImage()
         {
             return kinect.ConvertKinectPointArrayToWritableBitmap(_differenceImage, 640, 480);
+        }
+
+        public WriteableBitmap GetPicKinP()
+        {
+            return kinect.ConvertKinectPointArrayToWritableBitmap(kinP, 640, 480);
         }
     }
 }

@@ -142,10 +142,11 @@ namespace KinectAutoCalibration.Kinect
 
             for (int y = 0; y < height; ++y)
             {
-                for (int x = 0; x < width; ++x)
+                //for (int x = 0; x < width; ++x)
+                for (int x = 639; x >= 0; --x )
                 {
                     kinectArray[x, y] = new KinectPoint(
-                                            639 - x,
+                                            x,
                                             y,
                                             (byte)bytearray[bitPositionByteArray + 2],
                                             (byte)bytearray[bitPositionByteArray + 1],
@@ -282,7 +283,8 @@ namespace KinectAutoCalibration.Kinect
 
                     for (int y = 0; y < depthFrame.Height; ++y)
                     {
-                        for (int x = 0; x < depthFrame.Width; ++x)
+                        //for (int x = 0; x < depthFrame.Width; ++x)
+                        for (int x = depthFrame.Width - 1; x >= 0; --x)
                         {
                             int depthIndex = x + (y * this._kinect.DepthStream.FrameWidth);
                             ColorImagePoint colorImagePoint = colorImagePixelData[depthIndex];
@@ -299,8 +301,8 @@ namespace KinectAutoCalibration.Kinect
                                     depthImagePixelData[depthIndex].Depth != 0x0FFF &&
                                     depthImagePixelData[depthIndex].Depth != 0x1FFF)
                                 {
-                                    kinArray[colorInDepthX, colorInDepthY] =
-                                        new KinectPoint(639 - colorImagePixelData[depthIndex].X,
+                                    kinArray[639-colorInDepthX, colorInDepthY] =
+                                        new KinectPoint(colorImagePixelData[depthIndex].X,
                                                         colorImagePixelData[depthIndex].Y,
                                                         depthImagePixelData[depthIndex].Depth,
                                                         colorPixelData[
@@ -315,8 +317,8 @@ namespace KinectAutoCalibration.Kinect
                                 }
                                 else
                                 {
-                                    kinArray[colorInDepthX, colorInDepthY] =
-                                        new KinectPoint(639 - colorImagePixelData[depthIndex].X,
+                                    kinArray[639-colorInDepthX, colorInDepthY] =
+                                        new KinectPoint(colorImagePixelData[depthIndex].X,
                                                         colorImagePixelData[depthIndex].Y,
                                                         0,
                                                         colorPixelData[
