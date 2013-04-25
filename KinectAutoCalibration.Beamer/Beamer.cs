@@ -94,6 +94,36 @@ namespace KinectAutoCalibration.Beamer
             beamerWindow.WindowState = WindowState.Maximized;
         }
 
+        public void DisplayGrid(bool isInverted)
+        {
+            var imageCanvas = new Canvas
+            {
+                Height = screen.Bounds.Height,
+                Width = screen.Bounds.Width,
+                Background = new SolidColorBrush(Colors.Black)
+            };
+
+            var width = screen.Bounds.Width;
+            var height = screen.Bounds.Height;
+            var recList = new List<Rectangle>();
+            recList.AddRange(CreateRectangles(width/2-70,0, isInverted));
+            recList.AddRange(CreateRectangles(0, height/2-70, isInverted));
+            recList.AddRange(CreateRectangles(width / 2 - 70, height / 2 - 70, isInverted));
+            recList.AddRange(CreateRectangles(width - 70, height / 2 - 70, isInverted));
+            recList.AddRange(CreateRectangles(0, height - 70, isInverted));
+            recList.AddRange(CreateRectangles(width / 2 - 70, height - 70, isInverted));
+            recList.AddRange(CreateRectangles(width - 70, height - 70, isInverted));
+            foreach (var rectangle in recList)
+            {
+                imageCanvas.Children.Add(rectangle);
+            }
+            beamerWindow.Dispatcher.Invoke(
+            DispatcherPriority.Render,
+            new Action(() => beamerWindow.Content = imageCanvas));
+            beamerWindow.WindowState = WindowState.Minimized;
+            beamerWindow.WindowState = WindowState.Maximized;
+        }
+
         public void DisplayCalibrationImage(bool isInverted, int corner)
         {
             var imageCanvas = new Canvas
