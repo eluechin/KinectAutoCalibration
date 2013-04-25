@@ -18,11 +18,13 @@ namespace KinectAutoCalibration.Calibration
         WriteableBitmap GetDifferenceImage();
         WriteableBitmap GetPic1Bitmap();
         WriteableBitmap GetPic2Bitmap();
+        WriteableBitmap GetPicKinP();
 
         List<Vector3D> GetCornerPoints(KinectPoint[,] diffImage);
         void GetObstacles(int c);
         void GetObstacles();
         void DisplayArea();
         void DisplayBlank();
+        void CalibrateBeamer();
     }
 }

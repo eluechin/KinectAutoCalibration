@@ -66,6 +66,7 @@ namespace WpfApplication1
             _kC.InitialCalibration();
             //this.ColorImageElement1.Source = _kC.GetPic1Bitmap();
             //this.ColorImageElement2.Source = _kC.GetPic2Bitmap();
+            //this.ColorImageElement1.Source = _kC.GetPicKinP();
             this.ColorImageElement3.Source = _kC.GetDifferenceBitmap();
             this.WindowState = WindowState.Minimized;
             this.WindowState = WindowState.Maximized;
@@ -125,6 +126,14 @@ namespace WpfApplication1
         private void ObstMid(object sender, RoutedEventArgs e)
         {
             _kC.GetObstacles(5);
+            this.ColorImageElement3.Source = _kC.GetDifferenceBitmap();
+            this.WindowState = WindowState.Minimized;
+            this.WindowState = WindowState.Maximized;
+        }
+
+        private void CalibBeamer(object sender, RoutedEventArgs e)
+        {
+            _kC.CalibrateBeamer();
             this.ColorImageElement3.Source = _kC.GetDifferenceBitmap();
             this.WindowState = WindowState.Minimized;
             this.WindowState = WindowState.Maximized;
