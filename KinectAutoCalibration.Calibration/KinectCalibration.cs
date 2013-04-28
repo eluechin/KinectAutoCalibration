@@ -76,7 +76,7 @@ namespace KinectAutoCalibration.Calibration
             
             //// Punkt mit niedrigstem Abstand(z) als mittelpunkt (param2)
             //// Punkt mit höchstem Abstand(z) nicht nehmen!!!!
-            ChangeOfBasis.InitializeChangeOfBasis(corners[2], corners[0], corners[1]);
+            ChangeOfBasis.InitializeChangeOfBasis(corners[1], corners[0], corners[2]); //Corner Identification!!
 
             _corners2D = new List<Vector2D>();
             _corners2D.Add(ChangeOfBasis.GetVectorInNewBasis(corners[0]));
@@ -229,6 +229,8 @@ namespace KinectAutoCalibration.Calibration
             var kinArray = kinect.CreateKinectPointArray();
             var realWorldArray = kinect.CreateRealWorldArray(kinArray);
 
+            //var centroid = KMeans.DoKMeans(KMeansHelper.ExtractBlackPointsAs2dVector(_differenceImage), new List<Vector2D>{new Vector2D{X = 0, Y = 0}});
+     
             List<Vector3D> objs = KMeansHelper.ExtractBlackPointsAs3dVector(_differenceImage);
             var objs2D = new List<Vector2D>();
             foreach (var v in objs)
@@ -239,6 +241,8 @@ namespace KinectAutoCalibration.Calibration
                     objs2D.Add(ChangeOfBasis.GetVectorInNewBasis(kinect.CreateRealWorldVector(p)));
                 }
             }
+            //KinectPoint kp = realWorldArray[(int)centroid[0].X, (int)centroid[0].Y];
+            //objs2D.Add(ChangeOfBasis.GetVectorInNewBasis(kinect.CreateRealWorldVector(kp)));
 
             List<Vector2D> beamerCoordinates = new List<Vector2D>();
             foreach (var realVector in objs2D)
