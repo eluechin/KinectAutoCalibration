@@ -244,6 +244,7 @@ namespace KinectAutoCalibration.Calibration
             KinectPoint kp = realWorldArray[(int)centroid[0].X, (int)centroid[0].Y];
             objs2D.Add(ChangeOfBasis.GetVectorInNewBasis(kinect.CreateRealWorldVector(kp)));
 
+            
             List<Vector2D> beamerCoordinates = new List<Vector2D>();
             foreach (var realVector in objs2D)
             {
