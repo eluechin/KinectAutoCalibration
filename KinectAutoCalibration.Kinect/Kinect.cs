@@ -488,7 +488,8 @@ namespace KinectAutoCalibration.Kinect
         /// <returns>TO DO</returns>
         private int GetXinMillimeters(KinectPoint kPoint)
         {
-            const double WIDTH_CONST = 544.945;
+            //const double WIDTH_CONST = 544.945;
+            const double WIDTH_CONST = 580.8;
             const int WIDTH_X_AXIS = 640;
             const int MID_X_AXIS = 320;
 
@@ -513,7 +514,8 @@ namespace KinectAutoCalibration.Kinect
         /// <returns>TO DO</returns>
         private int GetYinMillimeters(KinectPoint kPoint)
         {
-            const double HEIGHT_CONST = 585.258;
+            //const double HEIGHT_CONST = 585.258;
+            const double HEIGHT_CONST = 581.8;
             const int HEIGHT_Y_AXIS = 480;
             const int MID_Y_AXIS = 240;
 
