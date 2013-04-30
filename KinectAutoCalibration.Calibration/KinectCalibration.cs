@@ -120,18 +120,38 @@ namespace KinectAutoCalibration.Calibration
             p2 = kinect.GetColorImage();
 
             _differenceImage = kinect.GetDifferenceImage(p1, p2, 80);
-            diffBitmap = kinect.ConvertKinectPointArrayToWritableBitmap(_differenceImage, 640, 480);
+            
 
             var centroidsInit = new List<Vector2D>
                 {
                     new Vector2D {X = 320, Y = 0},
                     new Vector2D {X = 0, Y = 240},
-                    new Vector2D {X = 320, Y = 240},
+                    //new Vector2D {X = 320, Y = 240},
                     new Vector2D {X = 640 - 1, Y = 240},
                     new Vector2D {X = 320, Y = 480-1}
                 };
 
             var centroids = KMeans.DoKMeans(KMeansHelper.ExtractBlackPointsAs2dVector(_differenceImage), centroidsInit);
+
+            foreach (var c in centroids)
+            {
+                var p = _differenceImage[(int) c.X, (int) c.Y];
+                p.R = 255;
+                p.G = 0;
+                p.B = 0;
+                _differenceImage[(int) c.X, (int) c.Y] = p;
+            }
+
+            foreach (var ci in centroidsInit)
+            {
+                var p = _differenceImage[(int)ci.X, (int)ci.Y];
+                p.R = 0;
+                p.G = 255;
+                p.B = 0;
+                _differenceImage[(int)ci.X, (int)ci.Y] = p;
+            }
+
+            diffBitmap = kinect.ConvertKinectPointArrayToWritableBitmap(_differenceImage, 640, 480);
 
         }
 

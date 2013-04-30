@@ -108,11 +108,11 @@ namespace KinectAutoCalibration.Beamer
             var recList = new List<Rectangle>();
             recList.AddRange(CreateRectangles(width/2-70,0, isInverted));
             recList.AddRange(CreateRectangles(0, height/2-70, isInverted));
-            recList.AddRange(CreateRectangles(width / 2 - 70, height / 2 - 70, isInverted));
-            recList.AddRange(CreateRectangles(width - 70, height / 2 - 70, isInverted));
-            recList.AddRange(CreateRectangles(0, height - 70, isInverted));
-            recList.AddRange(CreateRectangles(width / 2 - 70, height - 70, isInverted));
-            recList.AddRange(CreateRectangles(width - 70, height - 70, isInverted));
+            //recList.AddRange(CreateRectangles(width / 2 - 70, height / 2 - 70, isInverted));
+            recList.AddRange(CreateRectangles(width - 140, height / 2 - 70, isInverted));
+            //recList.AddRange(CreateRectangles(0, height - 140, isInverted));
+            recList.AddRange(CreateRectangles(width / 2 - 70, height - 140, isInverted));
+            //recList.AddRange(CreateRectangles(width - 140, height - 140, isInverted));
             foreach (var rectangle in recList)
             {
                 imageCanvas.Children.Add(rectangle);
