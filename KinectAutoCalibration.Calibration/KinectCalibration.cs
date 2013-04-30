@@ -33,12 +33,14 @@ namespace KinectAutoCalibration.Calibration
         private WriteableBitmap diffBitmap;
         private WriteableBitmap pic1;
         private WriteableBitmap pic2;
+        private WriteableBitmap pic3;
         private WriteableBitmap picKinP;
         private int _height;
         private int _width;
         private KinectPoint[,] _differenceImage;
         private KinectPoint[,] p1;
         private KinectPoint[,] p2;
+        private KinectPoint[,] p3; 
         private KinectPoint[,] kinP;
         private List<Vector3D> corners;
         private List<Vector2D> _corners2D;
@@ -348,6 +350,27 @@ namespace KinectAutoCalibration.Calibration
         public WriteableBitmap GetPicKinP()
         {
             return kinect.ConvertKinectPointArrayToWritableBitmap(kinP, 640, 480);
+        }
+
+        public WriteableBitmap PollLiveColorImage()
+        {
+            p3 = kinect.GetColorImage();
+            if (p3 != null)
+            {
+                return kinect.ConvertKinectPointArrayToWritableBitmap(p3, 640, 480);
+            }
+            return null;
+
+        }
+
+        public void RaiseKinect()
+        {
+            kinect.RaiseKinect();
+        }
+
+        public void LowerKinect()
+        {
+            kinect.LowerKinect();
         }
     }
 }

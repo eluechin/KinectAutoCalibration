@@ -38,16 +38,20 @@ namespace WpfApplication1
             InitializeComponent();
             try
             {
+                
                 _kC = new KinectCalibration();
+
+                CompositionTarget.Rendering += CompositionTarget_Rendering;
+
                 //_kC.InitialCalibration();
 
-                //WriteableBitmap _colorImageBitmap1 = new WriteableBitmap(640, 480, 96, 96, PixelFormats.Bgr32, null);
-                //WriteableBitmap _colorImageBitmap2 = new WriteableBitmap(640, 480, 96, 96, PixelFormats.Bgr32, null);
-                //WriteableBitmap _colorImageBitmap3 = new WriteableBitmap(640, 480, 96, 96, PixelFormats.Bgr32, null);
+                WriteableBitmap _colorImageBitmap1 = new WriteableBitmap(640, 480, 96, 96, PixelFormats.Bgr32, null);
+                WriteableBitmap _colorImageBitmap2 = new WriteableBitmap(640, 480, 96, 96, PixelFormats.Bgr32, null);
+                WriteableBitmap _colorImageBitmap3 = new WriteableBitmap(640, 480, 96, 96, PixelFormats.Bgr32, null);
 
-                //this.ColorImageElement1.Source = _colorImageBitmap1;
-                //this.ColorImageElement2.Source = _colorImageBitmap2;
-                //this.ColorImageElement3.Source = _colorImageBitmap3;
+                this.ColorImageElement1.Source = _colorImageBitmap1;
+                this.ColorImageElement2.Source = _colorImageBitmap2;
+                this.ColorImageElement3.Source = _colorImageBitmap3;
 
 
                 //this.ColorImageElement1.Source = kC.GetDifferenceBitmap();
@@ -61,13 +65,28 @@ namespace WpfApplication1
             }
         }
 
+        private void CompositionTarget_Rendering(object sender, EventArgs e)
+        {
+           this.ColorImageElement6.Source = _kC.PollLiveColorImage();
+        }
+
         private void InitialCalibration(object sender, RoutedEventArgs e)
         {
             _kC.InitialCalibration();
             //this.ColorImageElement1.Source = _kC.GetPic1Bitmap();
             //this.ColorImageElement2.Source = _kC.GetPic2Bitmap();
             //this.ColorImageElement1.Source = _kC.GetPicKinP();
-            this.ColorImageElement3.Source = _kC.GetDifferenceBitmap();
+            //this.ColorImageElement3.Source = _kC.GetDifferenceBitmap();
+           
+            /*
+            this._colorImageBitmap1 = _kC.GetDifferenceBitmap();
+            this._colorImageBitmap1.Lock();
+            this._colorImageBitmap1.AddDirtyRect(
+                    new Int32Rect(0, 0, 639, 479));
+            this._colorImageBitmap1.Unlock();
+            */
+            
+
             this.WindowState = WindowState.Minimized;
             this.WindowState = WindowState.Maximized;
         }
@@ -137,6 +156,17 @@ namespace WpfApplication1
             this.ColorImageElement3.Source = _kC.GetDifferenceBitmap();
             this.WindowState = WindowState.Minimized;
             this.WindowState = WindowState.Maximized;
+        }
+
+        private void KinectUp(object sender, RoutedEventArgs e)
+        {
+            _kC.RaiseKinect();
+
+        }
+
+        private void KinectDown(object sender, RoutedEventArgs e)
+        {
+            _kC.LowerKinect();
         }
     }
 

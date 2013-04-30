@@ -19,6 +19,8 @@ namespace KinectAutoCalibration.Kinect
         private WriteableBitmap _colorImageBitmap;
         private Int32Rect _colorImageBitmapRect;
         private int _colorImageStride;
+        private const int MIN_ELEVATION_ANGLE = -27;
+        private const int MAX_ELEVATION_ANGLE = 27;
 
         public Kinect()
         {
@@ -531,6 +533,22 @@ namespace KinectAutoCalibration.Kinect
             {
                 int y = (HEIGHT_Y_AXIS - kPoint.Y) * heightPixel;
                 return y;
+            }
+        }
+
+        public void RaiseKinect()
+        {
+            if (_kinect.ElevationAngle != MAX_ELEVATION_ANGLE)
+            {
+                _kinect.ElevationAngle += 1;
+            }
+        }
+
+        public void LowerKinect()
+        {
+            if (_kinect.ElevationAngle != MIN_ELEVATION_ANGLE)
+            {
+                _kinect.ElevationAngle -= 1;
             }
         }
 

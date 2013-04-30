@@ -19,6 +19,9 @@ namespace KinectAutoCalibration.Calibration
         WriteableBitmap GetPic1Bitmap();
         WriteableBitmap GetPic2Bitmap();
         WriteableBitmap GetPicKinP();
+        WriteableBitmap PollLiveColorImage();
+        void RaiseKinect();
+        void LowerKinect();
 
         List<Vector3D> GetCornerPoints(KinectPoint[,] diffImage);
         void GetObstacles(int c);
