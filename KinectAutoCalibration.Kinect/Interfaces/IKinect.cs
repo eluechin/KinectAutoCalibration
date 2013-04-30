@@ -28,5 +28,6 @@ namespace KinectAutoCalibration.Kinect
 
         void RaiseKinect();
         void LowerKinect();
+        byte[] ConvertKinectPointArrayToByteArray(KinectPoint[,] kinArray, int width, int height);
     }
 }

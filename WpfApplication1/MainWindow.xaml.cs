@@ -26,6 +26,8 @@ namespace WpfApplication1
         private WriteableBitmap _colorImageBitmap1;
         private WriteableBitmap _colorImageBitmap2;
         private WriteableBitmap _colorImageBitmap3;
+        private WriteableBitmap _colorImageBitmap4;
+        private WriteableBitmap _colorImageBitmap5;
         private Int32Rect _colorImageBitmapRect;
         private int _colorImageStride;
         private byte[] _colorImagePixelData1;
@@ -44,14 +46,20 @@ namespace WpfApplication1
                 CompositionTarget.Rendering += CompositionTarget_Rendering;
 
                 //_kC.InitialCalibration();
+                this._colorImageBitmapRect = new Int32Rect(0, 0, 640, 480);
+                this._colorImageStride = 640 * 4;
+           
+                this._colorImageBitmap1 = new WriteableBitmap(640, 480, 96, 96, PixelFormats.Bgr32, null);
+                this._colorImageBitmap2 = new WriteableBitmap(640, 480, 96, 96, PixelFormats.Bgr32, null);
+                this._colorImageBitmap3 = new WriteableBitmap(640, 480, 96, 96, PixelFormats.Bgr32, null);
+                this._colorImageBitmap4 = new WriteableBitmap(640, 480, 96, 96, PixelFormats.Bgr32, null);
+                this._colorImageBitmap5 = new WriteableBitmap(640, 480, 96, 96, PixelFormats.Bgr32, null);
 
-                WriteableBitmap _colorImageBitmap1 = new WriteableBitmap(640, 480, 96, 96, PixelFormats.Bgr32, null);
-                WriteableBitmap _colorImageBitmap2 = new WriteableBitmap(640, 480, 96, 96, PixelFormats.Bgr32, null);
-                WriteableBitmap _colorImageBitmap3 = new WriteableBitmap(640, 480, 96, 96, PixelFormats.Bgr32, null);
-
-                this.ColorImageElement1.Source = _colorImageBitmap1;
-                this.ColorImageElement2.Source = _colorImageBitmap2;
-                this.ColorImageElement3.Source = _colorImageBitmap3;
+                this.ColorImageElement1.Source = this._colorImageBitmap1;
+                this.ColorImageElement2.Source = this._colorImageBitmap2;
+                this.ColorImageElement3.Source = this._colorImageBitmap3;
+                this.ColorImageElement4.Source = this._colorImageBitmap4;
+                this.ColorImageElement5.Source = this._colorImageBitmap5;
 
 
                 //this.ColorImageElement1.Source = kC.GetDifferenceBitmap();
@@ -77,15 +85,9 @@ namespace WpfApplication1
             //this.ColorImageElement2.Source = _kC.GetPic2Bitmap();
             //this.ColorImageElement1.Source = _kC.GetPicKinP();
             //this.ColorImageElement3.Source = _kC.GetDifferenceBitmap();
-           
-            /*
-            this._colorImageBitmap1 = _kC.GetDifferenceBitmap();
-            this._colorImageBitmap1.Lock();
-            this._colorImageBitmap1.AddDirtyRect(
-                    new Int32Rect(0, 0, 639, 479));
-            this._colorImageBitmap1.Unlock();
-            */
-            
+
+            var pixels = _kC.GetDifferenceImage();
+            this._colorImageBitmap3.WritePixels(this._colorImageBitmapRect, pixels, this._colorImageStride, 0);            
 
             this.WindowState = WindowState.Minimized;
             this.WindowState = WindowState.Maximized;
@@ -126,8 +128,10 @@ namespace WpfApplication1
         private void Obst(object sender, RoutedEventArgs e)
         {
             _kC.GetObstacles();
-            this.ColorImageElement3.Source = _kC.GetDifferenceBitmap();
-            this.ColorImageElement2.Source = _kC.GetDifferenceImage();
+
+            var pixelsObst = _kC.GetDifferenceImageObst();
+            this._colorImageBitmap2.WritePixels(this._colorImageBitmapRect, pixelsObst, this._colorImageStride, 0);
+
             this.WindowState = WindowState.Minimized;
             this.WindowState = WindowState.Maximized;
         }

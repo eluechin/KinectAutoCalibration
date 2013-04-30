@@ -38,6 +38,7 @@ namespace KinectAutoCalibration.Calibration
         private int _height;
         private int _width;
         private KinectPoint[,] _differenceImage;
+        private KinectPoint[,] _differenceImageObst;
         private KinectPoint[,] p1;
         private KinectPoint[,] p2;
         private KinectPoint[,] p3; 
@@ -247,13 +248,13 @@ namespace KinectAutoCalibration.Calibration
             //MessageBox.Show("Display Obst");
             Thread.Sleep(1000);
             p2 = kinect.GetColorImage();
-            _differenceImage = kinect.GetDifferenceImage(_white, p2, 80);
+            _differenceImageObst = kinect.GetDifferenceImage(_white, p2, 80);
             var kinArray = kinect.CreateKinectPointArray();
             var realWorldArray = kinect.CreateRealWorldArray(kinArray);
 
-            var centroid = KMeans.DoKMeans(KMeansHelper.ExtractBlackPointsAs2dVector(_differenceImage), new List<Vector2D>{new Vector2D{X = 0, Y = 0}});
+            var centroid = KMeans.DoKMeans(KMeansHelper.ExtractBlackPointsAs2dVector(_differenceImageObst), new List<Vector2D>{new Vector2D{X = 0, Y = 0}});
      
-            List<Vector3D> objs = KMeansHelper.ExtractBlackPointsAs3dVector(_differenceImage);
+            List<Vector3D> objs = KMeansHelper.ExtractBlackPointsAs3dVector(_differenceImageObst);
             var objs2D = new List<Vector2D>();
             /*foreach (var v in objs)
             {
@@ -362,9 +363,15 @@ namespace KinectAutoCalibration.Calibration
             return diffBitmap;
         }
 
-        public WriteableBitmap GetDifferenceImage()
+        public byte[] GetDifferenceImage()
         {
-            return kinect.ConvertKinectPointArrayToWritableBitmap(_differenceImage, 640, 480);
+            //return kinect.ConvertKinectPointArrayToWritableBitmap(_differenceImage, 640, 480);
+            return kinect.ConvertKinectPointArrayToByteArray(_differenceImage, 640, 480);
+        }
+
+        public byte[] GetDifferenceImageObst()
+        {
+            return kinect.ConvertKinectPointArrayToByteArray(_differenceImageObst, 640, 480);
         }
 
         public WriteableBitmap GetPicKinP()
@@ -391,6 +398,11 @@ namespace KinectAutoCalibration.Calibration
         public void LowerKinect()
         {
             kinect.LowerKinect();
+        }
+
+        public byte[] ConvertKinectPointArrayToByteArray(KinectPoint[,] kinArray, int width, int height)
+        {
+            return kinect.ConvertKinectPointArrayToByteArray(kinArray, width, height);
         }
     }
 }
