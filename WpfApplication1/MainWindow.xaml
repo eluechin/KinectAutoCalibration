@@ -1,25 +1,33 @@
 ﻿<Window x:Class="WpfApplication1.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="830" Width="1600" WindowState="Maximized">
+        Title="MainWindow" Height="900" Width="1600" WindowState="Maximized">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="20" />
             <RowDefinition Height="350" />
+            <RowDefinition Height="20" />
             <RowDefinition Height="350" />
-            <RowDefinition Height="100" />
+            <RowDefinition Height="50" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-        <Image x:Name="ColorImageElement1" Grid.Row="0" Grid.Column="0" Height="350" Width="525"/>
-        <Image x:Name="ColorImageElement2" Grid.Row="0" Grid.Column="1" Height="350" Width="525"/>
-        <Image x:Name="ColorImageElement3" Grid.Row="0" Grid.Column="2" Height="350" Width="525"/>
-        <Image x:Name="ColorImageElement4" Grid.Row="1" Grid.Column="0" Height="350" Width="525"/>
-        <Image x:Name="ColorImageElement5" Grid.Row="1" Grid.Column="1" Height="350" Width="525"/>
-        <Image x:Name="ColorImageElement6" Grid.Row="1" Grid.Column="2" Height="350" Width="525"/>
-        <StackPanel Grid.Row="2" Grid.ColumnSpan="3" Orientation="Horizontal">
+        <TextBlock Text="1" Grid.Row="0" Grid.Column="0" Height="20" Width="525" TextAlignment="Center"></TextBlock>
+        <TextBlock Text="Differenz-Bild [Gegenstand]" Grid.Row="0" Grid.Column="1" Height="20" Width="525" TextAlignment="Center"></TextBlock>
+        <TextBlock Text="Differenz-Bild [Feld]" Grid.Row="0" Grid.Column="2" Height="20" Width="525" TextAlignment="Center"></TextBlock>
+        <Image x:Name="ColorImageElement1" Grid.Row="1" Grid.Column="0" Height="350" Width="525"/>
+        <Image x:Name="ColorImageElement2" Grid.Row="1" Grid.Column="1" Height="350" Width="525"/>
+        <Image x:Name="ColorImageElement3" Grid.Row="1" Grid.Column="2" Height="350" Width="525"/>
+        <TextBlock Text="4" Grid.Row="2" Grid.Column="0" Height="20" Width="525" TextAlignment="Center"></TextBlock>
+        <TextBlock Text="5" Grid.Row="2" Grid.Column="1" Height="20" Width="525" TextAlignment="Center"></TextBlock>
+        <TextBlock Text="Live Bild" Grid.Row="2" Grid.Column="2" Height="20" Width="525" TextAlignment="Center"></TextBlock>
+        <Image x:Name="ColorImageElement4" Grid.Row="3" Grid.Column="0" Height="350" Width="525"/>
+        <Image x:Name="ColorImageElement5" Grid.Row="3" Grid.Column="1" Height="350" Width="525"/>
+        <Image x:Name="ColorImageElement6" Grid.Row="3" Grid.Column="2" Height="350" Width="525"/>
+        <StackPanel Grid.Row="4" Grid.ColumnSpan="3" Orientation="Horizontal">
             <Button Content="Start Calibration" Click="InitialCalibration"></Button>
             <!--<Button Content="Obstacle Middle" Click="ObstMid"></Button>-->
             <Button Content="Obstacle TopLeft" Click="ObstTopLeft"></Button>

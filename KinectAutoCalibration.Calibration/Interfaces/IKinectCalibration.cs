@@ -15,13 +15,15 @@ namespace KinectAutoCalibration.Calibration
         void InitialCalibration();
 
         WriteableBitmap GetDifferenceBitmap();
-        WriteableBitmap GetDifferenceImage();
+        byte[] GetDifferenceImage();
+        byte[] GetDifferenceImageObst();
         WriteableBitmap GetPic1Bitmap();
         WriteableBitmap GetPic2Bitmap();
         WriteableBitmap GetPicKinP();
         WriteableBitmap PollLiveColorImage();
         void RaiseKinect();
         void LowerKinect();
+        byte[] ConvertKinectPointArrayToByteArray(KinectPoint[,] kinArray, int width, int height);
 
         List<Vector3D> GetCornerPoints(KinectPoint[,] diffImage);
         void GetObstacles(int c);

@@ -160,6 +160,8 @@ namespace KinectAutoCalibration.Kinect
         }
 
 
+
+
         /// <summary>
         /// This method is used to get a specific x/y-point out of a KinectPoint-array.</summary>
         /// <param name="kinArray">the array where the needed point is contained in.</param>
@@ -177,6 +179,33 @@ namespace KinectAutoCalibration.Kinect
             return kinPoint;
         }
 
+
+        public byte[] GetColorImageAsByteArray()
+        {
+            try
+            {
+
+                using (ColorImageFrame frame = this._kinect.ColorStream.OpenNextFrame(10))
+                {
+                    if (frame != null)
+                    {
+                        byte[] pixelData = new byte[frame.PixelDataLength];
+                        frame.CopyPixelDataTo(pixelData);
+
+                       
+                        return pixelData;
+                    }
+
+                    return null;
+                }
+
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
+        }
 
         /// <summary>
         /// This method requests an image from the Color Stream of a connected kinect</summary>
@@ -387,6 +416,42 @@ namespace KinectAutoCalibration.Kinect
             this._colorImageBitmap.WritePixels(this._colorImageBitmapRect, pixelData, this._colorImageStride, 0);
             return this._colorImageBitmap;
         }
+
+
+        public byte[] ConvertKinectPointArrayToByteArray(KinectPoint[,] kinArray, int width, int height)
+        {
+            var stride = width * 4; // bytes per row
+
+            byte[] pixelData = new byte[height * stride];
+            int index = 0;
+
+            for (int y = 0; y < height; ++y)
+            {
+                for (int x = 0; x < width; ++x)
+                {
+                    //var color = colorArray[y, x];
+                    //var index = (y * stride) + (x * 4);
+                    if (kinArray[x, y] != null)
+                    {
+                        pixelData[index + 2] = (byte)kinArray[x, y].R;
+                        pixelData[index + 1] = (byte)kinArray[x, y].G;
+                        pixelData[index] = (byte)kinArray[x, y].B;
+                        //pixelData[index + 3] = color.A; // color.A;
+
+                    }
+                    else
+                    {
+                        pixelData[index + 2] = 0xFF;
+                        pixelData[index + 1] = 0x00;
+                        pixelData[index] = 0x00;
+                    }
+                    index += 4;
+                }
+            }
+
+            return pixelData;
+        }
+
 
         public Bitmap ConvertKinectPointArrayToBitmap(KinectPoint[,] kinArray, int width, int height)
         {
