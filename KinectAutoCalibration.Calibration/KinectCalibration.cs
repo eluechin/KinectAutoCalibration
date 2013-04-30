@@ -46,6 +46,7 @@ namespace KinectAutoCalibration.Calibration
         private List<Vector3D> corners;
         private List<Vector2D> _corners2D;
         private KinectPoint[,] _white;
+        private List<Vector2D> _area2DVectors;
 
         public KinectCalibration()
         {
@@ -158,6 +159,26 @@ namespace KinectAutoCalibration.Calibration
 
         }
 
+        public int GetAreaWidth()
+        {
+            return _width;
+        }
+
+        public int GetAreaHeight()
+        {
+            return _height;
+        }
+
+        public int GetObstacleCentroidX()
+        {
+            return (int) _area2DVectors[0].X;
+        }
+
+        public int GetObstacleCentroidY()
+        {
+            return (int) _area2DVectors[0].Y;
+        }
+
         public void GetObstacles(int c)
         {
             beamer.DisplayCalibrationImage(true, c);
@@ -252,10 +273,10 @@ namespace KinectAutoCalibration.Calibration
             var kinArray = kinect.CreateKinectPointArray();
             var realWorldArray = kinect.CreateRealWorldArray(kinArray);
 
-            var centroid = KMeans.DoKMeans(KMeansHelper.ExtractBlackPointsAs2dVector(_differenceImageObst), new List<Vector2D>{new Vector2D{X = 0, Y = 0}});
+            var centroids = KMeans.DoKMeans(KMeansHelper.ExtractBlackPointsAs2dVector(_differenceImageObst), new List<Vector2D>{new Vector2D{X = 0, Y = 0}});
      
             List<Vector3D> objs = KMeansHelper.ExtractBlackPointsAs3dVector(_differenceImageObst);
-            var objs2D = new List<Vector2D>();
+            _area2DVectors = new List<Vector2D>();
             /*foreach (var v in objs)
             {
                 KinectPoint p = realWorldArray[(int)v.X, (int)v.Y];
@@ -264,12 +285,11 @@ namespace KinectAutoCalibration.Calibration
                     objs2D.Add(ChangeOfBasis.GetVectorInNewBasis(kinect.CreateRealWorldVector(p)));
                 }
             }*/
-            KinectPoint kp = realWorldArray[(int)centroid[0].X, (int)centroid[0].Y];
-            objs2D.Add(ChangeOfBasis.GetVectorInNewBasis(kinect.CreateRealWorldVector(kp)));
+            KinectPoint kp = realWorldArray[(int)centroids[0].X, (int)centroids[0].Y];
+            _area2DVectors.Add(ChangeOfBasis.GetVectorInNewBasis(kinect.CreateRealWorldVector(kp)));
 
-            
             List<Vector2D> beamerCoordinates = new List<Vector2D>();
-            foreach (var realVector in objs2D)
+            foreach (var realVector in _area2DVectors)
             {
                 beamerCoordinates.Add(CalculateBeamerCoordinate(realVector));
             }
@@ -278,7 +298,7 @@ namespace KinectAutoCalibration.Calibration
             var pixelData = new byte[1200 * stride];
             try
             {
-                foreach (var v2 in objs2D)
+                foreach (var v2 in _area2DVectors)
                 {
                     var x = (int)v2.X + 70;
                     var y = 1200-(int)v2.Y -70;

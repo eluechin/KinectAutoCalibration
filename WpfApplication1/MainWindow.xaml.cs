@@ -87,7 +87,10 @@ namespace WpfApplication1
             //this.ColorImageElement3.Source = _kC.GetDifferenceBitmap();
 
             var pixels = _kC.GetDifferenceImage();
-            this._colorImageBitmap3.WritePixels(this._colorImageBitmapRect, pixels, this._colorImageStride, 0);            
+            this._colorImageBitmap3.WritePixels(this._colorImageBitmapRect, pixels, this._colorImageStride, 0);
+
+            AreaHeight.Text += _kC.GetAreaHeight().ToString();
+            AreaWidth.Text += _kC.GetAreaWidth().ToString();
 
             this.WindowState = WindowState.Minimized;
             this.WindowState = WindowState.Maximized;
@@ -131,6 +134,9 @@ namespace WpfApplication1
 
             var pixelsObst = _kC.GetDifferenceImageObst();
             this._colorImageBitmap2.WritePixels(this._colorImageBitmapRect, pixelsObst, this._colorImageStride, 0);
+
+            ObstacleX.Text += _kC.GetObstacleCentroidX().ToString();
+            ObstacleY.Text += _kC.GetObstacleCentroidY().ToString();
 
             this.WindowState = WindowState.Minimized;
             this.WindowState = WindowState.Maximized;

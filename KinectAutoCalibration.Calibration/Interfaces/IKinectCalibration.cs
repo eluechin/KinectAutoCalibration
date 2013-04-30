@@ -31,5 +31,11 @@ namespace KinectAutoCalibration.Calibration
         void DisplayArea();
         void DisplayBlank();
         void CalibrateBeamer();
+
+        int GetAreaWidth();
+        int GetAreaHeight();
+        int GetObstacleCentroidX();
+        int GetObstacleCentroidY();
+
     }
 }
