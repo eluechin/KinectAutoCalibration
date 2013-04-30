@@ -25,5 +25,8 @@ namespace KinectAutoCalibration.Kinect
         WriteableBitmap ConvertKinectPointArrayToWritableBitmap(KinectPoint[,] kinArray, int width, int height);
 
         Vector3D CreateRealWorldVector(KinectPoint p);
+
+        void RaiseKinect();
+        void LowerKinect();
     }
 }
