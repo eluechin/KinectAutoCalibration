@@ -278,14 +278,14 @@ namespace KinectAutoCalibration.Calibration
      
             List<Vector3D> objs = KMeansHelper.ExtractBlackPointsAs3dVector(_differenceImageObst);
             _area2DVectors = new List<Vector2D>();
-            /*foreach (var v in objs)
+            foreach (var v in objs)
             {
                 KinectPoint p = realWorldArray[(int)v.X, (int)v.Y];
                 if (p != null)
                 {
-                    objs2D.Add(ChangeOfBasis.GetVectorInNewBasis(kinect.CreateRealWorldVector(p)));
+                    _area2DVectors.Add(ChangeOfBasis.GetVectorInNewBasis(kinect.CreateRealWorldVector(p)));
                 }
-            }*/
+            }
             KinectPoint kp = realWorldArray[(int)centroids[0].X, (int)centroids[0].Y];
             _area2DVectors.Add(ChangeOfBasis.GetVectorInNewBasis(kinect.CreateRealWorldVector(kp)));
 
@@ -294,31 +294,42 @@ namespace KinectAutoCalibration.Calibration
             {
                 beamerCoordinates.Add(CalculateBeamerCoordinate(realVector));
             }
-            var stride = 1600 * 4; // bytes per row
+            int widthPic = 640;
+            int heightPic = 480;
 
-            _areaArray = new byte[1200 * stride];
+
+            var stride = widthPic * 4; // bytes per row
+
+            
+            _areaArray = new byte[heightPic * stride];
+            
             try
             {
+                int counter = 0;
                 foreach (var v2 in _area2DVectors)
                 {
                     var x = (int)v2.X + 70;
-                    var y = 1200-(int)v2.Y -70;
-                    int index = y * 1600 * 4 + x * 4;
-                    if (index > 1200 * stride || index < 0)
+                    var y = heightPic-(int)v2.Y -70;
+                    int index = y * widthPic * 4 + x * 4;
+                    if (index > heightPic * stride || index < 0)
                         continue;
 
                     _areaArray[index + 2] = (byte)0xff;
                     _areaArray[index + 1] = (byte)0xff;
                     _areaArray[index] = (byte)0xff;
+                    ++counter;
                 }
+
+    
+                
             }
             catch (Exception e)
             {
                 Console.Error.WriteLine(e.StackTrace);
             }
 
-            diffBitmap = new WriteableBitmap(1600, 1200, 96, 96, PixelFormats.Bgr32, null);
-            diffBitmap.WritePixels(new Int32Rect(0, 0, 1600, 1200), _areaArray, 1600 * 4, 0);
+            //diffBitmap = new WriteableBitmap(1600, 1200, 96, 96, PixelFormats.Bgr32, null);
+            //diffBitmap.WritePixels(new Int32Rect(0, 0, 1600, 1200), _areaArray, 1600 * 4, 0);
         }
 
         public byte[] GetAreaArray()
@@ -400,9 +411,10 @@ namespace KinectAutoCalibration.Calibration
             return kinect.ConvertKinectPointArrayToByteArray(_differenceImageObst, 640, 480);
         }
 
-        public WriteableBitmap GetPicKinP()
+        public byte[] GetPicKinP()
         {
-            return kinect.ConvertKinectPointArrayToWritableBitmap(kinP, 640, 480);
+            //return kinect.ConvertKinectPointArrayToWritableBitmap(kinP, 640, 480);
+            return kinect.ConvertKinectPointArrayToByteArray(kinP, 640, 480);
         }
 
         public WriteableBitmap PollLiveColorImage()

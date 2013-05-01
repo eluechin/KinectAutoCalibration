@@ -19,7 +19,7 @@ namespace KinectAutoCalibration.Calibration
         byte[] GetDifferenceImageObst();
         WriteableBitmap GetPic1Bitmap();
         WriteableBitmap GetPic2Bitmap();
-        WriteableBitmap GetPicKinP();
+        byte[] GetPicKinP();
         WriteableBitmap PollLiveColorImage();
         void RaiseKinect();
         void LowerKinect();

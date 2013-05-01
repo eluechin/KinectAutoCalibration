@@ -86,6 +86,10 @@ namespace WpfApplication1
             //this.ColorImageElement1.Source = _kC.GetPicKinP();
             //this.ColorImageElement3.Source = _kC.GetDifferenceBitmap();
 
+            var pixelsKinP = _kC.GetPicKinP();
+            this._colorImageBitmap1.WritePixels(this._colorImageBitmapRect, pixelsKinP, this._colorImageStride, 0);
+
+
             var pixels = _kC.GetDifferenceImage();
             this._colorImageBitmap3.WritePixels(this._colorImageBitmapRect, pixels, this._colorImageStride, 0);
 
