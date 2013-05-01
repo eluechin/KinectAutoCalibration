@@ -536,7 +536,8 @@ namespace KinectAutoCalibration.Kinect
                     }
                     else
                     {
-                        rwArray[x, y] = kinArray[x, y];
+                        // TODO
+                        rwArray[x, y] = null;
                     }
                 }
             }
