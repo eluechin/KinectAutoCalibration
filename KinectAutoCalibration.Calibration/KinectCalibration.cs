@@ -47,6 +47,7 @@ namespace KinectAutoCalibration.Calibration
         private List<Vector2D> _corners2D;
         private KinectPoint[,] _white;
         private List<Vector2D> _area2DVectors;
+        private byte[] _areaArray;
 
         public KinectCalibration()
         {
@@ -295,7 +296,7 @@ namespace KinectAutoCalibration.Calibration
             }
             var stride = 1600 * 4; // bytes per row
 
-            var pixelData = new byte[1200 * stride];
+            _areaArray = new byte[1200 * stride];
             try
             {
                 foreach (var v2 in _area2DVectors)
@@ -306,9 +307,9 @@ namespace KinectAutoCalibration.Calibration
                     if (index > 1200 * stride || index < 0)
                         continue;
 
-                    pixelData[index + 2] = (byte)0xff;
-                    pixelData[index + 1] = (byte)0xff;
-                    pixelData[index] = (byte)0xff;
+                    _areaArray[index + 2] = (byte)0xff;
+                    _areaArray[index + 1] = (byte)0xff;
+                    _areaArray[index] = (byte)0xff;
                 }
             }
             catch (Exception e)
@@ -317,7 +318,12 @@ namespace KinectAutoCalibration.Calibration
             }
 
             diffBitmap = new WriteableBitmap(1600, 1200, 96, 96, PixelFormats.Bgr32, null);
-            diffBitmap.WritePixels(new Int32Rect(0, 0, 1600, 1200), pixelData, 1600 * 4, 0);
+            diffBitmap.WritePixels(new Int32Rect(0, 0, 1600, 1200), _areaArray, 1600 * 4, 0);
+        }
+
+        public byte[] GetAreaArray()
+        {
+            return _areaArray;
         }
 
         public void DisplayBlank()

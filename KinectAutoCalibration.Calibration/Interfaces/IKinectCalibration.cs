@@ -36,6 +36,6 @@ namespace KinectAutoCalibration.Calibration
         int GetAreaHeight();
         int GetObstacleCentroidX();
         int GetObstacleCentroidY();
-
+        byte[] GetAreaArray();
     }
 }

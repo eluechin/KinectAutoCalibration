@@ -135,6 +135,9 @@ namespace WpfApplication1
             var pixelsObst = _kC.GetDifferenceImageObst();
             this._colorImageBitmap2.WritePixels(this._colorImageBitmapRect, pixelsObst, this._colorImageStride, 0);
 
+            var pixelsArea = _kC.GetAreaArray();
+            this._colorImageBitmap5.WritePixels(this._colorImageBitmapRect, pixelsArea, this._colorImageStride, 0);
+
             ObstacleX.Text += _kC.GetObstacleCentroidX().ToString();
             ObstacleY.Text += _kC.GetObstacleCentroidY().ToString();
 
