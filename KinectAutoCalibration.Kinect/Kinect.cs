@@ -520,6 +520,8 @@ namespace KinectAutoCalibration.Kinect
         {
             KinectPoint[,] rwArray = new KinectPoint[640, 480];
 
+            int counter = 0; 
+
             for (int y = 0; y < 480; ++y)
             {
                 for (int x = 0; x < 640; ++x)
@@ -537,11 +539,12 @@ namespace KinectAutoCalibration.Kinect
                     else
                     {
                         // TODO
+                        counter++;
                         rwArray[x, y] = null;
                     }
                 }
             }
-
+            Console.WriteLine(counter/(480*640));
             return rwArray;
         }
 
