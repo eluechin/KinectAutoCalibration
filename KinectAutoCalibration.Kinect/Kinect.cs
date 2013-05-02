@@ -21,6 +21,9 @@ namespace KinectAutoCalibration.Kinect
         private int _colorImageStride;
         private const int MIN_ELEVATION_ANGLE = -27;
         private const int MAX_ELEVATION_ANGLE = 27;
+        private const int KINECT_IMAGE_WIDTH = 640;
+        private const int KINECT_IMAGE_HEIGHT = 480;
+        private const int BYTES_PER_PIXEL = 4;
 
         public Kinect()
         {
@@ -91,15 +94,6 @@ namespace KinectAutoCalibration.Kinect
                     {
                         diffImage[x, y] = new KinectPoint { X = x, Y = y };
 
-
-                        //Variante 1: (Hacking the Kinect) 
-                        /*
-                        if ((image2[x, y].R + threshold <= image1[x, y].R || image2[x, y].R - threshold >= image1[x, y].R) &&
-                            (image2[x, y].G + threshold <= image1[x, y].G || image2[x, y].G - threshold >= image1[x, y].G) &&
-                            (image2[x, y].B + threshold <= image1[x, y].B || image2[x, y].B - threshold >= image1[x, y].B))
-                        { */
-
-                        //Variante 2: Vektor-Differenz
                         Vector3D vector1 = new Vector3D(image1[x, y].R, image1[x, y].G, image1[x, y].B);
                         Vector3D vector2 = new Vector3D(image2[x, y].R, image2[x, y].G, image2[x, y].B);
                         Vector3D diffVector = (Vector3D)vector1.Subtract(vector2);
@@ -144,8 +138,8 @@ namespace KinectAutoCalibration.Kinect
 
             for (int y = 0; y < height; ++y)
             {
-                //for (int x = 0; x < width; ++x)
-                for (int x = 639; x >= 0; --x )
+
+                for (int x = (width-1); x >= 0; --x )
                 {
                     kinectArray[x, y] = new KinectPoint(
                                             x,
@@ -171,12 +165,18 @@ namespace KinectAutoCalibration.Kinect
         public KinectPoint GetKinectPoint(KinectPoint[,] kinArray, int x, int y)
         {
             //TODO: Exception Handling
+            if ((x >= 0 || x < KINECT_IMAGE_WIDTH) &&
+                (y >= 0 || y < KINECT_IMAGE_HEIGHT))
+            {
+                KinectPoint kinPoint = new KinectPoint();
+                kinPoint = kinArray[x, y];
 
-            KinectPoint kinPoint = new KinectPoint();
-
-            kinPoint = kinArray[x, y];
-
-            return kinPoint;
+                return kinPoint;
+            }
+            else
+            {
+                return null;
+            }
         }
 
 
@@ -222,8 +222,6 @@ namespace KinectAutoCalibration.Kinect
                     {
                         byte[] pixelData1 = new byte[frame.PixelDataLength];
                         frame.CopyPixelDataTo(pixelData1);
-
-                        //KinectPoint[,] kinArray = ConvertToKinectPoint(pixelData1, frame.Width, frame.Height);
 
                         KinectPoint[,] picKin = ConvertToKinectPoint(pixelData1, 640, 480);
                         return picKin;
@@ -328,11 +326,12 @@ namespace KinectAutoCalibration.Kinect
                             if (colorInDepthX > 0 && colorInDepthX < this._kinect.DepthStream.FrameWidth &&
                                 colorInDepthY >= 0 && colorInDepthY < this._kinect.DepthStream.FrameHeight)
                             {
+                                
                                 if (depthImagePixelData[depthIndex].Depth != 0x0000 &&
                                     depthImagePixelData[depthIndex].Depth != 0x0FFF &&
                                     depthImagePixelData[depthIndex].Depth != 0x1FFF)
                                 {
-                                    kinArray[639-colorInDepthX, colorInDepthY] =
+                                    kinArray[(KINECT_IMAGE_WIDTH - 1) - colorInDepthX, colorInDepthY] =
                                         new KinectPoint(colorImagePixelData[depthIndex].X,
                                                         colorImagePixelData[depthIndex].Y,
                                                         depthImagePixelData[depthIndex].Depth,
@@ -348,7 +347,7 @@ namespace KinectAutoCalibration.Kinect
                                 }
                                 else
                                 {
-                                    kinArray[639-colorInDepthX, colorInDepthY] =
+                                    kinArray[(KINECT_IMAGE_WIDTH - 1) - colorInDepthX, colorInDepthY] =
                                         new KinectPoint(colorImagePixelData[depthIndex].X,
                                                         colorImagePixelData[depthIndex].Y,
                                                         0,
@@ -385,6 +384,7 @@ namespace KinectAutoCalibration.Kinect
         public WriteableBitmap ConvertKinectPointArrayToWritableBitmap(KinectPoint[,] kinArray, int width, int height)
         {
             var stride = width * 4; // bytes per row
+          
 
             byte[] pixelData = new byte[height * stride];
             int index = 0;
@@ -409,7 +409,7 @@ namespace KinectAutoCalibration.Kinect
                         pixelData[index + 1] = 0x00;
                         pixelData[index] = 0x00;
                     }
-                    index += 4;
+                    index += BYTES_PER_PIXEL;
                 }
             }
 
@@ -445,7 +445,7 @@ namespace KinectAutoCalibration.Kinect
                         pixelData[index + 1] = 0x00;
                         pixelData[index] = 0x00;
                     }
-                    index += 4;
+                    index += BYTES_PER_PIXEL;
                 }
             }
 
@@ -505,7 +505,7 @@ namespace KinectAutoCalibration.Kinect
                         pixelData[index + 1] = 0x00;
                         pixelData[index] = 0x00;
                     }
-                    index += 4;
+                    index += BYTES_PER_PIXEL;
                 }
             }
 
@@ -516,24 +516,30 @@ namespace KinectAutoCalibration.Kinect
         /// TO DO</summary>
         /// <param name="kinArray">TO DO</param>
         /// <returns>TO DO</returns>
-        public KinectPoint[,] CreateRealWorldArray(KinectPoint[,] kinArray)
+        public KinectPoint[,] CreateRealWorldArray(KinectPoint[,] kinArray, int width, int height)
         {
             KinectPoint[,] rwArray = new KinectPoint[640, 480];
 
-            int counter = 0; 
+            int counter = 0;
+            const double WIDTH_CONST = 544.945;
+            const double HEIGHT_CONST = 585.258;
 
-            for (int y = 0; y < 480; ++y)
+            for (int y = 0; y < height; ++y)
             {
-                for (int x = 0; x < 640; ++x)
+                for (int x = 0; x < width; ++x)
                 {
                     if (kinArray[x, y] != null && kinArray[x, y].Z != 0)
                     {
                         KinectPoint temp = kinArray[x, y];
+                        
                         //temp.X = GetXinMillimeters(kinArray[x, y]);
                         //temp.Y = GetXinMillimeters(kinArray[x, y]);
+                        
                         temp.Z = kinArray[x, y].Z;
-                        temp.X = (int)((kinArray[x, y].X - 320) * temp.Z / 544.945);
-                        temp.Y = (int)((kinArray[x, y].Y - 240) * temp.Z / 585.258);
+                        
+                        temp.X = (int)((kinArray[x, y].X - (width/2)) * temp.Z / WIDTH_CONST);
+                        
+                        temp.Y = (int)((kinArray[x, y].Y - (height/2)) * temp.Z / HEIGHT_CONST);
                         rwArray[x, y] = temp;
                     }
                     else
@@ -621,5 +627,43 @@ namespace KinectAutoCalibration.Kinect
             }
         }
 
+        public List<KinectPoint> getNeighborsOfKinectPoint(KinectPoint[,] kinArray, KinectPoint kinPoint, int radius)
+        {
+            var neighbors = new List<KinectPoint>();
+
+            for (int i = radius; i >= -radius; --i)
+            {
+                for (int j = radius; j >= -radius; --j)
+                {
+                    int x = kinPoint.X + i;
+                    int y = kinPoint.Y + j;
+
+                    if ((x >= 0 || x < KINECT_IMAGE_WIDTH) &&
+                        (y >= 0 || y < KINECT_IMAGE_HEIGHT))
+                    {
+                        neighbors.Add(kinArray[x,y]);
+                    }
+                }
+            }
+            return neighbors;
+        } 
+
+        public int calculateDepthMeanValue(List<KinectPoint> neighbors)
+        {
+            int sum = 0;
+            int validNeighbors = 0;
+
+            foreach (var kinPoint in neighbors)
+            {
+                if (kinPoint.Z != -1)
+                {
+                    sum += kinPoint.Z;
+                    ++validNeighbors;
+                }
+               
+            }
+
+            return (int)(sum/validNeighbors);
+        }
     }
 }

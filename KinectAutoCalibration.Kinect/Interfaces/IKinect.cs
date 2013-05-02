@@ -20,7 +20,7 @@ namespace KinectAutoCalibration.Kinect
         KinectPoint[,] GetColorImage();
         short[] GetDepthImage();
         KinectPoint[,] CreateKinectPointArray();
-        KinectPoint[,] CreateRealWorldArray(KinectPoint[,] kinArray);
+        KinectPoint[,] CreateRealWorldArray(KinectPoint[,] kinArray, int width, int height);
         Bitmap ConvertKinectPointArrayToBitmap(KinectPoint[,] kinArray, int width, int height);
         WriteableBitmap ConvertKinectPointArrayToWritableBitmap(KinectPoint[,] kinArray, int width, int height);
 

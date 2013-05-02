@@ -191,7 +191,7 @@ namespace KinectAutoCalibration.Calibration
             p2 = kinect.GetColorImage();
             _differenceImage = kinect.GetDifferenceImage(p1, p2, 80);
             var kinArray = kinect.CreateKinectPointArray();
-            var realWorldArray = kinect.CreateRealWorldArray(kinArray);
+            var realWorldArray = kinect.CreateRealWorldArray(kinArray, 640, 480);
 
             List<Vector3D> objs = KMeansHelper.ExtractBlackPointsAs3dVector(_differenceImage);
             var objs2D = new List<Vector2D>();
@@ -272,7 +272,7 @@ namespace KinectAutoCalibration.Calibration
             p2 = kinect.GetColorImage();
             _differenceImageObst = kinect.GetDifferenceImage(_white, p2, 80);
             var kinArray = kinect.CreateKinectPointArray();
-            var realWorldArray = kinect.CreateRealWorldArray(kinArray);
+            var realWorldArray = kinect.CreateRealWorldArray(kinArray, 640, 480);
 
             var centroids = KMeans.DoKMeans(KMeansHelper.ExtractBlackPointsAs2dVector(_differenceImageObst), new List<Vector2D>{new Vector2D{X = 0, Y = 0}});
      
@@ -367,7 +367,7 @@ namespace KinectAutoCalibration.Calibration
         public List<Vector3D> GetCornerPoints(KinectPoint[,] diffImage)
         {
             var kinArray = kinect.CreateKinectPointArray();
-            var realWorldArray = kinect.CreateRealWorldArray(kinArray);
+            var realWorldArray = kinect.CreateRealWorldArray(kinArray, 640, 480);
             var corners = new List<Vector3D>();
             var centroids = KMeans.DoKMeans(KMeansHelper.ExtractBlackPointsAs2dVector(diffImage), KMeansHelper.CreateInitialCentroids(640, 480));
             foreach (var vectorCentroid in centroids)
