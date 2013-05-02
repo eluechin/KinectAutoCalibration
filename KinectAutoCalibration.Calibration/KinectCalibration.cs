@@ -76,6 +76,15 @@ namespace KinectAutoCalibration.Calibration
             
             //var realWorldArray = kinect.CreateRealWorldArray(kinArray);
             kinP = kinect.CreateKinectPointArray();
+            int error = 0;
+            foreach (var kinectPoint in kinP)
+            {
+                if (kinectPoint == null)
+                {
+                    ++error;
+                }
+            }
+
             corners = GetCornerPoints(_differenceImage);
             corners.Sort((first, second) => first != null ? first.Z.CompareTo(second.Z) : 0);
             
