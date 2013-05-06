@@ -10,7 +10,7 @@ using KinectAutoCalibration.Common;
 
 namespace KinectAutoCalibration.Calibration
 {
-    public interface IKinectCalibration
+    public interface IAutoKinectCalibration
     {
         void InitialCalibration();
 

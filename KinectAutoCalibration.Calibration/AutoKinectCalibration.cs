@@ -22,7 +22,7 @@ using KinectAutoCalibration.Kinect;
 
 namespace KinectAutoCalibration.Calibration
 {
-    public class KinectCalibration : IKinectCalibration
+    public class AutoKinectCalibration : IAutoKinectCalibration
     {
         //private readonly int WIDTH = Convert.ToInt32(ConfigurationManager.AppSettings["AREA_WIDTH"]);
         //private readonly int HEIGHT = Convert.ToInt32(ConfigurationManager.AppSettings["AREA_WIDTH"]);
@@ -49,7 +49,7 @@ namespace KinectAutoCalibration.Calibration
         private List<Vector2D> _area2DVectors;
         private byte[] _areaArray;
 
-        public KinectCalibration()
+        public AutoKinectCalibration()
         {
             Window beamerWindow = new Window
             {
@@ -386,7 +386,7 @@ namespace KinectAutoCalibration.Calibration
             return corners;
         }
 
-        void IKinectCalibration.GetObstacles(int c)
+        void IAutoKinectCalibration.GetObstacles(int c)
         {
             GetObstacles(c);
         }
