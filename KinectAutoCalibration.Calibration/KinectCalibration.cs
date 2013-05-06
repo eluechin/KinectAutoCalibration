@@ -28,7 +28,7 @@ namespace KinectAutoCalibration.Calibration
         //private readonly int HEIGHT = Convert.ToInt32(ConfigurationManager.AppSettings["AREA_WIDTH"]);
         private readonly int WIDTH = 1400;
         private readonly int HEIGHT = 1050;
-        private IBeamer beamer;
+        private IBeamerControl beamerControl;
         private IKinect kinect;
         private WriteableBitmap diffBitmap;
         private WriteableBitmap pic1;
@@ -57,17 +57,17 @@ namespace KinectAutoCalibration.Calibration
                 WindowStyle = WindowStyle.None,
                 AllowsTransparency = true
             };
-            beamer = new Beamer.Beamer(beamerWindow);
+            beamerControl = new BeamerControl();
             kinect = new Kinect.Kinect();
         }
 
         public void InitialCalibration()
         {
-            beamer.DisplayCalibrationImage(true);
+            beamerControl.DisplayCalibrationImageEdge(true);
             Thread.Sleep(1000);
             p1 = kinect.GetColorImage();
             Thread.Sleep(1000);
-            beamer.DisplayCalibrationImage(false);
+            beamerControl.DisplayCalibrationImageEdge(false);
             Thread.Sleep(1000);
             p2 = kinect.GetColorImage();
 
@@ -114,24 +114,24 @@ namespace KinectAutoCalibration.Calibration
             //lookupTable.Add(new Vector2D{X=800,Y=600}, middle);
 
             //Thread.Sleep(1000);
-            //beamer.DisplayCalibrationImage(true, 5);
+            //beamerControl.DisplayCalibrationImage(true, 5);
             //Thread.Sleep(1000);
-            //beamer.DisplayCalibrationImage(false, 5);
+            //beamerControl.DisplayCalibrationImage(false, 5);
             
-            beamer.DisplayBlank();
+            beamerControl.DisplayBlank();
             Thread.Sleep(1000);
             _white = kinect.GetColorImage();
         }
 
         public void CalibrateBeamer()
         {
-            beamer.DisplayGrid(true);
-            Thread.Sleep(1000);
-            p1 = kinect.GetColorImage();
-            Thread.Sleep(1000);
-            beamer.DisplayGrid(false);
-            Thread.Sleep(1000);
-            p2 = kinect.GetColorImage();
+            //beamerControl.DisplayGrid(true);
+            //Thread.Sleep(1000);
+            //p1 = kinect.GetColorImage();
+            //Thread.Sleep(1000);
+            //beamerControl.DisplayGrid(false);
+            //Thread.Sleep(1000);
+            //p2 = kinect.GetColorImage();
 
             _differenceImage = kinect.GetDifferenceImage(p1, p2, 80);
             
@@ -191,11 +191,11 @@ namespace KinectAutoCalibration.Calibration
 
         public void GetObstacles(int c)
         {
-            beamer.DisplayCalibrationImage(true, c);
+            beamerControl.DisplayCalibrationImage(true, c);
             Thread.Sleep(1000);
             p1 = kinect.GetColorImage();
             Thread.Sleep(500);
-            beamer.DisplayCalibrationImage(false, c);
+            beamerControl.DisplayCalibrationImage(false, c);
             Thread.Sleep(1000);
             p2 = kinect.GetColorImage();
             _differenceImage = kinect.GetDifferenceImage(p1, p2, 80);
@@ -246,7 +246,7 @@ namespace KinectAutoCalibration.Calibration
         private Vector2D CalculateBeamerCoordinate(Vector2D areaVector)
         {
             /*
-            // 1400 = beamer width
+            // 1400 = beamerControl width
             // 70 = tile width
             var s = new Vector2D{X = areaVector.X * (1400 - 2*70) / _width, Y = areaVector.Y + 70};
             var b = _corners2D[1];
@@ -275,7 +275,7 @@ namespace KinectAutoCalibration.Calibration
 
         public void GetObstacles()
         {
-            beamer.DisplayBlank();
+            beamerControl.DisplayBlank();
             //MessageBox.Show("Display Obst");
             Thread.Sleep(1000);
             p2 = kinect.GetColorImage();
@@ -348,12 +348,12 @@ namespace KinectAutoCalibration.Calibration
 
         public void DisplayBlank()
         {
-            beamer.DisplayBlank();
+            beamerControl.DisplayBlank();
         }
 
         public void DisplayArea()
         {
-            beamer.DisplayBitmap(diffBitmap);
+            //beamerControl.DisplayBitmap(diffBitmap);
         }
 
         public Bitmap GetColorBitmap()
