@@ -377,9 +377,9 @@ namespace KinectAutoCalibration.Calibration
         public List<Vector3D> GetCornerPoints(KinectPoint[,] diffImage)
         {
             var kinArray = kinect.CreateKinectPointArray();
-            var realWorldArray = kinect.CreateRealWorldArray(kinArray, 640, 480);
             var corners = new List<Vector3D>();
             var centroids = KMeans.DoKMeans(KMeansHelper.ExtractBlackPointsAs2dVector(diffImage), KMeansHelper.CreateInitialCentroids(640, 480));
+            var realWorldArray = kinect.CreateRealWorldArray(kinArray, 640, 480);
             foreach (var vectorCentroid in centroids)
             {
                 corners.Add(kinect.CreateRealWorldVector(realWorldArray[(int)vectorCentroid.X, (int)vectorCentroid.Y]));

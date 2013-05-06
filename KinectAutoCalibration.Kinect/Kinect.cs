@@ -23,6 +23,8 @@ namespace KinectAutoCalibration.Kinect
         private const int MAX_ELEVATION_ANGLE = 27;
         private const int KINECT_IMAGE_WIDTH = 640;
         private const int KINECT_IMAGE_HEIGHT = 480;
+        private const double WIDTH_CONST = 544.945;
+        private const double HEIGHT_CONST = 585.258;
         private const int BYTES_PER_PIXEL = 4;
 
         public Kinect()
@@ -329,7 +331,7 @@ namespace KinectAutoCalibration.Kinect
                             int colorInDepthY = colorImagePoint.Y /
                                                 (this._kinect.ColorStream.FrameWidth / this._kinect.DepthStream.FrameWidth);
 
-                            if (isValidKinectPoint(colorInDepthX, colorInDepthY, depthImagePixelData[depthIndex].Depth))
+                            if (IsValidKinectPoint(colorInDepthX, colorInDepthY, depthImagePixelData[depthIndex].Depth))
                             {
                                 kinArray[(KINECT_IMAGE_WIDTH - 1) - colorInDepthX, colorInDepthY] =
                                     new KinectPoint(colorImagePixelData[depthIndex].X,
@@ -517,97 +519,69 @@ namespace KinectAutoCalibration.Kinect
         public KinectPoint[,] CreateRealWorldArray(KinectPoint[,] kinArray, int width, int height)
         {
             KinectPoint[,] rwArray = new KinectPoint[640, 480];
+            var a = new KinectPoint(0, 0, 0, 0, 0);
+            var b = new KinectPoint(1, 1, 0, 0, 0);
+            var c = new KinectPoint(2, 2, 0, 0, 0);
 
-            int counter = 0;
-            const double WIDTH_CONST = 544.945;
-            const double HEIGHT_CONST = 585.258;
 
+            var rwA = CalculateRealWorldPoint(a);
+            var rwB = CalculateRealWorldPoint(b);
+            var rwC = CalculateRealWorldPoint(c);
+                
             for (int y = 0; y < height; ++y)
             {
                 for (int x = 0; x < width; ++x)
                 {
-                    //if (kinArray[x, y] != null && kinArray[x, y].Z != -1)
                     if (kinArray[x, y].Z != -1)
                     {
-                        KinectPoint temp = kinArray[x, y];
 
-                        //temp.X = GetXinMillimeters(kinArray[x, y]);
-                        //temp.Y = GetXinMillimeters(kinArray[x, y]);
+                        var RWPoint = CalculateRealWorldPoint(kinArray[x, y], rwA, rwB, rwC);
+                        //TODO
+                        //rwArray[x, y] = RWPoint;
 
-                        temp.Z = kinArray[x, y].Z;
-
-                        temp.X = (int)((kinArray[x, y].X - (width / 2)) * temp.Z / WIDTH_CONST);
-
-                        temp.Y = (int)((kinArray[x, y].Y - (height / 2)) * temp.Z / HEIGHT_CONST);
-                        rwArray[x, y] = temp;
                     }
                     else
                     {
                         // TODO
-                        counter++;
                         rwArray[x, y] = kinArray[x, y];
                     }
                 }
             }
-            Console.WriteLine(counter / (480 * 640));
             return rwArray;
+        }
+
+        private RealWorldPoint CalculateRealWorldPoint(KinectPoint p)
+        {
+            var RWPoint = new RealWorldPoint();
+
+            RWPoint.Z = p.Z;
+            RWPoint.X = (int) ((p.X - (KINECT_IMAGE_WIDTH/2))* RWPoint.Z/WIDTH_CONST);
+            RWPoint.Y = (int)((p.Y - (KINECT_IMAGE_HEIGHT / 2)) * RWPoint.Z / HEIGHT_CONST);
+
+            return RWPoint;
+        }
+
+        private RealWorldPoint CalculateRealWorldPoint(KinectPoint p, RealWorldPoint a, RealWorldPoint b, RealWorldPoint c)
+        {
+            var RWPoint = new RealWorldPoint();
+
+            //RWPoint.Z = kinectPoint.Z;
+
+            //var numerator = 2 (az by cx-ay bz cx-az bx cy+ax bz cy+ay bx cz-ax by cz) HEIGHT_CONST WIDTH_CONST;
+            //var denominator = ((az (bx-cx)+bz cx-bx cz+ax (-bz+cz)) (HEIGHT-2 py) WIDTH_CONST+HEIGHT_CONST ((-ay bz+az (by-cy)+bz cy+ay cz-by cz) (2 px-WIDTH)+2 (-ax by+ay (bx-cx)+by cx+ax cy-bx cy) WIDTH_CONST))};
+            var numerator = 1;
+            var denominator = 1;
+
+            RWPoint.Z = (int) numerator/denominator;
+            RWPoint.X = (int) ((p.X - (KINECT_IMAGE_WIDTH/2))*RWPoint.Z/WIDTH_CONST);
+            RWPoint.Y = (int)((p.Y - (KINECT_IMAGE_HEIGHT / 2)) * RWPoint.Z / HEIGHT_CONST);
+
+            return RWPoint;
         }
 
         public Vector3D CreateRealWorldVector(KinectPoint p)
         {
             return new Vector3D { X = p.X, Y = p.Y, Z = p.Z };
-        }
-
-        /// <summary>
-        /// TO DO</summary>
-        /// <param name="kinArray">TO DO</param>
-        /// <returns>TO DO</returns>
-        private int GetXinMillimeters(KinectPoint kPoint)
-        {
-            //const double WIDTH_CONST = 544.945;
-            const double WIDTH_CONST = 580.8;
-            const int WIDTH_X_AXIS = 640;
-            const int MID_X_AXIS = 320;
-
-            double s = kPoint.Z * WIDTH_CONST;
-            int widthPixel = (int)(s / WIDTH_X_AXIS);
-
-            if (kPoint.X < MID_X_AXIS)
-            {
-                int x = (MID_X_AXIS - kPoint.X) * widthPixel;
-                return x;
-            }
-            else
-            {
-                int x = (WIDTH_X_AXIS - kPoint.X) * widthPixel;
-                return -x;
-            }
-        }
-
-        /// <summary>
-        /// TO DO</summary>
-        /// <param name="kinArray">TO DO</param>
-        /// <returns>TO DO</returns>
-        private int GetYinMillimeters(KinectPoint kPoint)
-        {
-            //const double HEIGHT_CONST = 585.258;
-            const double HEIGHT_CONST = 581.8;
-            const int HEIGHT_Y_AXIS = 480;
-            const int MID_Y_AXIS = 240;
-
-            double s = kPoint.Z * HEIGHT_CONST;
-            int heightPixel = (int)(s / HEIGHT_Y_AXIS);
-
-            if (kPoint.Y < MID_Y_AXIS)
-            {
-                int y = (MID_Y_AXIS - kPoint.Y) * heightPixel;
-                return -y;
-            }
-            else
-            {
-                int y = (HEIGHT_Y_AXIS - kPoint.Y) * heightPixel;
-                return y;
-            }
         }
 
         public void RaiseKinect()
@@ -626,7 +600,7 @@ namespace KinectAutoCalibration.Kinect
             }
         }
 
-        public bool isValidKinectPoint(int colorInDepthX, int colorInDepthY, short depthValue)
+        public bool IsValidKinectPoint(int colorInDepthX, int colorInDepthY, short depthValue)
         {
             if (colorInDepthX > 0 && colorInDepthX < this._kinect.DepthStream.FrameWidth &&
                 colorInDepthY >= 0 && colorInDepthY < this._kinect.DepthStream.FrameHeight)
@@ -642,7 +616,7 @@ namespace KinectAutoCalibration.Kinect
             return false;
         }
 
-        public List<KinectPoint> getNeighborsOfKinectPoint(KinectPoint[,] kinArray, KinectPoint kinPoint, int radius)
+        public List<KinectPoint> GetNeighborsOfKinectPoint(KinectPoint[,] kinArray, KinectPoint kinPoint, int radius)
         {
             var neighbors = new List<KinectPoint>();
 
@@ -663,7 +637,7 @@ namespace KinectAutoCalibration.Kinect
             return neighbors;
         }
 
-        public int calculateDepthMeanValue(List<KinectPoint> neighbors)
+        public int CalculateDepthMeanValue(List<KinectPoint> neighbors)
         {
             int sum = 0;
             int validNeighbors = 0;
