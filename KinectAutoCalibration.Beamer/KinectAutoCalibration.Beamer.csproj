@@ -46,8 +46,7 @@
     <Compile Include="Beamer.cs" />
     <Compile Include="BeamerControl.cs" />
     <Compile Include="BeamerImage.cs" />
-    <Compile Include="BeamerTest.cs" />
-    <Compile Include="Interfaces\IBeamer.cs" />
+    <Compile Include="Interfaces\IBeamerControl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -17,22 +17,6 @@ namespace KinectAutoCalibration.Beamer
         }
 
         /// <summary>
-        /// Checks first if there is a second Screen. Throws an exception if there is no one found.
-        /// </summary>
-        private static void GetBeamerScreen()
-        {
-            if (Screen.AllScreens.Count() > 1)
-            {
-                screen = Screen.AllScreens[1];
-            }
-            else
-            {
-                throw new Exception("No Beamer found");
-                //screen = Screen.AllScreens[0];
-            }
-        }
- 
-        /// <summary>
         /// Get the width of the beamer depending on the resolution.
         /// </summary>
         /// <returns>integer with the width of the beamer</returns>
@@ -66,6 +50,22 @@ namespace KinectAutoCalibration.Beamer
         public static int GetBeamerLeftPosition()
         {
             return screen.Bounds.Left;
+        }
+
+        /// <summary>
+        /// Checks first if there is a second Screen. Throws an exception if there is no one found.
+        /// </summary>
+        private static void GetBeamerScreen()
+        {
+            if (Screen.AllScreens.Count() > 1)
+            {
+                screen = Screen.AllScreens[1];
+            }
+            else
+            {
+                throw new Exception("No Beamer found");
+                //screen = Screen.AllScreens[0];
+            }
         }
     }
 }

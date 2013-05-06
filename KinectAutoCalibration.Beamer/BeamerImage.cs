@@ -13,6 +13,49 @@ namespace KinectAutoCalibration.Beamer
         public static readonly int TILE_HEIGHT = 70;
         // ReSharper restore InconsistentNaming
 
+        public static Canvas CreateCalibImageEdge(int beamerWidth, int beamerHeight, bool isInverted)
+        {
+            var imageCanvas = new Canvas
+            {
+                Height = beamerHeight,
+                Width = beamerWidth,
+                Background = new SolidColorBrush(Colors.Black)
+            };
+            var rightOffset = RightOffset(beamerWidth);
+            var topOffset = TopOffset(beamerHeight);
+
+            var topLeft = CreateRectangleGroup(0, 0, isInverted);
+            var topRight = CreateRectangleGroup(rightOffset, 0, isInverted);
+            var botRight = CreateRectangleGroup(rightOffset, topOffset, isInverted);
+            var botLeft = CreateRectangleGroup(0, topOffset, isInverted);
+
+            var allElements = topLeft.Union(topRight).Union(botRight).Union(botLeft).ToList();
+            foreach (var e in allElements)
+            {
+                imageCanvas.Children.Add(e);
+            }
+
+            return imageCanvas;
+        }
+
+        public static Canvas CreateCalibImage(int beamerWidth, int beamerHeight, bool isInverted, int depth)
+        {
+            var imageCanvas = new Canvas
+            {
+                Height = beamerHeight,
+                Width = beamerWidth,
+                Background = new SolidColorBrush(Colors.Black)
+            };
+
+            var allElements = CreateCalibRectangles(beamerWidth / depth, beamerHeight / depth, isInverted);
+            foreach (var e in allElements)
+            {
+                imageCanvas.Children.Add(e);
+            }
+
+            return imageCanvas;
+        }
+
         private static IEnumerable<Rectangle> CreateRectangleGroup(int leftPosition, int topPosition, bool isInverted)
         {
             var rectangleGroup = new List<Rectangle>();
@@ -50,31 +93,6 @@ namespace KinectAutoCalibration.Beamer
             return rectangle;
         }
 
-        public static Canvas CreateCalibImageEdge(int beamerWidth, int beamerHeight, bool isInverted)
-        {
-            var imageCanvas = new Canvas
-                {
-                    Height = beamerHeight,
-                    Width = beamerWidth,
-                    Background = new SolidColorBrush(Colors.Black)
-                };
-            var rightOffset = RightOffset(beamerWidth);
-            var topOffset = TopOffset(beamerHeight);
-
-            var topLeft = CreateRectangleGroup(0, 0, isInverted);
-            var topRight = CreateRectangleGroup(rightOffset, 0, isInverted);
-            var botRight = CreateRectangleGroup(rightOffset, topOffset, isInverted);
-            var botLeft = CreateRectangleGroup(0, topOffset, isInverted);
-
-            var allElements = topLeft.Union(topRight).Union(botRight).Union(botLeft).ToList();
-            foreach (var e in allElements)
-            {
-                imageCanvas.Children.Add(e);
-            }
-
-            return imageCanvas;
-        }
-
         private static int TopOffset(int beamerHeight)
         {
             return beamerHeight - 2 * TILE_HEIGHT;
@@ -83,24 +101,6 @@ namespace KinectAutoCalibration.Beamer
         private static int RightOffset(int beamerWidth)
         {
             return beamerWidth - 2 * TILE_WIDTH;
-        }
-
-        public static Canvas CreateCalibImage(int beamerWidth, int beamerHeight, bool isInverted, int depth)
-        {
-            var imageCanvas = new Canvas
-            {
-                Height = beamerHeight,
-                Width = beamerWidth,
-                Background = new SolidColorBrush(Colors.Black)
-            };
-
-            var allElements = CreateCalibRectangles(beamerWidth / depth, beamerHeight / depth, isInverted);
-            foreach (var e in allElements)
-            {
-                imageCanvas.Children.Add(e);
-            }
-
-            return imageCanvas;
         }
 
         private static IEnumerable<Rectangle> CreateCalibRectangles(int width, int height, bool isInverted)

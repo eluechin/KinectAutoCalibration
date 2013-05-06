@@ -5,7 +5,7 @@ using System.Windows.Threading;
 
 namespace KinectAutoCalibration.Beamer
 {
-    public class BeamerControl
+    public class BeamerControl : IBeamerControl
     {
         private readonly Window beamerWindow;
 
@@ -19,15 +19,6 @@ namespace KinectAutoCalibration.Beamer
             };
         }
 
-        private void DisplayContent(Canvas imageCanvas)
-        {
-            beamerWindow.Dispatcher.Invoke(
-            DispatcherPriority.Render,
-            new Action(() => beamerWindow.Content = imageCanvas));
-            beamerWindow.WindowState = WindowState.Minimized;
-            beamerWindow.WindowState = WindowState.Maximized;
-        }
-
         public void DisplayCalibrationImageEdge(bool isInverted)
         {
             var canvasImage = BeamerImage.CreateCalibImageEdge(Beamer.GetBeamerWidth(), Beamer.GetBeamerHeight(),
@@ -35,10 +26,26 @@ namespace KinectAutoCalibration.Beamer
             DisplayContent(canvasImage);
         }
 
+        public void DisplayCalibrationImage(bool isInverted, int depth)
+        {
+            var canvasImage = BeamerImage.CreateCalibImage(Beamer.GetBeamerWidth(), Beamer.GetBeamerHeight(), isInverted,
+                                                           depth);
+            DisplayContent(canvasImage);
+        }
+
         public void DisplayBlank()
         {
             var imageCanvas = new Canvas { Height = Beamer.GetBeamerHeight(), Width = Beamer.GetBeamerWidth() };
             DisplayContent(imageCanvas);
+        }
+
+        private void DisplayContent(Canvas imageCanvas)
+        {
+            beamerWindow.Dispatcher.Invoke(
+            DispatcherPriority.Render,
+            new Action(() => beamerWindow.Content = imageCanvas));
+            beamerWindow.WindowState = WindowState.Minimized;
+            beamerWindow.WindowState = WindowState.Maximized;
         }
     }
 }
