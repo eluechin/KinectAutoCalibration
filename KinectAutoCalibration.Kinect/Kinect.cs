@@ -308,15 +308,11 @@ namespace KinectAutoCalibration.Kinect
                         }
                     }
 
-                    //int index = 0;
-                    int error1 = 0;
-                    int error2 = 0;
-
                     for (int y = 0; y < depthFrame.Height; ++y)
                     {
                         for (int x = 0; x < depthFrame.Width; ++x)
                         {
-                            kinArray[x, y] = new KinectPoint(x, y, -2, 0, 0, 0);
+                            kinArray[x, y] = new KinectPoint(x, y, -1, 0, 0, 0);
                         }
                     }
 
@@ -348,11 +344,7 @@ namespace KinectAutoCalibration.Kinect
                                                     colorPixelData[
                                                         colorImagePixelData[depthIndex].Y * depthFrame.Width * 4 +
                                                         (colorImagePixelData[depthIndex].X + 1) * 4]);
-                                if (depthImagePixelData[depthIndex].Depth == -1)
-                                {
-                                    ++error1;
-                                }
-
+   
                             }
                             else
                             {
@@ -369,9 +361,7 @@ namespace KinectAutoCalibration.Kinect
                                                     colorPixelData[
                                                         colorImagePixelData[depthIndex].Y * depthFrame.Width * 4 +
                                                         (colorImagePixelData[depthIndex].X + 1) * 4]);
-                                ++error2;
                             }
-                            //++index;
                         }
 
                     }
@@ -434,21 +424,6 @@ namespace KinectAutoCalibration.Kinect
             byte[] pixelData = new byte[height * stride];
             int index = 0;
 
-            int error1 = 0;
-            int error2 = 0;
-            foreach (var kinectPoint in kinArray)
-            {
-                if (kinectPoint.Z == -1)
-                {
-                    ++error1;
-                }
-                if (kinectPoint.Z == -2)
-                {
-                    ++error2;
-                }
-            }
-
-
             for (int y = 0; y < height; ++y)
             {
                 for (int x = 0; x < width; ++x)
@@ -462,24 +437,12 @@ namespace KinectAutoCalibration.Kinect
                         pixelData[index] = (byte)kinArray[x, y].B;
                         //pixelData[index + 3] = color.A; // color.A;
 
-                    }
-                    else if (kinArray[x, y].Z == -1)
-                    {
-                        pixelData[index + 2] = 0x00;
-                        pixelData[index + 1] = 0x00;
-                        pixelData[index] = 0xFF;
-                    }
-
-                    if (kinArray[x, y].Z == -2)
-                    {
+                    } else {
                         pixelData[index + 2] = 0xFF;
                         pixelData[index + 1] = 0x00;
                         pixelData[index] = 0x00;
                     }
-                    else
-                    {
-                    }
-
+                    
                     index += BYTES_PER_PIXEL;
                 }
             }
