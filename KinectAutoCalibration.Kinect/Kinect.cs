@@ -368,6 +368,7 @@ namespace KinectAutoCalibration.Kinect
 
                     }
                 }
+                //kinArray = RecoverDepthInformationOfKinectPointArray(kinArray);
                 return kinArray;
             }
             catch (Exception)
@@ -615,41 +616,40 @@ namespace KinectAutoCalibration.Kinect
             return false;
         }
 
-        public List<KinectPoint> RecoverDepthInformationOfKinectPointArray(KinectPoint[,] kinArray)
+        public KinectPoint[,] RecoverDepthInformationOfKinectPointArray(KinectPoint[,] kinArray)
         {
-            var recoveredKinArray = new List<KinectPoint>();
+            var recoveredKinArray = new KinectPoint[KINECT_IMAGE_WIDTH,KINECT_IMAGE_HEIGHT];
 
-            foreach (var kinectPoint in kinArray)
+            for (int y = 0; y < KINECT_IMAGE_HEIGHT; ++y)
             {
-                if (kinectPoint.Z == -1)
+                for (int x = 0; x < KINECT_IMAGE_WIDTH; ++x)
                 {
-                    int correctionRadius = 1;
-                    int z = -1;
-                    int depthMeanValue = 0;
-
-                    do
+                    if (kinArray[x,y].Z == -1)
                     {
-                        var neighbors = GetNeighborsOfKinectPoint(kinArray, kinectPoint, correctionRadius);
-                        depthMeanValue = CalculateDepthMeanValue(neighbors);
+                        int correctionRadius = 1;
+                        int z = -1;
+                        int depthMeanValue = 0;
 
-                        ++correctionRadius;
+                        do
+                        {
+                            var neighbors = GetNeighborsOfKinectPoint(kinArray, kinArray[x,y], correctionRadius);
+                            depthMeanValue = CalculateDepthMeanValue(neighbors);
 
-                    } while (depthMeanValue == 0);
+                            ++correctionRadius;
 
-                    kinectPoint.Z = depthMeanValue;
-                    recoveredKinArray.Add(kinectPoint);
+                        } while (depthMeanValue == 0);
 
-                }
-                else
-                {
-                    recoveredKinArray.Add(kinectPoint);
+                        kinArray[x,y].Z = depthMeanValue;
+                        recoveredKinArray[x,y] = kinArray[x,y];
+
+                    }
+                    else
+                    {
+                        recoveredKinArray[x, y] = kinArray[x, y];
+                    }
                 }
             }
-            
-
-
-
-
+   
             return recoveredKinArray;
         } 
 
