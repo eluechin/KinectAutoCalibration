@@ -81,10 +81,13 @@ namespace KinectAutoCalibration.Calibration
                 }
             }*/
 
+            corners = new List<Vector3D>();
+
             rwCorners = GetCornerPoints(_differenceImage);
             foreach (var rwCorner in rwCorners)
             {
-                corners.Add(kinect.CreateRealWorldVector(rwCorner.Value));
+                var p = kinect.CreateRealWorldVector(rwCorner.Value);
+                corners.Add(p);
             }
             
             //// Punkt mit niedrigstem Abstand(z) als mittelpunkt (param2)
@@ -386,10 +389,10 @@ namespace KinectAutoCalibration.Calibration
             rwCornersList.Sort((first, second) => first != null ? first.Z.CompareTo(second.Z) : 0);
         
             var rwCorners = new Dictionary<int, RealWorldPoint>();
-            rwCorners.Add(0, rwCorners[0]);
-            rwCorners.Add(1, rwCorners[1]);
-            rwCorners.Add(2, rwCorners[2]);
-            rwCorners.Add(3, rwCorners[3]);
+            rwCorners.Add(0, rwCornersList[0]);
+            rwCorners.Add(1, rwCornersList[1]);
+            rwCorners.Add(2, rwCornersList[2]);
+            rwCorners.Add(3, rwCornersList[3]);
 
             return rwCorners;
         }
