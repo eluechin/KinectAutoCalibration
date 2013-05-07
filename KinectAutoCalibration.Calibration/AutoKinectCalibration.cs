@@ -51,12 +51,6 @@ namespace KinectAutoCalibration.Calibration
 
         public AutoKinectCalibration()
         {
-            Window beamerWindow = new Window
-            {
-                WindowStartupLocation = WindowStartupLocation.Manual,
-                WindowStyle = WindowStyle.None,
-                AllowsTransparency = true
-            };
             beamerControl = new BeamerControl();
             kinect = new Kinect.Kinect();
         }
@@ -109,19 +103,16 @@ namespace KinectAutoCalibration.Calibration
             var middle = ChangeOfBasis.GetVectorInNewBasis(corners[2]);
             _height = myList[1].Value;
             _width = myList[2].Value;
-
-            //var lookupTable = new Dictionary<Vector2D, Vector2D>();
-            //lookupTable.Add(new Vector2D{X=800,Y=600}, middle);
-
-            //Thread.Sleep(1000);
-            //beamerControl.DisplayCalibrationImage(true, 5);
-            //Thread.Sleep(1000);
-            //beamerControl.DisplayCalibrationImage(false, 5);
             
             beamerControl.DisplayBlank();
             Thread.Sleep(1000);
             _white = kinect.GetColorImage();
         }
+
+        //private byte[] GetDifferenceImage()
+        //{
+        //    return kinect.GetDifferenceImage(p1, p2, 80);
+        //}
 
         public void CalibrateBeamer()
         {

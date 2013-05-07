@@ -5,6 +5,9 @@ using System.Windows.Threading;
 
 namespace KinectAutoCalibration.Beamer
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class BeamerControl : IBeamerControl
     {
         private readonly Window beamerWindow;
