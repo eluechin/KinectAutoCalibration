@@ -72,14 +72,14 @@ namespace KinectAutoCalibration.Calibration
             //var realWorldArray = kinect.CreateRealWorldArray(kinArray);
             kinP = kinect.CreateKinectPointArray();
             
-            /*int error = 0;
+            int error = 0;
             foreach (var kinectPoint in kinP)
             {
-                if (kinectPoint == null)
+                if (kinectPoint.Z == -1)
                 {
                     ++error;
                 }
-            }*/
+            }
 
             corners = new List<Vector3D>();
 
