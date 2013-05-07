@@ -18,8 +18,13 @@ namespace KinectAutoCalibration.Beamer
             {
                 WindowStartupLocation = WindowStartupLocation.Manual,
                 WindowStyle = WindowStyle.None,
-                AllowsTransparency = true
+                AllowsTransparency = true,
+                Left = Beamer.GetBeamerLeftPosition(),
+                Top = Beamer.GetBeamerTopPosition(),
+                Width = Beamer.GetBeamerWidth(),
+                Height = Beamer.GetBeamerHeight()
             };
+            beamerWindow.Show();
         }
 
         public void DisplayCalibrationImageEdge(bool isInverted)
