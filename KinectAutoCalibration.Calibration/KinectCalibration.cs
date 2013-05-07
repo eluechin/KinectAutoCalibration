@@ -290,13 +290,13 @@ namespace KinectAutoCalibration.Calibration
             _area2DVectors = new List<Vector2D>();
             foreach (var v in objs)
             {
-                KinectPoint p = realWorldArray[(int)v.X, (int)v.Y];
+                RealWorldPoint p = realWorldArray[(int)v.X, (int)v.Y];
                 if (p != null)
                 {
                     _area2DVectors.Add(ChangeOfBasis.GetVectorInNewBasis(kinect.CreateRealWorldVector(p)));
                 }
             }
-            KinectPoint kp = realWorldArray[(int)centroids[0].X, (int)centroids[0].Y];
+            RealWorldPoint kp = realWorldArray[(int)centroids[0].X, (int)centroids[0].Y];
             _area2DVectors.Add(ChangeOfBasis.GetVectorInNewBasis(kinect.CreateRealWorldVector(kp)));
 
             List<Vector2D> beamerCoordinates = new List<Vector2D>();

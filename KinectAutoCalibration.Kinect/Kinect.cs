@@ -517,9 +517,9 @@ namespace KinectAutoCalibration.Kinect
         /// TO DO</summary>
         /// <param name="kinArray">TO DO</param>
         /// <returns>TO DO</returns>
-        public KinectPoint[,] CreateRealWorldArray(KinectPoint[,] kinArray, int width, int height)
+        public RealWorldPoint[,] CreateRealWorldArray(KinectPoint[,] kinArray, int width, int height)
         {
-            KinectPoint[,] rwArray = new KinectPoint[640, 480];
+            RealWorldPoint[,] rwArray = new RealWorldPoint[640, 480];
             var a = new KinectPoint(0, 0, 0, 0, 0);
             var b = new KinectPoint(1, 1, 0, 0, 0);
             var c = new KinectPoint(2, 2, 0, 0, 0);
@@ -532,19 +532,9 @@ namespace KinectAutoCalibration.Kinect
             {
                 for (int x = 0; x < width; ++x)
                 {
-                    if (kinArray[x, y].Z != -1)
-                    {
-
-                        var rwPoint = CalculateRealWorldPoint(kinArray[x, y], rwA, rwB, rwC);
-                        //TODO
-                        //rwArray[x, y] = RWPoint;
-
-                    }
-                    else
-                    {
-                        // TODO
-                        rwArray[x, y] = kinArray[x, y];
-                    }
+                    //var rwPoint = CalculateRealWorldPoint(kinArray[x, y], rwA, rwB, rwC);
+                    var rwPoint = CalculateRealWorldPoint(kinArray[x, y]);
+                    rwArray[x, y] = rwPoint;
                 }
             }
             return rwArray;
@@ -579,7 +569,7 @@ namespace KinectAutoCalibration.Kinect
             return rwPoint;
         }
 
-        public Vector3D CreateRealWorldVector(KinectPoint p)
+        public Vector3D CreateRealWorldVector(RealWorldPoint p)
         {
             return new Vector3D { X = p.X, Y = p.Y, Z = p.Z };
         }
@@ -688,7 +678,6 @@ namespace KinectAutoCalibration.Kinect
                 }
 
             }
-
             return (int)(sum / validNeighbors);
         }
     }
