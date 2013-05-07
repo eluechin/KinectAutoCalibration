@@ -25,7 +25,7 @@ namespace KinectAutoCalibration.Calibration
         void LowerKinect();
         byte[] ConvertKinectPointArrayToByteArray(KinectPoint[,] kinArray, int width, int height);
 
-        List<Vector3D> GetCornerPoints(KinectPoint[,] diffImage);
+        Dictionary<int,RealWorldPoint> GetCornerPoints(KinectPoint[,] diffImage);
         void GetObstacles(int c);
         void GetObstacles();
         void DisplayArea();

@@ -45,6 +45,7 @@
     <Compile Include="BitmapHelper.cs" />
     <Compile Include="KMeansHelper.cs" />
     <Compile Include="Point2D.cs" />
+    <Compile Include="RealWorldPoint.cs" />
     <Compile Include="Vector2D.cs" />
     <Compile Include="Algorithms\KMeans.cs" />
     <Compile Include="Interfaces\IPoint2D.cs" />

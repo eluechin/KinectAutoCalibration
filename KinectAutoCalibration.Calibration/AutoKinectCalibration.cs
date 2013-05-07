@@ -44,6 +44,7 @@ namespace KinectAutoCalibration.Calibration
         private KinectPoint[,] p3; 
         private KinectPoint[,] kinP;
         private List<Vector3D> corners;
+        private Dictionary<int, RealWorldPoint> rwCorners; 
         private List<Vector2D> _corners2D;
         private KinectPoint[,] _white;
         private List<Vector2D> _area2DVectors;
@@ -70,17 +71,21 @@ namespace KinectAutoCalibration.Calibration
             
             //var realWorldArray = kinect.CreateRealWorldArray(kinArray);
             kinP = kinect.CreateKinectPointArray();
-            int error = 0;
+            
+            /*int error = 0;
             foreach (var kinectPoint in kinP)
             {
                 if (kinectPoint == null)
                 {
                     ++error;
                 }
-            }
+            }*/
 
-            corners = GetCornerPoints(_differenceImage);
-            corners.Sort((first, second) => first != null ? first.Z.CompareTo(second.Z) : 0);
+            rwCorners = GetCornerPoints(_differenceImage);
+            foreach (var rwCorner in rwCorners)
+            {
+                corners.Add(kinect.CreateRealWorldVector(rwCorner.Value));
+            }
             
             //// Punkt mit niedrigstem Abstand(z) als mittelpunkt (param2)
             //// Punkt mit höchstem Abstand(z) nicht nehmen!!!!
@@ -272,7 +277,9 @@ namespace KinectAutoCalibration.Calibration
             p2 = kinect.GetColorImage();
             _differenceImageObst = kinect.GetDifferenceImage(_white, p2, 80);
             var kinArray = kinect.CreateKinectPointArray();
-            var realWorldArray = kinect.CreateRealWorldArray(kinArray, 640, 480);
+            //var realWorldArray = kinect.CreateRealWorldArray(kinArray, 640, 480);
+            var realWorldArray = kinect.CreateRealWorldArray(kinArray, 640, 480, rwCorners[0], rwCorners[1],
+                                                             rwCorners[2]);
 
             var centroids = KMeans.DoKMeans(KMeansHelper.ExtractBlackPointsAs2dVector(_differenceImageObst), new List<Vector2D>{new Vector2D{X = 0, Y = 0}});
      
@@ -280,13 +287,13 @@ namespace KinectAutoCalibration.Calibration
             _area2DVectors = new List<Vector2D>();
             foreach (var v in objs)
             {
-                KinectPoint p = realWorldArray[(int)v.X, (int)v.Y];
+                RealWorldPoint p = realWorldArray[(int)v.X, (int)v.Y];
                 if (p != null)
                 {
                     _area2DVectors.Add(ChangeOfBasis.GetVectorInNewBasis(kinect.CreateRealWorldVector(p)));
                 }
             }
-            KinectPoint kp = realWorldArray[(int)centroids[0].X, (int)centroids[0].Y];
+            RealWorldPoint kp = realWorldArray[(int)centroids[0].X, (int)centroids[0].Y];
             _area2DVectors.Add(ChangeOfBasis.GetVectorInNewBasis(kinect.CreateRealWorldVector(kp)));
 
             List<Vector2D> beamerCoordinates = new List<Vector2D>();
@@ -364,17 +371,27 @@ namespace KinectAutoCalibration.Calibration
             return lengthDict;
         }
 
-        public List<Vector3D> GetCornerPoints(KinectPoint[,] diffImage)
+        public Dictionary<int, RealWorldPoint> GetCornerPoints(KinectPoint[,] diffImage)
         {
             var kinArray = kinect.CreateKinectPointArray();
-            var realWorldArray = kinect.CreateRealWorldArray(kinArray, 640, 480);
-            var corners = new List<Vector3D>();
+            var rwCornersList = new List<RealWorldPoint>();
             var centroids = KMeans.DoKMeans(KMeansHelper.ExtractBlackPointsAs2dVector(diffImage), KMeansHelper.CreateInitialCentroids(640, 480));
+            var realWorldArray = kinect.CreateRealWorldArray(kinArray, 640, 480);
             foreach (var vectorCentroid in centroids)
             {
-                corners.Add(kinect.CreateRealWorldVector(realWorldArray[(int)vectorCentroid.X, (int)vectorCentroid.Y]));
+                //corners.Add(kinect.CreateRealWorldVector(realWorldArray[(int)vectorCentroid.X, (int)vectorCentroid.Y]));
+                rwCornersList.Add(realWorldArray[(int)vectorCentroid.X, (int)vectorCentroid.Y]);
             }
-            return corners;
+
+            rwCornersList.Sort((first, second) => first != null ? first.Z.CompareTo(second.Z) : 0);
+        
+            var rwCorners = new Dictionary<int, RealWorldPoint>();
+            rwCorners.Add(0, rwCorners[0]);
+            rwCorners.Add(1, rwCorners[1]);
+            rwCorners.Add(2, rwCorners[2]);
+            rwCorners.Add(3, rwCorners[3]);
+
+            return rwCorners;
         }
 
         void IAutoKinectCalibration.GetObstacles(int c)
