@@ -669,8 +669,8 @@ namespace KinectAutoCalibration.Kinect
                     int x = kinPoint.X + i;
                     int y = kinPoint.Y + j;
 
-                    if ((x >= 0 || x < KINECT_IMAGE_WIDTH) &&
-                        (y >= 0 || y < KINECT_IMAGE_HEIGHT))
+                    if ((x >= 0 && x < KINECT_IMAGE_WIDTH) &&
+                        (y >= 0 && y < KINECT_IMAGE_HEIGHT))
                     {
                         neighbors.Add(kinArray[x, y]);
                     }
@@ -693,7 +693,15 @@ namespace KinectAutoCalibration.Kinect
                 }
 
             }
-            return (int)(sum / validNeighbors);
+            if (validNeighbors != 0)
+            {
+                return (int) (sum/validNeighbors);
+            }
+            else
+            {
+                return 0;
+            }
+            
         }
     }
 }
