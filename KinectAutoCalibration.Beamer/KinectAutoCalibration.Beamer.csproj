@@ -44,10 +44,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Beamer.cs" />
-    <Compile Include="BeamerTest.cs" />
-    <Compile Include="Interfaces\IBeamer.cs" />
-    <Compile Include="Interfaces\IBeamerTest.cs" />
+    <Compile Include="BeamerControl.cs" />
+    <Compile Include="BeamerImage.cs" />
+    <Compile Include="Interfaces\IBeamerControl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Strategy\IBeamerCorrectionStrategy.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\KinectAutoCalibration.Common\KinectAutoCalibration.Common.csproj">

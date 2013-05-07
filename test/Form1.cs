@@ -64,7 +64,7 @@ namespace test
 
             MessageBox.Show("newBaseVector: X:" + newBaseVector.X + " /Y:" + newBaseVector.Y);
             */
-            KinectAutoCalibration.Calibration.KinectCalibration test = new KinectCalibration();
+            KinectAutoCalibration.Calibration.AutoKinectCalibration test = new AutoKinectCalibration();
             test.InitialCalibration();
 
 
