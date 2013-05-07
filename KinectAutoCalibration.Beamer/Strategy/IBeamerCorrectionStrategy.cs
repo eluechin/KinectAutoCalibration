@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace KinectAutoCalibration.Beamer.Strategy
+﻿namespace KinectAutoCalibration.Beamer
 {
     public interface IBeamerCorrectionStrategy
     {
+        Point2D CalculateBeamerCoordinate(AreaPoint2D areaCoordinate);
     }
 }

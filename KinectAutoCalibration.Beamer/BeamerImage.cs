@@ -56,6 +56,31 @@ namespace KinectAutoCalibration.Beamer
             return imageCanvas;
         }
 
+        public static Canvas CreateAreaImage(int beamerWidth, int beamerHeight, List<Point2D> objects)
+        {
+            var imageCanvas = new Canvas
+            {
+                Height = beamerHeight,
+                Width = beamerWidth,
+                Background = new SolidColorBrush(Colors.Black)
+            };
+
+            foreach (var element in objects)
+            {
+                var point = new Ellipse
+                    {
+                        Width = 1, 
+                        Height = 1, 
+                        Fill = new SolidColorBrush(Colors.White)
+                    };
+                Canvas.SetLeft(point, element.X);
+                Canvas.SetTop(point, element.Y);
+                imageCanvas.Children.Add(point);
+            }
+
+            return imageCanvas;
+        }
+
         private static IEnumerable<Rectangle> CreateRectangleGroup(int leftPosition, int topPosition, bool isInverted)
         {
             var rectangleGroup = new List<Rectangle>();
@@ -113,5 +138,7 @@ namespace KinectAutoCalibration.Beamer
 
             return top.Union(left).Union(middle).Union(right).Union(bottom).ToList();
         }
+
+
     }
 }

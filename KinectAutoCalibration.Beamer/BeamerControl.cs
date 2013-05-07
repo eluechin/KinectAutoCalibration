@@ -1,6 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace KinectAutoCalibration.Beamer
@@ -45,6 +50,13 @@ namespace KinectAutoCalibration.Beamer
         {
             var imageCanvas = new Canvas { Height = Beamer.GetBeamerHeight(), Width = Beamer.GetBeamerWidth() };
             DisplayContent(imageCanvas);
+        }
+
+        public void DisplayArea(List<AreaPoint2D> objects, IBeamerCorrectionStrategy correctionStrategy)
+        {
+            var beamerPointOfObjects = objects.Select(correctionStrategy.CalculateBeamerCoordinate).ToList();
+            var canvasImage = BeamerImage.CreateAreaImage(Beamer.GetBeamerWidth(), Beamer.GetBeamerHeight(), beamerPointOfObjects);
+            DisplayContent(canvasImage);
         }
 
         private void DisplayContent(Canvas imageCanvas)
