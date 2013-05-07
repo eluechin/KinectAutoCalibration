@@ -3,15 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace KinectAutoCalibration.Beamer
 {
     /// <summary>
-    /// 
+    /// Abstraction of the Beamer. Provides the basic funtionality to control the beamer.
     /// </summary>
     public class BeamerControl : IBeamerControl
     {
@@ -32,6 +29,9 @@ namespace KinectAutoCalibration.Beamer
             beamerWindow.Show();
         }
 
+        /// <summary>
+        /// Display a calibration image with chess patterns in the corners.
+        /// </summary>
         public void DisplayCalibrationImageEdge(bool isInverted)
         {
             var canvasImage = BeamerImage.CreateCalibImageEdge(Beamer.GetBeamerWidth(), Beamer.GetBeamerHeight(),
