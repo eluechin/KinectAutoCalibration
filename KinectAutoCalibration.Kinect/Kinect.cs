@@ -368,7 +368,7 @@ namespace KinectAutoCalibration.Kinect
 
                     }
                 }
-                //kinArray = RecoverDepthInformationOfKinectPointArray(kinArray);
+                kinArray = RecoverDepthInformationOfKinectPointArray(kinArray);
                 return kinArray;
             }
             catch (Exception)
@@ -520,20 +520,35 @@ namespace KinectAutoCalibration.Kinect
         public RealWorldPoint[,] CreateRealWorldArray(KinectPoint[,] kinArray, int width, int height)
         {
             RealWorldPoint[,] rwArray = new RealWorldPoint[640, 480];
-            var a = new KinectPoint(0, 0, 0, 0, 0);
-            var b = new KinectPoint(1, 1, 0, 0, 0);
-            var c = new KinectPoint(2, 2, 0, 0, 0);
 
-            var rwA = CalculateRealWorldPoint(a);
-            var rwB = CalculateRealWorldPoint(b);
-            var rwC = CalculateRealWorldPoint(c);
+            //var a = new KinectPoint(0, 0, 0, 0, 0);
+            //var b = new KinectPoint(1, 1, 0, 0, 0);
+            //var c = new KinectPoint(2, 2, 0, 0, 0);
+
+            //var rwA = CalculateRealWorldPoint(a);
+            //var rwB = CalculateRealWorldPoint(b);
+            //var rwC = CalculateRealWorldPoint(c);
                 
             for (int y = 0; y < height; ++y)
             {
                 for (int x = 0; x < width; ++x)
                 {
-                    //var rwPoint = CalculateRealWorldPoint(kinArray[x, y], rwA, rwB, rwC);
                     var rwPoint = CalculateRealWorldPoint(kinArray[x, y]);
+                    rwArray[x, y] = rwPoint;
+                }
+            }
+            return rwArray;
+        }
+        
+        public RealWorldPoint[,] CreateRealWorldArray(KinectPoint[,] kinArray, int width, int height, RealWorldPoint rwA, RealWorldPoint rwB, RealWorldPoint rwC)
+        {
+            RealWorldPoint[,] rwArray = new RealWorldPoint[640, 480];
+
+            for (int y = 0; y < height; ++y)
+            {
+                for (int x = 0; x < width; ++x)
+                {
+                    var rwPoint = CalculateRealWorldPoint(kinArray[x, y], rwA, rwB, rwC);
                     rwArray[x, y] = rwPoint;
                 }
             }
