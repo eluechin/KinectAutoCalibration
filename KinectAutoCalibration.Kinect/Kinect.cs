@@ -523,7 +523,6 @@ namespace KinectAutoCalibration.Kinect
             var b = new KinectPoint(1, 1, 0, 0, 0);
             var c = new KinectPoint(2, 2, 0, 0, 0);
 
-
             var rwA = CalculateRealWorldPoint(a);
             var rwB = CalculateRealWorldPoint(b);
             var rwC = CalculateRealWorldPoint(c);
@@ -535,7 +534,7 @@ namespace KinectAutoCalibration.Kinect
                     if (kinArray[x, y].Z != -1)
                     {
 
-                        var RWPoint = CalculateRealWorldPoint(kinArray[x, y], rwA, rwB, rwC);
+                        var rwPoint = CalculateRealWorldPoint(kinArray[x, y], rwA, rwB, rwC);
                         //TODO
                         //rwArray[x, y] = RWPoint;
 
@@ -552,31 +551,31 @@ namespace KinectAutoCalibration.Kinect
 
         private RealWorldPoint CalculateRealWorldPoint(KinectPoint p)
         {
-            var RWPoint = new RealWorldPoint();
+            var rwPoint = new RealWorldPoint();
 
-            RWPoint.Z = p.Z;
-            RWPoint.X = (int) ((p.X - (KINECT_IMAGE_WIDTH/2))* RWPoint.Z/WIDTH_CONST);
-            RWPoint.Y = (int)((p.Y - (KINECT_IMAGE_HEIGHT / 2)) * RWPoint.Z / HEIGHT_CONST);
+            rwPoint.Z = p.Z;
+            rwPoint.X = (int) ((p.X - (KINECT_IMAGE_WIDTH/2))* rwPoint.Z/WIDTH_CONST);
+            rwPoint.Y = (int)((p.Y - (KINECT_IMAGE_HEIGHT / 2)) * rwPoint.Z / HEIGHT_CONST);
 
-            return RWPoint;
+            return rwPoint;
         }
 
         private RealWorldPoint CalculateRealWorldPoint(KinectPoint p, RealWorldPoint a, RealWorldPoint b, RealWorldPoint c)
         {
-            var RWPoint = new RealWorldPoint();
+            var rwPoint = new RealWorldPoint();
 
             //RWPoint.Z = kinectPoint.Z;
 
-            //var numerator = 2 (az by cx-ay bz cx-az bx cy+ax bz cy+ay bx cz-ax by cz) HEIGHT_CONST WIDTH_CONST;
-            //var denominator = ((az (bx-cx)+bz cx-bx cz+ax (-bz+cz)) (HEIGHT-2 py) WIDTH_CONST+HEIGHT_CONST ((-ay bz+az (by-cy)+bz cy+ay cz-by cz) (2 px-WIDTH)+2 (-ax by+ay (bx-cx)+by cx+ax cy-bx cy) WIDTH_CONST))};
-            var numerator = 1;
-            var denominator = 1;
+            var numerator = 2*(a.Z * b.Y * c.X - a.Y * b.Z * c.X - a.Z * b.X * c.Y + a.X * b.Z * c.Y + a.Y * b.X * c.Z - a.X * b.Y * c.Z) * HEIGHT_CONST * WIDTH_CONST;
+            var denominator = ((a.Z*(b.X - c.X) + b.Z*c.X - b.X*c.Z + a.X*(-b.Z + c.Z))*(KINECT_IMAGE_HEIGHT - 2*p.Y)*WIDTH_CONST + HEIGHT_CONST*((-a.Y*b.Z + a.Z*(b.Y-c.Y) + b.Z*c.Y + a.Y*c.Z*-b.Y*c.Z) * (2*p.X - KINECT_IMAGE_WIDTH) + 2*(-a.X*b.Y + a.Y*(b.X-c.X) + b.Y*c.X + a.X*c.Y - b.X*c.Y)*WIDTH_CONST));
+            //var numerator = 1;
+            //var denominator = 1;
 
-            RWPoint.Z = (int) numerator/denominator;
-            RWPoint.X = (int) ((p.X - (KINECT_IMAGE_WIDTH/2))*RWPoint.Z/WIDTH_CONST);
-            RWPoint.Y = (int)((p.Y - (KINECT_IMAGE_HEIGHT / 2)) * RWPoint.Z / HEIGHT_CONST);
+            rwPoint.Z = (int) (numerator/denominator);
+            rwPoint.X = (int) ((p.X - (KINECT_IMAGE_WIDTH/2))*rwPoint.Z/WIDTH_CONST);
+            rwPoint.Y = (int)((p.Y - (KINECT_IMAGE_HEIGHT / 2)) * rwPoint.Z / HEIGHT_CONST);
 
-            return RWPoint;
+            return rwPoint;
         }
 
         public Vector3D CreateRealWorldVector(KinectPoint p)
@@ -616,13 +615,51 @@ namespace KinectAutoCalibration.Kinect
             return false;
         }
 
-        public List<KinectPoint> GetNeighborsOfKinectPoint(KinectPoint[,] kinArray, KinectPoint kinPoint, int radius)
+        public List<KinectPoint> RecoverDepthInformationOfKinectPointArray(KinectPoint[,] kinArray)
+        {
+            var recoveredKinArray = new List<KinectPoint>();
+
+            foreach (var kinectPoint in kinArray)
+            {
+                if (kinectPoint.Z == -1)
+                {
+                    int correctionRadius = 1;
+                    int z = -1;
+                    int depthMeanValue = 0;
+
+                    do
+                    {
+                        var neighbors = GetNeighborsOfKinectPoint(kinArray, kinectPoint, correctionRadius);
+                        depthMeanValue = CalculateDepthMeanValue(neighbors);
+
+                        ++correctionRadius;
+
+                    } while (depthMeanValue == 0);
+
+                    kinectPoint.Z = depthMeanValue;
+                    recoveredKinArray.Add(kinectPoint);
+
+                }
+                else
+                {
+                    recoveredKinArray.Add(kinectPoint);
+                }
+            }
+            
+
+
+
+
+            return recoveredKinArray;
+        } 
+
+        public List<KinectPoint> GetNeighborsOfKinectPoint(KinectPoint[,] kinArray, KinectPoint kinPoint, int correctionRadius)
         {
             var neighbors = new List<KinectPoint>();
 
-            for (int i = radius; i >= -radius; --i)
+            for (int i = correctionRadius; i >= -correctionRadius; --i)
             {
-                for (int j = radius; j >= -radius; --j)
+                for (int j = correctionRadius; j >= -correctionRadius; --j)
                 {
                     int x = kinPoint.X + i;
                     int y = kinPoint.Y + j;
