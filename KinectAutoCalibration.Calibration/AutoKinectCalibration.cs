@@ -28,8 +28,8 @@ namespace KinectAutoCalibration.Calibration
         //private readonly int HEIGHT = Convert.ToInt32(ConfigurationManager.AppSettings["AREA_WIDTH"]);
         private readonly int WIDTH = 1400;
         private readonly int HEIGHT = 1050;
-        private IBeamerControl beamerControl;
-        private IKinect kinect;
+        private readonly IBeamerControl beamerControl;
+        private readonly IKinect kinect;
         private WriteableBitmap diffBitmap;
         private WriteableBitmap pic1;
         private WriteableBitmap pic2;
@@ -133,7 +133,6 @@ namespace KinectAutoCalibration.Calibration
                 beamerControl.DisplayCalibrationImage(false, i);
             }
             //    _differenceImage = kinect.GetDifferenceImage(p1, p2, 80);
-
 
             //var centroidsInit = new List<Vector2D>
             //    {
