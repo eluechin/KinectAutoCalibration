@@ -41,14 +41,16 @@ namespace KinectAutoCalibration.Calibration
         private KinectPoint[,] _differenceImageObst;
         private KinectPoint[,] p1;
         private KinectPoint[,] p2;
-        private KinectPoint[,] p3; 
+        private KinectPoint[,] p3;
         private KinectPoint[,] kinP;
         private List<Vector3D> corners;
-        private Dictionary<int, RealWorldPoint> rwCorners; 
+        private Dictionary<int, RealWorldPoint> rwCorners;
         private List<Vector2D> _corners2D;
         private KinectPoint[,] _white;
         private List<Vector2D> _area2DVectors;
         private byte[] _areaArray;
+
+        private const int CALIBRATION_ROUNDS = 5;
 
         public AutoKinectCalibration()
         {
@@ -68,10 +70,10 @@ namespace KinectAutoCalibration.Calibration
 
             _differenceImage = kinect.GetDifferenceImage(p1, p2, 80);
             diffBitmap = kinect.ConvertKinectPointArrayToWritableBitmap(_differenceImage, 640, 480);
-            
+
             //var realWorldArray = kinect.CreateRealWorldArray(kinArray);
             kinP = kinect.CreateKinectPointArray();
-            
+
             /*int error = 0;
             foreach (var kinectPoint in kinP)
             {
@@ -89,7 +91,7 @@ namespace KinectAutoCalibration.Calibration
                 var p = kinect.CreateRealWorldVector(rwCorner.Value);
                 corners.Add(p);
             }
-            
+
             //// Punkt mit niedrigstem Abstand(z) als mittelpunkt (param2)
             //// Punkt mit höchstem Abstand(z) nicht nehmen!!!!
             ChangeOfBasis.InitializeChangeOfBasis(corners[1], corners[0], corners[2]); //Corner Identification!!
@@ -111,7 +113,7 @@ namespace KinectAutoCalibration.Calibration
             var middle = ChangeOfBasis.GetVectorInNewBasis(corners[2]);
             _height = myList[1].Value;
             _width = myList[2].Value;
-            
+
             beamerControl.DisplayBlank();
             Thread.Sleep(1000);
             _white = kinect.GetColorImage();
@@ -124,47 +126,45 @@ namespace KinectAutoCalibration.Calibration
 
         public void CalibrateBeamer()
         {
-            //beamerControl.DisplayGrid(true);
-            //Thread.Sleep(1000);
-            //p1 = kinect.GetColorImage();
-            //Thread.Sleep(1000);
-            //beamerControl.DisplayGrid(false);
-            //Thread.Sleep(1000);
-            //p2 = kinect.GetColorImage();
-
-            _differenceImage = kinect.GetDifferenceImage(p1, p2, 80);
-            
-
-            var centroidsInit = new List<Vector2D>
-                {
-                    new Vector2D {X = 320, Y = 0},
-                    new Vector2D {X = 0, Y = 240},
-                    //new Vector2D {X = 320, Y = 240},
-                    new Vector2D {X = 640 - 1, Y = 240},
-                    new Vector2D {X = 320, Y = 480-1}
-                };
-
-            var centroids = KMeans.DoKMeans(KMeansHelper.ExtractBlackPointsAs2dVector(_differenceImage), centroidsInit);
-
-            foreach (var c in centroids)
+            for (var i = 1; i <= CALIBRATION_ROUNDS; i++)
             {
-                var p = _differenceImage[(int) c.X, (int) c.Y];
-                p.R = 255;
-                p.G = 0;
-                p.B = 0;
-                _differenceImage[(int) c.X, (int) c.Y] = p;
+                beamerControl.DisplayCalibrationImage(true, i);
+                Thread.Sleep(1000);
+                beamerControl.DisplayCalibrationImage(false, i);
             }
+            //    _differenceImage = kinect.GetDifferenceImage(p1, p2, 80);
 
-            foreach (var ci in centroidsInit)
-            {
-                var p = _differenceImage[(int)ci.X, (int)ci.Y];
-                p.R = 0;
-                p.G = 255;
-                p.B = 0;
-                _differenceImage[(int)ci.X, (int)ci.Y] = p;
-            }
 
-            diffBitmap = kinect.ConvertKinectPointArrayToWritableBitmap(_differenceImage, 640, 480);
+            //var centroidsInit = new List<Vector2D>
+            //    {
+            //        new Vector2D {X = 320, Y = 0},
+            //        new Vector2D {X = 0, Y = 240},
+            //        //new Vector2D {X = 320, Y = 240},
+            //        new Vector2D {X = 640 - 1, Y = 240},
+            //        new Vector2D {X = 320, Y = 480-1}
+            //    };
+
+            //var centroids = KMeans.DoKMeans(KMeansHelper.ExtractBlackPointsAs2dVector(_differenceImage), centroidsInit);
+
+            //foreach (var c in centroids)
+            //{
+            //    var p = _differenceImage[(int) c.X, (int) c.Y];
+            //    p.R = 255;
+            //    p.G = 0;
+            //    p.B = 0;
+            //    _differenceImage[(int) c.X, (int) c.Y] = p;
+            //}
+
+            //foreach (var ci in centroidsInit)
+            //{
+            //    var p = _differenceImage[(int)ci.X, (int)ci.Y];
+            //    p.R = 0;
+            //    p.G = 255;
+            //    p.B = 0;
+            //    _differenceImage[(int)ci.X, (int)ci.Y] = p;
+            //}
+
+            //diffBitmap = kinect.ConvertKinectPointArrayToWritableBitmap(_differenceImage, 640, 480);
 
         }
 
@@ -180,12 +180,12 @@ namespace KinectAutoCalibration.Calibration
 
         public int GetObstacleCentroidX()
         {
-            return (int) _area2DVectors[0].X;
+            return (int)_area2DVectors[0].X;
         }
 
         public int GetObstacleCentroidY()
         {
-            return (int) _area2DVectors[0].Y;
+            return (int)_area2DVectors[0].Y;
         }
 
         public void GetObstacles(int c)
@@ -284,8 +284,8 @@ namespace KinectAutoCalibration.Calibration
             var realWorldArray = kinect.CreateRealWorldArray(kinArray, 640, 480, rwCorners[0], rwCorners[1],
                                                              rwCorners[2]);
 
-            var centroids = KMeans.DoKMeans(KMeansHelper.ExtractBlackPointsAs2dVector(_differenceImageObst), new List<Vector2D>{new Vector2D{X = 0, Y = 0}});
-     
+            var centroids = KMeans.DoKMeans(KMeansHelper.ExtractBlackPointsAs2dVector(_differenceImageObst), new List<Vector2D> { new Vector2D { X = 0, Y = 0 } });
+
             List<Vector3D> objs = KMeansHelper.ExtractBlackPointsAs3dVector(_differenceImageObst);
             _area2DVectors = new List<Vector2D>();
             foreach (var v in objs)
@@ -310,16 +310,16 @@ namespace KinectAutoCalibration.Calibration
 
             var stride = widthPic * 4; // bytes per row
 
-            
+
             _areaArray = new byte[heightPic * stride];
-            
+
             try
             {
                 int counter = 0;
                 foreach (var v2 in _area2DVectors)
                 {
                     var x = (int)v2.X + 70;
-                    var y = heightPic-(int)v2.Y -70;
+                    var y = heightPic - (int)v2.Y - 70;
                     int index = y * widthPic * 4 + x * 4;
                     if (index > heightPic * stride || index < 0)
                         continue;
@@ -330,8 +330,8 @@ namespace KinectAutoCalibration.Calibration
                     ++counter;
                 }
 
-    
-                
+
+
             }
             catch (Exception e)
             {
@@ -387,7 +387,7 @@ namespace KinectAutoCalibration.Calibration
             }
 
             rwCornersList.Sort((first, second) => first != null ? first.Z.CompareTo(second.Z) : 0);
-        
+
             var rwCorners = new Dictionary<int, RealWorldPoint>();
             rwCorners.Add(0, rwCornersList[0]);
             rwCorners.Add(1, rwCornersList[1]);
