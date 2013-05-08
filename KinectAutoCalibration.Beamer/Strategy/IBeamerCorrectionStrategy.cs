@@ -2,6 +2,6 @@
 {
     public interface IBeamerCorrectionStrategy
     {
-        Point2D CalculateBeamerCoordinate(AreaPoint2D areaCoordinate);
+        BeamerPoint2D CalculateBeamerCoordinate(AreaPoint2D areaCoordinate);
     }
 }

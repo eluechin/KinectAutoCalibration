@@ -51,7 +51,7 @@
     <Compile Include="AreaPoint2D.cs" />
     <Compile Include="Strategy\IBeamerCorrectionStrategy.cs" />
     <Compile Include="Strategy\LinearCorrection.cs" />
-    <Compile Include="Point2D.cs" />
+    <Compile Include="BeamerPoint2D.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\KinectAutoCalibration.Common\KinectAutoCalibration.Common.csproj">
