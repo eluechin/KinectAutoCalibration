@@ -32,11 +32,13 @@ namespace KinectAutoCalibration.Beamer
         /// <summary>
         /// Display a calibration image with chess patterns in the corners.
         /// </summary>
-        public void DisplayCalibrationImageEdge(bool isInverted)
+        public BeamerPoint2D DisplayCalibrationImageEdge(bool isInverted, int position)
         {
-            var canvasImage = BeamerImage.CreateCalibImageEdge(Beamer.GetBeamerWidth(), Beamer.GetBeamerHeight(),
-                                                               isInverted);
-            DisplayContent(canvasImage);
+            var beamerPoint = BeamerImage.CreateCalibImageEdge(Beamer.GetBeamerWidth(), Beamer.GetBeamerHeight(),
+                                                               isInverted, position);
+            var canvas = BeamerImage.GetImageCanvas();
+            DisplayContent(canvas);
+            return beamerPoint;
         }
 
         public void DisplayCalibrationImage(bool isInverted, int depth)

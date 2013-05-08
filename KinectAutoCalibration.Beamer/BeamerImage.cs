@@ -13,15 +13,21 @@ namespace KinectAutoCalibration.Beamer
         public static readonly int TILE_WIDTH = 70;
         public static readonly int TILE_HEIGHT = 70;
         // ReSharper restore InconsistentNaming
+        private static Canvas ImageCanvas { get; set; }
 
-        public static Canvas CreateCalibImageEdge(int beamerWidth, int beamerHeight, bool isInverted)
+        public static Canvas GetImageCanvas()
         {
-            var imageCanvas = new Canvas
-            {
-                Height = beamerHeight,
-                Width = beamerWidth,
-                Background = new SolidColorBrush(Colors.Black)
-            };
+            return ImageCanvas;
+        }
+
+        public static BeamerPoint2D CreateCalibImageEdge(int beamerWidth, int beamerHeight, bool isInverted, int position)
+        {
+            ImageCanvas = new Canvas
+                {
+                    Height = beamerHeight,
+                    Width = beamerWidth,
+                    Background = new SolidColorBrush(Colors.Black)
+                };
             var rightOffset = RightOffset(beamerWidth);
             var topOffset = TopOffset(beamerHeight);
 
@@ -29,14 +35,59 @@ namespace KinectAutoCalibration.Beamer
             var topRight = CreateRectangleGroup(rightOffset, 0, isInverted);
             var botRight = CreateRectangleGroup(rightOffset, topOffset, isInverted);
             var botLeft = CreateRectangleGroup(0, topOffset, isInverted);
-
-            var allElements = topLeft.Union(topRight).Union(botRight).Union(botLeft).ToList();
-            foreach (var e in allElements)
+            var allElements = new List<Rectangle>();
+            switch (position)
             {
-                imageCanvas.Children.Add(e);
+                case 0:
+                    allElements.AddRange(topLeft);
+                    break;
+                case 1:
+                    allElements.AddRange(topRight);
+                    break;
+                case 2:
+                    allElements.AddRange(botRight);
+                    break;
+                case 3:
+                    allElements.AddRange(botLeft);
+                    break;
+                case 4:
+                    allElements.AddRange(topLeft.Union(topRight).Union(botRight).Union(botLeft).ToList());
+                    break;
+                case 5:
+                    throw new Exception("There is no Point 5!!!!!!");
             }
 
-            return imageCanvas;
+            foreach (var e in allElements)
+            {
+                ImageCanvas.Children.Add(e);
+            }
+
+            return CalculateBeamerPoint(beamerWidth, beamerHeight, position);
+        }
+
+        private static BeamerPoint2D CalculateBeamerPoint(int beamerWidth, int beamerHeight, int position)
+        {
+            var beamerPoint = new BeamerPoint2D();
+            switch (position)
+            {
+                case 0:
+                    beamerPoint.X = TILE_WIDTH;
+                    beamerPoint.Y = TILE_HEIGHT;
+                    break;
+                case 1:
+                    beamerPoint.X = beamerWidth - TILE_WIDTH;
+                    beamerPoint.Y = TILE_HEIGHT;
+                    break;
+                case 2:
+                    beamerPoint.X = beamerWidth - TILE_WIDTH;
+                    beamerPoint.Y = beamerHeight - TILE_HEIGHT;
+                    break;
+                case 3:
+                    beamerPoint.X = TILE_WIDTH;
+                    beamerPoint.Y = beamerHeight - TILE_HEIGHT;
+                    break;
+            }
+            return beamerPoint;
         }
 
         public static Canvas CreateCalibImage(int beamerWidth, int beamerHeight, bool isInverted, int round)
@@ -47,10 +98,10 @@ namespace KinectAutoCalibration.Beamer
                 Width = beamerWidth,
                 Background = new SolidColorBrush(Colors.Black)
             };
-            var divisorArray = new []{1,2,4,6};
-            var divisor = divisorArray[round-1];
-            var width = beamerWidth/divisor;
-            var height = beamerHeight/divisor;
+            var divisorArray = new[] { 1, 2, 4, 6 };
+            var divisor = divisorArray[round - 1];
+            var width = beamerWidth / divisor;
+            var height = beamerHeight / divisor;
             for (var x = 0; x < round; x++)
             {
                 for (var y = 0; y < round; y++)
@@ -58,32 +109,32 @@ namespace KinectAutoCalibration.Beamer
                     var allElements = new List<Rectangle>();
                     if (round == 1)
                     {
-                         allElements.AddRange(CreateCalibRectangles(width , height, x, y, isInverted));
+                        allElements.AddRange(CreateCalibRectangles(width, height, x, y, isInverted));
                     }
                     else
                     {
                         var specificWidth = width + TILE_WIDTH;
                         var specifcHeight = height + TILE_HEIGHT;
-                        var specificOffsetLeft = x*specificWidth - 2*TILE_WIDTH;
-                        var specificOffsetTop = y*specifcHeight - 2*TILE_HEIGHT;
+                        var specificOffsetLeft = x * specificWidth - 2 * TILE_WIDTH;
+                        var specificOffsetTop = y * specifcHeight - 2 * TILE_HEIGHT;
                         if (specificOffsetLeft < 0)
                             specificOffsetLeft = 0;
-                       if (specificOffsetTop < 0)
+                        if (specificOffsetTop < 0)
                             specificOffsetTop = 0;
-                       allElements.AddRange(CreateCalibRectangles(specificWidth, specifcHeight, specificOffsetLeft, specificOffsetTop, isInverted));
+                        allElements.AddRange(CreateCalibRectangles(specificWidth, specifcHeight, specificOffsetLeft, specificOffsetTop, isInverted));
                     }
-                    
+
                     foreach (var e in allElements)
                     {
                         imageCanvas.Children.Add(e);
-                    } 
+                    }
                 }
             }
 
             return imageCanvas;
         }
 
-        public static Canvas CreateAreaImage(int beamerWidth, int beamerHeight, List<Point2D> objects)
+        public static Canvas CreateAreaImage(int beamerWidth, int beamerHeight, List<BeamerPoint2D> objects)
         {
             var imageCanvas = new Canvas
             {
@@ -96,8 +147,8 @@ namespace KinectAutoCalibration.Beamer
             {
                 var point = new Ellipse
                     {
-                        Width = 1, 
-                        Height = 1, 
+                        Width = 1,
+                        Height = 1,
                         Fill = new SolidColorBrush(Colors.White)
                     };
                 Canvas.SetLeft(point, element.X);
@@ -160,7 +211,7 @@ namespace KinectAutoCalibration.Beamer
             var top = CreateRectangleGroup(leftOffset + (width / 2 - TILE_WIDTH), topOffset, isInverted);
             var left = CreateRectangleGroup(leftOffset, topOffset + (height / 2 - TILE_WIDTH), isInverted);
             var middle = CreateRectangleGroup(leftOffset + (width / 2 - TILE_WIDTH), topOffset + (height / 2 - TILE_WIDTH), isInverted);
-            var right = CreateRectangleGroup(leftOffset + (width - 2 * TILE_WIDTH),topOffset + (height / 2 - TILE_WIDTH), isInverted);
+            var right = CreateRectangleGroup(leftOffset + (width - 2 * TILE_WIDTH), topOffset + (height / 2 - TILE_WIDTH), isInverted);
             var bottom = CreateRectangleGroup(leftOffset + (width / 2 - TILE_WIDTH), topOffset + (height - 2 * TILE_WIDTH), isInverted);
 
             return top.Union(left).Union(middle).Union(right).Union(bottom).ToList();

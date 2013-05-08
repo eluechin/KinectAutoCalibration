@@ -2,7 +2,7 @@
 {
     public interface IBeamerControl
     {
-        void DisplayCalibrationImageEdge(bool isInverted);
+        BeamerPoint2D DisplayCalibrationImageEdge(bool isInverted, int position);
         void DisplayCalibrationImage(bool isInverted, int depth);
         void DisplayBlank();
     }

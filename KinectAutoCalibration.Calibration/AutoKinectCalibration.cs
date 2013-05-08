@@ -51,6 +51,8 @@ namespace KinectAutoCalibration.Calibration
         private byte[] _areaArray;
 
         private const int CALIBRATION_ROUNDS = 2;
+        private const int CALIBRATION_POINTS = 4;
+        private const int THRESHOLD = 80;
 
         public AutoKinectCalibration()
         {
@@ -60,19 +62,35 @@ namespace KinectAutoCalibration.Calibration
 
         public void InitialCalibration()
         {
-            beamerControl.DisplayCalibrationImageEdge(true);
-            Thread.Sleep(1000);
-            p1 = kinect.GetColorImage();
-            Thread.Sleep(1000);
-            beamerControl.DisplayCalibrationImageEdge(false);
-            Thread.Sleep(1000);
-            p2 = kinect.GetColorImage();
+            var beamerToKinect = new Dictionary<BeamerPoint2D, KinectPoint>();
 
-            _differenceImage = kinect.GetDifferenceImage(p1, p2, 80);
-            diffBitmap = kinect.ConvertKinectPointArrayToWritableBitmap(_differenceImage, 640, 480);
-
-            //var realWorldArray = kinect.CreateRealWorldArray(kinArray);
             kinP = kinect.CreateKinectPointArray();
+
+            for (var i = 0; i < CALIBRATION_POINTS; i++)
+            {
+                var beamerPoint = beamerControl.DisplayCalibrationImageEdge(true, i);
+                p1 = kinect.GetColorImage();
+                Thread.Sleep(1000);
+                beamerControl.DisplayCalibrationImageEdge(false, i);
+                Thread.Sleep(1000);
+                p2 = kinect.GetColorImage();
+
+                _differenceImage = kinect.GetDifferenceImage(p1, p2, THRESHOLD);
+                var initPoints = new List<Vector2D>() { new Vector2D { X = 0, Y = 0 } };
+                var centroids = KMeans.DoKMeans(KMeansHelper.ExtractBlackPointsAs2dVector(_differenceImage), initPoints);
+
+                beamerToKinect.Add(beamerPoint, kinP[(int) centroids[0].X, (int) centroids[0].Y]);
+
+                
+
+                //rwCorners = GetCornerPoints(_differenceImage);
+                //foreach (var rwCorner in rwCorners)
+                //{
+                //    var p = kinect.CreateRealWorldVector(rwCorner.Value);
+                //    corners.Add(p);
+                //}
+            }
+            //var realWorldArray = kinect.CreateRealWorldArray(kinArray);           
 
             /*int error = 0;
             foreach (var kinectPoint in kinP)
@@ -83,18 +101,18 @@ namespace KinectAutoCalibration.Calibration
                 }
             }*/
 
+            var realWorldArray = kinect.CreateRealWorldArray(kinP, 640, 480);
             corners = new List<Vector3D>();
-
-            rwCorners = GetCornerPoints(_differenceImage);
-            foreach (var rwCorner in rwCorners)
+            foreach (var element in beamerToKinect)
             {
-                var p = kinect.CreateRealWorldVector(rwCorner.Value);
-                corners.Add(p);
+                var kinectPoint = element.Value;
+                corners.Add(kinect.CreateRealWorldVector(realWorldArray[kinectPoint.X, kinectPoint.Y]));
             }
+            corners.Sort((first, second) => first != null ? first.Z.CompareTo(second.Z) : 0);
 
             //// Punkt mit niedrigstem Abstand(z) als mittelpunkt (param2)
             //// Punkt mit höchstem Abstand(z) nicht nehmen!!!!
-            ChangeOfBasis.InitializeChangeOfBasis(corners[1], corners[0], corners[2]); //Corner Identification!!
+            ChangeOfBasis.InitializeChangeOfBasis(corners[1], corners[0], corners[2]);
 
             _corners2D = new List<Vector2D>();
             _corners2D.Add(ChangeOfBasis.GetVectorInNewBasis(corners[0]));
@@ -129,8 +147,10 @@ namespace KinectAutoCalibration.Calibration
             for (var i = 1; i <= CALIBRATION_ROUNDS; i++)
             {
                 beamerControl.DisplayCalibrationImage(true, i);
+                p1 = kinect.GetColorImage();
                 Thread.Sleep(1000);
                 beamerControl.DisplayCalibrationImage(false, i);
+                p2 = kinect.GetColorImage();
             }
             //    _differenceImage = kinect.GetDifferenceImage(p1, p2, 80);
 
