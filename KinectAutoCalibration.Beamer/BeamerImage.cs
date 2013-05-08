@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -38,7 +39,7 @@ namespace KinectAutoCalibration.Beamer
             return imageCanvas;
         }
 
-        public static Canvas CreateCalibImage(int beamerWidth, int beamerHeight, bool isInverted, int depth)
+        public static Canvas CreateCalibImage(int beamerWidth, int beamerHeight, bool isInverted, int round)
         {
             var imageCanvas = new Canvas
             {
@@ -46,11 +47,37 @@ namespace KinectAutoCalibration.Beamer
                 Width = beamerWidth,
                 Background = new SolidColorBrush(Colors.Black)
             };
-
-            var allElements = CreateCalibRectangles(beamerWidth / depth, beamerHeight / depth, isInverted);
-            foreach (var e in allElements)
+            var divisorArray = new []{1,2,4,6};
+            var divisor = divisorArray[round-1];
+            var width = beamerWidth/divisor;
+            var height = beamerHeight/divisor;
+            for (var x = 0; x < round; x++)
             {
-                imageCanvas.Children.Add(e);
+                for (var y = 0; y < round; y++)
+                {
+                    var allElements = new List<Rectangle>();
+                    if (round == 1)
+                    {
+                         allElements.AddRange(CreateCalibRectangles(width , height, x, y, isInverted));
+                    }
+                    else
+                    {
+                        var specificWidth = width + TILE_WIDTH;
+                        var specifcHeight = height + TILE_HEIGHT;
+                        var specificOffsetLeft = x*specificWidth - 2*TILE_WIDTH;
+                        var specificOffsetTop = y*specifcHeight - 2*TILE_HEIGHT;
+                        if (specificOffsetLeft < 0)
+                            specificOffsetLeft = 0;
+                       if (specificOffsetTop < 0)
+                            specificOffsetTop = 0;
+                       allElements.AddRange(CreateCalibRectangles(specificWidth, specifcHeight, specificOffsetLeft, specificOffsetTop, isInverted));
+                    }
+                    
+                    foreach (var e in allElements)
+                    {
+                        imageCanvas.Children.Add(e);
+                    } 
+                }
             }
 
             return imageCanvas;
@@ -128,13 +155,13 @@ namespace KinectAutoCalibration.Beamer
             return beamerWidth - 2 * TILE_WIDTH;
         }
 
-        private static IEnumerable<Rectangle> CreateCalibRectangles(int width, int height, bool isInverted)
+        private static IEnumerable<Rectangle> CreateCalibRectangles(int width, int height, int leftOffset, int topOffset, bool isInverted)
         {
-            var top = CreateRectangleGroup(width / 2 - TILE_WIDTH, 0, isInverted);
-            var left = CreateRectangleGroup(0, height / 2 - TILE_WIDTH, isInverted);
-            var middle = CreateRectangleGroup(width / 2 - TILE_WIDTH, height / 2 - TILE_WIDTH, isInverted);
-            var right = CreateRectangleGroup(width - 2 * TILE_WIDTH, height / 2 - TILE_WIDTH, isInverted);
-            var bottom = CreateRectangleGroup(width / 2 - TILE_WIDTH, height - 2 * TILE_WIDTH, isInverted);
+            var top = CreateRectangleGroup(leftOffset + (width / 2 - TILE_WIDTH), topOffset, isInverted);
+            var left = CreateRectangleGroup(leftOffset, topOffset + (height / 2 - TILE_WIDTH), isInverted);
+            var middle = CreateRectangleGroup(leftOffset + (width / 2 - TILE_WIDTH), topOffset + (height / 2 - TILE_WIDTH), isInverted);
+            var right = CreateRectangleGroup(leftOffset + (width - 2 * TILE_WIDTH),topOffset + (height / 2 - TILE_WIDTH), isInverted);
+            var bottom = CreateRectangleGroup(leftOffset + (width / 2 - TILE_WIDTH), topOffset + (height - 2 * TILE_WIDTH), isInverted);
 
             return top.Union(left).Union(middle).Union(right).Union(bottom).ToList();
         }

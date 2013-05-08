@@ -50,7 +50,7 @@ namespace KinectAutoCalibration.Calibration
         private List<Vector2D> _area2DVectors;
         private byte[] _areaArray;
 
-        private const int CALIBRATION_ROUNDS = 5;
+        private const int CALIBRATION_ROUNDS = 2;
 
         public AutoKinectCalibration()
         {
