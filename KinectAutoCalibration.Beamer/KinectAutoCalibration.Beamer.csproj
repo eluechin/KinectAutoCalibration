@@ -48,10 +48,8 @@
     <Compile Include="BeamerImage.cs" />
     <Compile Include="Interfaces\IBeamerControl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="AreaPoint2D.cs" />
     <Compile Include="Strategy\IBeamerCorrectionStrategy.cs" />
     <Compile Include="Strategy\LinearCorrection.cs" />
-    <Compile Include="BeamerPoint2D.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\KinectAutoCalibration.Common\KinectAutoCalibration.Common.csproj">

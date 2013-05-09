@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using KinectAutoCalibration.Common;
 
 namespace KinectAutoCalibration.Beamer
 {
@@ -20,7 +21,7 @@ namespace KinectAutoCalibration.Beamer
             return ImageCanvas;
         }
 
-        public static BeamerPoint2D CreateCalibImageEdge(int beamerWidth, int beamerHeight, bool isInverted, int position)
+        public static BeamerPoint CreateCalibImageEdge(int beamerWidth, int beamerHeight, bool isInverted, int position)
         {
             ImageCanvas = new Canvas
                 {
@@ -65,9 +66,9 @@ namespace KinectAutoCalibration.Beamer
             return CalculateBeamerPoint(beamerWidth, beamerHeight, position);
         }
 
-        private static BeamerPoint2D CalculateBeamerPoint(int beamerWidth, int beamerHeight, int position)
+        private static BeamerPoint CalculateBeamerPoint(int beamerWidth, int beamerHeight, int position)
         {
-            var beamerPoint = new BeamerPoint2D();
+            var beamerPoint = new BeamerPoint();
             switch (position)
             {
                 case 0:
@@ -134,7 +135,7 @@ namespace KinectAutoCalibration.Beamer
             return imageCanvas;
         }
 
-        public static Canvas CreateAreaImage(int beamerWidth, int beamerHeight, List<BeamerPoint2D> objects)
+        public static Canvas CreateAreaImage(int beamerWidth, int beamerHeight, List<BeamerPoint> objects)
         {
             var imageCanvas = new Canvas
             {

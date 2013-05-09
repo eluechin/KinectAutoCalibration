@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KinectAutoCalibration.Common.Interfaces
+namespace KinectAutoCalibration.Calibration
 {
-    public interface IPoint2D
+    public class IKinectBeamerCalibration
     {
-        int X { get; set; }
-        int Y { get; set; }
     }
 }

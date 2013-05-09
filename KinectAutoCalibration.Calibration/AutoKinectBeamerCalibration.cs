@@ -1,35 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Configuration;
 using System.Drawing;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Threading;
 using KinectAutoCalibration.Beamer;
 using KinectAutoCalibration.Common;
 using KinectAutoCalibration.Common.Algorithms;
 using KinectAutoCalibration.Kinect;
-//using Vector3D = System.Windows.Media.Media3D.Vector3D;
-
 
 namespace KinectAutoCalibration.Calibration
 {
-    public class AutoKinectCalibration : IAutoKinectCalibration
+    public class AutoKinectBeamerCalibration : IAutoKinectBeamerCalibration
     {
         //private readonly int WIDTH = Convert.ToInt32(ConfigurationManager.AppSettings["AREA_WIDTH"]);
         //private readonly int HEIGHT = Convert.ToInt32(ConfigurationManager.AppSettings["AREA_WIDTH"]);
-        private readonly int WIDTH = 1400;
-        private readonly int HEIGHT = 1050;
-        private IBeamerControl beamerControl;
-        private IKinect kinect;
+        private readonly IBeamerControl beamerControl;
+        private readonly IKinect kinect;
         private WriteableBitmap diffBitmap;
         private WriteableBitmap pic1;
         private WriteableBitmap pic2;
@@ -54,7 +43,7 @@ namespace KinectAutoCalibration.Calibration
         private const int CALIBRATION_POINTS = 4;
         private const int THRESHOLD = 80;
 
-        public AutoKinectCalibration()
+        public AutoKinectBeamerCalibration()
         {
             beamerControl = new BeamerControl();
             kinect = new Kinect.Kinect();
@@ -62,7 +51,7 @@ namespace KinectAutoCalibration.Calibration
 
         public void InitialCalibration()
         {
-            var beamerToKinect = new Dictionary<BeamerPoint2D, KinectPoint>();
+            var beamerToKinect = new Dictionary<BeamerPoint, KinectPoint>();
 
             kinP = kinect.CreateKinectPointArray();
 
@@ -153,7 +142,6 @@ namespace KinectAutoCalibration.Calibration
                 p2 = kinect.GetColorImage();
             }
             //    _differenceImage = kinect.GetDifferenceImage(p1, p2, 80);
-
 
             //var centroidsInit = new List<Vector2D>
             //    {
@@ -417,7 +405,7 @@ namespace KinectAutoCalibration.Calibration
             return rwCorners;
         }
 
-        void IAutoKinectCalibration.GetObstacles(int c)
+        void IAutoKinectBeamerCalibration.GetObstacles(int c)
         {
             GetObstacles(c);
         }

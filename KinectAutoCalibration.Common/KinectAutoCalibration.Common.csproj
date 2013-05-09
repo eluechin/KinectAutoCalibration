@@ -42,20 +42,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Algorithms\ChangeOfBasis.cs" />
+    <Compile Include="Point\AreaPoint.cs" />
+    <Compile Include="Point\BeamerPoint.cs" />
     <Compile Include="BitmapHelper.cs" />
     <Compile Include="KMeansHelper.cs" />
-    <Compile Include="Point2D.cs" />
-    <Compile Include="RealWorldPoint.cs" />
+    <Compile Include="Point\Point.cs" />
+    <Compile Include="Point\RealWorldPoint.cs" />
     <Compile Include="Vector2D.cs" />
     <Compile Include="Algorithms\KMeans.cs" />
-    <Compile Include="Interfaces\IPoint2D.cs" />
-    <Compile Include="Interfaces\IVector.cs" />
-    <Compile Include="KinectPoint.cs" />
+    <Compile Include="Point\KinectPoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Vector3D.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Interfaces\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

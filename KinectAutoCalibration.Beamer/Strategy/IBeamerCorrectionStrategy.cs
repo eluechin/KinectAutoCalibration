@@ -1,7 +1,9 @@
-﻿namespace KinectAutoCalibration.Beamer
+﻿using KinectAutoCalibration.Common;
+
+namespace KinectAutoCalibration.Beamer
 {
     public interface IBeamerCorrectionStrategy
     {
-        BeamerPoint2D CalculateBeamerCoordinate(AreaPoint2D areaCoordinate);
+        BeamerPoint CalculateBeamerCoordinate(AreaPoint areaCoordinate);
     }
 }
