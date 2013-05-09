@@ -15,8 +15,6 @@ namespace KinectAutoCalibration.Calibration
     {
         public const int THREAD_SLEEP = 1000;
         public const int THRESHOLD = 80;
-        
-        private const int CALIBRATION_ROUNDS = 2;
 
         private readonly IBeamerWindow beamerWindow;
         private readonly IKinect kinect;

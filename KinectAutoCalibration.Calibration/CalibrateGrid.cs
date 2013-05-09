@@ -11,8 +11,12 @@ namespace KinectAutoCalibration.Calibration
 {
     public class CalibrateGrid : IBeamerToKinectStrategy
     {
+        //TODO XML Configuration?
+        private const int CALIBRATION_ROUNDS = 2;
+
         public Dictionary<BeamerPoint, KinectPoint> CalibrateBeamterToKinect(IBeamerWindow beamerWindow, IKinect kinect)
         {
+            //TODO Implement
             throw new NotImplementedException();
         }
     }
