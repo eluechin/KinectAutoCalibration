@@ -43,5 +43,9 @@ namespace KinectAutoCalibration.Calibration
             ChangeOfBasis.InitializeChangeOfBasis(a, b, c);
         }
 
+        public IKinectBeamerOperation CreateKinectBeamerOperation()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

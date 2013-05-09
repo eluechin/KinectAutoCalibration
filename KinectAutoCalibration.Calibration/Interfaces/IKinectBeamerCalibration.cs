@@ -5,5 +5,7 @@
         void CalibrateBeamerToKinect(IBeamerToKinectStrategy beamerToKinectStrategy);
         void ConvertKinectToRealWorld(IKinectToRealWorldStrategy kinectToRealWorldStrategy);
         void RealWorldToArea();
+
+        IKinectBeamerOperation CreateKinectBeamerOperation();
     }
 }
