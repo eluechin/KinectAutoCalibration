@@ -8,26 +8,6 @@ namespace KinectAutoCalibration.Common.Algorithms
 {
     public static class ChangeOfBasis
     {
-        /*
-        1) Bestimme _n --> normieren 
-        2) Bestimme _e1 <-- 	_e1 aus der Differenz der Eckpunkte 1 und 2 berechnen
-					        _e1 muss senkrecht auf _n stehen (also rechter Winkel)
-			        _e2 <-- 	(_e1 x _n)
-			
-        Methoden:
-	    1. 3 Punkte entgegennehmen und _n davon liefern
-	    2. _e1 berechnen
-    	3. _e2 berechnen (Input: _e1 und _n)
-	    4. Basiswechsel --> a,b liefern		
-
-        --> Nachtrag SW04: Normalenvektor bestimmen
-            1) Differenz Eckpunkt P4 und Eckpunkt P1 --> _e1
-            2) Differenz Eckpunkt P2 und Eckpunkt P1
-            3) Kreuzprodukt aus den Vektoren der Resultate von 1) und 2) --> _n
-            4) Kreuzprodukt aus _n und Vektor _e1 --> _e2
-            5) alle Vektoren normalisieren
-         */
-
         private static Vector3D _point1;
         private static Vector3D _point2;
         private static Vector3D _point3;
