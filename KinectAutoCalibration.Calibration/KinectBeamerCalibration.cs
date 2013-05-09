@@ -19,7 +19,8 @@ namespace KinectAutoCalibration.Calibration
         private readonly IBeamerWindow beamerWindow;
         private readonly IKinect kinect;
         private readonly Dictionary<BeamerPoint, KinectPoint> beamerToKinect;
-        private Dictionary<KinectPoint, RealWorldPoint> kinectToRealWorld;
+        private readonly Dictionary<KinectPoint, RealWorldPoint> kinectToRealWorld;
+        private readonly Dictionary<RealWorldPoint, KinectPoint> realWorldToArea; 
 
         public KinectBeamerCalibration()
         {
@@ -48,6 +49,16 @@ namespace KinectAutoCalibration.Calibration
         public void ConvertKinectToRealWorld(IKinectToRealWorldStrategy kinectToRealWorldStrategy)
         {
             
+        }
+
+        public void RealWorldToArea()
+        {
+            var a = new Vector3D();
+            var b = new Vector3D();
+            var c = new Vector3D();
+
+            //TODO a,b und c ermittlen
+            ChangeOfBasis.InitializeChangeOfBasis(a, b, c);
         }
 
     }

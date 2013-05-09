@@ -133,14 +133,7 @@ namespace KinectAutoCalibration.Calibration
 
         public void CalibrateBeamer()
         {
-            for (var i = 1; i <= CALIBRATION_ROUNDS; i++)
-            {
-                beamerWindow.DisplayCalibrationImage(true, i);
-                p1 = kinect.GetColorImage();
-                Thread.Sleep(1000);
-                beamerWindow.DisplayCalibrationImage(false, i);
-                p2 = kinect.GetColorImage();
-            }
+            
             //    _differenceImage = kinect.GetDifferenceImage(p1, p2, 80);
 
             //var centroidsInit = new List<Vector2D>
