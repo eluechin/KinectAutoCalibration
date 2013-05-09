@@ -2,15 +2,15 @@
 
 namespace KinectAutoCalibration.Kinect
 {
-    public class RealWorld
+    public class RealWorldCalculation
     {
-        public RealWorld()
+        public RealWorldCalculation()
         {
         }
 
         /// <summary>
-        /// This method is used to convert a KinectPoint-array to a RealWorld-Array whose coordinates are all in millimeters.
-        /// When to use: Use this method only to calculate the RealWorld-coordinates of the corner points. 
+        /// This method is used to convert a KinectPoint-array to a RealWorldCalculation-Array whose coordinates are all in millimeters.
+        /// When to use: Use this method only to calculate the RealWorldCalculation-coordinates of the corner points. 
         /// </summary>
         /// <param name="kinArray">the KinectPoint-array which should be converted</param>
         /// <param name="width">the actual width of the two-dimensional KinectPoint-array</param>
@@ -39,10 +39,10 @@ namespace KinectAutoCalibration.Kinect
         }
 
         /// <summary>
-        /// This method is used to convert a KinectPoint-array to a RealWorld-Array whose coordinates are all in millimeters.
+        /// This method is used to convert a KinectPoint-array to a RealWorldCalculation-Array whose coordinates are all in millimeters.
         /// The difference to the other CreateRealWorld-method is, that this method uses 3 known RealWorldPoints to calculate the millimeter-coordinates
         /// of the new RealWorldPoints.
-        /// When to use: As soon as the corner points are given in RealWorldPoints use this method to calculate the RealWorld-coordinates of 
+        /// When to use: As soon as the corner points are given in RealWorldPoints use this method to calculate the RealWorldCalculation-coordinates of 
         /// additional points needed.
         /// </summary>
         /// <param name="kinArray">the KinectPoint-array which should be converted</param>
@@ -81,8 +81,8 @@ namespace KinectAutoCalibration.Kinect
         }
 
         /// <summary>
-        /// This method is used to calculate the RealWorld-coordinates for a given KinectPoint
-        /// When to use: use only to calculate the corner points' RealWorld-coordinates. For other KinectPoints use the other "CalculateRealWorldVector" 
+        /// This method is used to calculate the RealWorldCalculation-coordinates for a given KinectPoint
+        /// When to use: use only to calculate the corner points' RealWorldCalculation-coordinates. For other KinectPoints use the other "CalculateRealWorldVector" 
         /// method.
         /// </summary>
         /// <param name="p">the KinectPoint which should be transformed to a RealWorldPoint </param>
@@ -99,8 +99,8 @@ namespace KinectAutoCalibration.Kinect
         }
 
         /// <summary>
-        /// This method is used to calculate the RealWorld-coordinates for a given KinectPoint
-        /// When to use: use only to calculate the corner points' RealWorld-coordinates. For other KinectPoints use the other "CalculateRealWorldVector" 
+        /// This method is used to calculate the RealWorldCalculation-coordinates for a given KinectPoint
+        /// When to use: use only to calculate the corner points' RealWorldCalculation-coordinates. For other KinectPoints use the other "CalculateRealWorldVector" 
         /// method.
         /// </summary>
         /// <param name="p">the KinectPoint which should be transformed to a RealWorldPoint </param>

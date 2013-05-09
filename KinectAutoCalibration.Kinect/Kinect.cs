@@ -17,7 +17,7 @@ namespace KinectAutoCalibration.Kinect
         internal int _colorImageStride;
         internal readonly KinectConverters _kinectConverters;
         private readonly RecoverDepthInformation _recoverDepthInformation;
-        private readonly RealWorld _realWorld;
+        private readonly RealWorldCalculation _realWorldCalculation;
         public const int MIN_ELEVATION_ANGLE = -27;
         public const int MAX_ELEVATION_ANGLE = 27;
         public const int KINECT_IMAGE_WIDTH = 640;
@@ -31,7 +31,7 @@ namespace KinectAutoCalibration.Kinect
             DiscoverKinectSensor();
             _kinectConverters = new KinectConverters(this);
             _recoverDepthInformation = new RecoverDepthInformation();
-            _realWorld = new RealWorld();
+            _realWorldCalculation = new RealWorldCalculation();
         }
 
         /// <summary>
@@ -337,17 +337,17 @@ namespace KinectAutoCalibration.Kinect
 
         public RealWorldPoint[,] CreateRealWorldArray(KinectPoint[,] kinArray, int width, int height)
         {
-            return _realWorld.CreateRealWorldArray(kinArray, width, height);
+            return _realWorldCalculation.CreateRealWorldArray(kinArray, width, height);
         }
 
         public RealWorldPoint[,] CreateRealWorldArray(KinectPoint[,] kinArray, int width, int height, RealWorldPoint rwA, RealWorldPoint rwB, RealWorldPoint rwC)
         {
-            return _realWorld.CreateRealWorldArray(kinArray, width, height, rwA, rwB, rwC);
+            return _realWorldCalculation.CreateRealWorldArray(kinArray, width, height, rwA, rwB, rwC);
         }
 
         public Vector3D CreateRealWorldVector(RealWorldPoint p)
         {
-            return _realWorld.CreateRealWorldVector(p);
+            return _realWorldCalculation.CreateRealWorldVector(p);
         }
     }
 }
