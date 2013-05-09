@@ -75,119 +75,79 @@ namespace WpfApplication1
 
         private void CompositionTarget_Rendering(object sender, EventArgs e)
         {
-           this.ColorImageElement6.Source = _kC.PollLiveColorImage();
+           //this.ColorImageElement6.Source = _kC.PollLiveColorImage();
         }
 
         private void InitialCalibration(object sender, RoutedEventArgs e)
         {
-            _kC.InitialCalibration();
-            //this.ColorImageElement1.Source = _kC.GetPic1Bitmap();
-            //this.ColorImageElement2.Source = _kC.GetPic2Bitmap();
-            //this.ColorImageElement1.Source = _kC.GetPicKinP();
-            //this.ColorImageElement3.Source = _kC.GetDifferenceBitmap();
+            //_kC.InitialCalibration();
+            ////this.ColorImageElement1.Source = _kC.GetPic1Bitmap();
+            ////this.ColorImageElement2.Source = _kC.GetPic2Bitmap();
+            ////this.ColorImageElement1.Source = _kC.GetPicKinP();
+            ////this.ColorImageElement3.Source = _kC.GetDifferenceBitmap();
 
-            var pixelsKinP = _kC.GetPicKinP();
-            this._colorImageBitmap1.WritePixels(this._colorImageBitmapRect, pixelsKinP, this._colorImageStride, 0);
+            //var pixelsKinP = _kC.GetPicKinP();
+            //this._colorImageBitmap1.WritePixels(this._colorImageBitmapRect, pixelsKinP, this._colorImageStride, 0);
 
 
-            var pixels = _kC.GetDifferenceImage();
-            this._colorImageBitmap3.WritePixels(this._colorImageBitmapRect, pixels, this._colorImageStride, 0);
+            //var pixels = _kC.GetDifferenceImage();
+            //this._colorImageBitmap3.WritePixels(this._colorImageBitmapRect, pixels, this._colorImageStride, 0);
 
-            var h = "Area Height: ";
-            var w = "Area Width: ";
-            AreaHeight.Text = h + _kC.GetAreaHeight().ToString();
-            AreaWidth.Text = w + _kC.GetAreaWidth().ToString();
+            //var h = "Area Height: ";
+            //var w = "Area Width: ";
+            //AreaHeight.Text = h + _kC.GetAreaHeight().ToString();
+            //AreaWidth.Text = w + _kC.GetAreaWidth().ToString();
 
-            this.WindowState = WindowState.Minimized;
-            this.WindowState = WindowState.Maximized;
-        }
-
-        private void ObstTopLeft(object sender, RoutedEventArgs e)
-        {
-            _kC.GetObstacles(1);
-            this.ColorImageElement3.Source = _kC.GetDifferenceBitmap();
-            this.WindowState = WindowState.Minimized;
-            this.WindowState = WindowState.Maximized;
-        }
-
-        private void ObstTopRight(object sender, RoutedEventArgs e)
-        {
-            _kC.GetObstacles(2);
-            this.ColorImageElement3.Source = _kC.GetDifferenceBitmap();
-            this.WindowState = WindowState.Minimized;
-            this.WindowState = WindowState.Maximized;
-        }
-
-        private void ObstBtmLeft(object sender, RoutedEventArgs e)
-        {
-            _kC.GetObstacles(4);
-            this.ColorImageElement3.Source = _kC.GetDifferenceBitmap();
-            this.WindowState = WindowState.Minimized;
-            this.WindowState = WindowState.Maximized;
-        }
-
-        private void ObstBtmRight(object sender, RoutedEventArgs e)
-        {
-            _kC.GetObstacles(3);
-            this.ColorImageElement3.Source = _kC.GetDifferenceBitmap();
-            this.WindowState = WindowState.Minimized;
-            this.WindowState = WindowState.Maximized;
+            //this.WindowState = WindowState.Minimized;
+            //this.WindowState = WindowState.Maximized;
         }
 
         private void Obst(object sender, RoutedEventArgs e)
         {
-            _kC.GetObstacles();
+            //_kC.GetObstacles();
 
-            var pixelsObst = _kC.GetDifferenceImageObst();
-            this._colorImageBitmap2.WritePixels(this._colorImageBitmapRect, pixelsObst, this._colorImageStride, 0);
+            //var pixelsObst = _kC.GetDifferenceImageObst();
+            //this._colorImageBitmap2.WritePixels(this._colorImageBitmapRect, pixelsObst, this._colorImageStride, 0);
 
-            var pixelsArea = _kC.GetAreaArray();
-            this._colorImageBitmap5.WritePixels(this._colorImageBitmapRect, pixelsArea, this._colorImageStride, 0);
+            //var pixelsArea = _kC.GetAreaArray();
+            //this._colorImageBitmap5.WritePixels(this._colorImageBitmapRect, pixelsArea, this._colorImageStride, 0);
 
-            var x = "Obstacle x: ";
-            var y = "Obstacle y: ";
-            ObstacleX.Text = x+_kC.GetObstacleCentroidX().ToString();
-            ObstacleY.Text = y+_kC.GetObstacleCentroidY().ToString();
+            //var x = "Obstacle x: ";
+            //var y = "Obstacle y: ";
+            //ObstacleX.Text = x+_kC.GetObstacleCentroidX().ToString();
+            //ObstacleY.Text = y+_kC.GetObstacleCentroidY().ToString();
 
-            this.WindowState = WindowState.Minimized;
-            this.WindowState = WindowState.Maximized;
+            //this.WindowState = WindowState.Minimized;
+            //this.WindowState = WindowState.Maximized;
         }
 
         private void dsplArea(object sender, RoutedEventArgs e)
         {
-            _kC.DisplayArea();
+            //_kC.DisplayArea();
         }
 
         private void dsplBlank(object sender, RoutedEventArgs e)
         {
-            _kC.DisplayBlank();
-        }
-
-        private void ObstMid(object sender, RoutedEventArgs e)
-        {
-            _kC.GetObstacles(5);
-            this.ColorImageElement3.Source = _kC.GetDifferenceBitmap();
-            this.WindowState = WindowState.Minimized;
-            this.WindowState = WindowState.Maximized;
+            //_kC.DisplayBlank();
         }
 
         private void CalibBeamer(object sender, RoutedEventArgs e)
         {
-            _kC.CalibrateBeamer();
-            this.ColorImageElement3.Source = _kC.GetDifferenceBitmap();
-            this.WindowState = WindowState.Minimized;
-            this.WindowState = WindowState.Maximized;
+            //_kC.CalibrateBeamer();
+            //this.ColorImageElement3.Source = _kC.GetDifferenceBitmap();
+            //this.WindowState = WindowState.Minimized;
+            //this.WindowState = WindowState.Maximized;
         }
 
         private void KinectUp(object sender, RoutedEventArgs e)
         {
-            _kC.RaiseKinect();
+            //_kC.RaiseKinect();
 
         }
 
         private void KinectDown(object sender, RoutedEventArgs e)
         {
-            _kC.LowerKinect();
+            //_kC.LowerKinect();
         }
     }
 

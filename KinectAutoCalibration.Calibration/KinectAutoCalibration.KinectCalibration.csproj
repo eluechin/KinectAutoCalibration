@@ -52,6 +52,7 @@
     <Compile Include="IKinectToRealWorldStrategy.cs" />
     <Compile Include="Interfaces\IAutoKinectBeamerCalibration.cs" />
     <Compile Include="AutoKinectBeamerCalibration.cs" />
+    <Compile Include="Interfaces\ICalibration.cs" />
     <Compile Include="Interfaces\IKinectBeamerCalibration.cs" />
     <Compile Include="KinectBeamerCalibration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

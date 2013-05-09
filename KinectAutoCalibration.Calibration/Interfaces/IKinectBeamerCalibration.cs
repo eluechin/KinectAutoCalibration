@@ -8,7 +8,7 @@ using KinectAutoCalibration.Kinect;
 
 namespace KinectAutoCalibration.Calibration
 {
-    public class IKinectBeamerCalibration
+    public interface IKinectBeamerCalibration : ICalibration
     {
         
 

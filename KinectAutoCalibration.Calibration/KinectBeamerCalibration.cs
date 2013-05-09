@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using KinectAutoCalibration.Beamer;
 using KinectAutoCalibration.Common;
 using KinectAutoCalibration.Common.Algorithms;
@@ -11,31 +13,10 @@ using KinectAutoCalibration.Kinect;
 
 namespace KinectAutoCalibration.Calibration
 {
-    public class KinectBeamerCalibration : IKinectBeamerCalibration
+    public class KinectBeamerCalibration : Calibration, IKinectBeamerCalibration
     {
         public const int THREAD_SLEEP = 1000;
         public const int THRESHOLD = 80;
-
-        private readonly IBeamerWindow beamerWindow;
-        private readonly IKinect kinect;
-        private readonly Dictionary<BeamerPoint, KinectPoint> beamerToKinect;
-        private readonly Dictionary<KinectPoint, RealWorldPoint> kinectToRealWorld;
-        private readonly Dictionary<RealWorldPoint, KinectPoint> realWorldToArea; 
-
-        public KinectBeamerCalibration()
-        {
-            beamerToKinect = new Dictionary<BeamerPoint, KinectPoint>();
-
-            try
-            {
-                beamerWindow = new BeamerWindow();
-                kinect = new Kinect.Kinect();
-            }
-            catch (Exception ex)
-            {
-                // TODO Exception Handling
-            }
-        }
 
         public void CalibrateBeamerToKinect(IBeamerToKinectStrategy beamerToKinectStrategy)
         {
@@ -48,7 +29,8 @@ namespace KinectAutoCalibration.Calibration
 
         public void ConvertKinectToRealWorld(IKinectToRealWorldStrategy kinectToRealWorldStrategy)
         {
-            
+            //TODO Implement
+            throw new NotImplementedException();
         }
 
         public void RealWorldToArea()
@@ -62,6 +44,4 @@ namespace KinectAutoCalibration.Calibration
         }
 
     }
-
-    
 }
