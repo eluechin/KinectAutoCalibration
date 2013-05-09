@@ -16,7 +16,7 @@ namespace KinectAutoCalibration.Calibration
         // TODO Put in XML Configuration File?
         private const int CALIBRATION_POINTS = 4;
 
-        public Dictionary<BeamerPoint, KinectPoint> CalibrateBeamterToKinect(IBeamerWindow beamerWindow, IKinect kinect)
+        public Dictionary<BeamerPoint, KinectPoint> CalibrateBeamerToKinect(IBeamerWindow beamerWindow, IKinect kinect)
         {
             var beamerToKinect = new Dictionary<BeamerPoint, KinectPoint>();
             var kinectPoints = kinect.CreateKinectPointArray();

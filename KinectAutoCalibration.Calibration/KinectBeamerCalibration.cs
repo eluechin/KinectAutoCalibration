@@ -20,7 +20,7 @@ namespace KinectAutoCalibration.Calibration
 
         public void CalibrateBeamerToKinect(IBeamerToKinectStrategy beamerToKinectStrategy)
         {
-            var newPoints = beamerToKinectStrategy.CalibrateBeamterToKinect(beamerWindow, kinect);
+            var newPoints = beamerToKinectStrategy.CalibrateBeamerToKinect(beamerWindow, kinect);
             foreach (var element in newPoints)
             {
                 beamerToKinect.Add(element.Key, element.Value);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows;
@@ -335,14 +336,14 @@ namespace KinectAutoCalibration.Kinect
             return _kinectConverters.ConvertKinectPointArrayToBitmap(kinArray, width, height);
         }
 
-        public RealWorldPoint[,] CreateRealWorldArray(KinectPoint[,] kinArray, int width, int height)
+        public Dictionary<KinectPoint,RealWorldPoint> CreateRealWorldCoordinates(List<KinectPoint> kinectPoints )
         {
-            return _realWorldCalculation.CreateRealWorldArray(kinArray, width, height);
+            return _realWorldCalculation.CreateRealWorldCoordinates(kinectPoints);
         }
 
-        public RealWorldPoint[,] CreateRealWorldArray(KinectPoint[,] kinArray, int width, int height, RealWorldPoint rwA, RealWorldPoint rwB, RealWorldPoint rwC)
+        public Dictionary<KinectPoint, RealWorldPoint> CreateRealWorldCoordinates(List<KinectPoint> kinectPoints, RealWorldPoint rwA, RealWorldPoint rwB, RealWorldPoint rwC)
         {
-            return _realWorldCalculation.CreateRealWorldArray(kinArray, width, height, rwA, rwB, rwC);
+            return _realWorldCalculation.CreateRealWorldCoordinates(kinectPoints, rwA, rwB, rwC);
         }
 
         public Vector3D CreateRealWorldVector(RealWorldPoint p)

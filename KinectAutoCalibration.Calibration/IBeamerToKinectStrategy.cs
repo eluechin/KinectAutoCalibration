@@ -11,6 +11,6 @@ namespace KinectAutoCalibration.Calibration
 {
     public interface IBeamerToKinectStrategy
     {
-        Dictionary<BeamerPoint, KinectPoint> CalibrateBeamterToKinect(IBeamerWindow beamerWindow, IKinect kinect);
+        Dictionary<BeamerPoint, KinectPoint> CalibrateBeamerToKinect(IBeamerWindow beamerWindow, IKinect kinect);
     }
 }

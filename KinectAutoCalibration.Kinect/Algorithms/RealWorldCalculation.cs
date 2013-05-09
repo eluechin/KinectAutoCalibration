@@ -1,4 +1,5 @@
-﻿using KinectAutoCalibration.Common;
+﻿using System.Collections.Generic;
+using KinectAutoCalibration.Common;
 
 namespace KinectAutoCalibration.Kinect
 {
@@ -9,65 +10,49 @@ namespace KinectAutoCalibration.Kinect
         }
 
         /// <summary>
-        /// This method is used to convert a KinectPoint-array to a RealWorldCalculation-Array whose coordinates are all in millimeters.
-        /// When to use: Use this method only to calculate the RealWorldCalculation-coordinates of the corner points. 
+        /// This method is used to convert a list of KinectPoints to a mapping-dictionary.
+        /// When to use: Use this method only to calculate the RealWorld-coordinates of the corner points. 
         /// </summary>
-        /// <param name="kinArray">the KinectPoint-array which should be converted</param>
-        /// <param name="width">the actual width of the two-dimensional KinectPoint-array</param>
-        /// <param name="height">the actual height of the two-dimensional KinectPoint-array</param>
-        /// <returns>Returns an array which contains RealWorldPoints</returns>
-        public RealWorldPoint[,] CreateRealWorldArray(KinectPoint[,] kinArray, int width, int height)
+        /// <param name="kinectPoints">a list of KinectPoints which should be converted</param>
+        /// <returns>Returns a dictionary which contains KinectPoints and their mapped RealWorldPoints</returns>
+        public Dictionary<KinectPoint, RealWorldPoint> CreateRealWorldCoordinates(List<KinectPoint> kinectPoints)
         {
-            RealWorldPoint[,] rwArray = new RealWorldPoint[640, 480];
+            var dict_Kin2RW = new Dictionary<KinectPoint, RealWorldPoint>();
 
-            //var a = new KinectPoint(0, 0, 0, 0, 0);
-            //var b = new KinectPoint(1, 1, 0, 0, 0);
-            //var c = new KinectPoint(2, 2, 0, 0, 0);
-            //var rwA = CalculateRealWorldPoint(a);
-            //var rwB = CalculateRealWorldPoint(b);
-            //var rwC = CalculateRealWorldPoint(c);
-                
-            for (int y = 0; y < height; ++y)
+            foreach (var kinectPoint in kinectPoints)
             {
-                for (int x = 0; x < width; ++x)
-                {
-                    var rwPoint = CalculateRealWorldPoint(kinArray[x, y]);
-                    rwArray[x, y] = rwPoint;
-                }
+                dict_Kin2RW.Add(kinectPoint, CalculateRealWorldPoint(kinectPoint));
             }
-            return rwArray;
+                    
+           
+            return dict_Kin2RW;
         }
 
         /// <summary>
-        /// This method is used to convert a KinectPoint-array to a RealWorldCalculation-Array whose coordinates are all in millimeters.
-        /// The difference to the other CreateRealWorld-method is, that this method uses 3 known RealWorldPoints to calculate the millimeter-coordinates
-        /// of the new RealWorldPoints.
-        /// When to use: As soon as the corner points are given in RealWorldPoints use this method to calculate the RealWorldCalculation-coordinates of 
+        /// This method is used to convert a list of KinectPoints to a mapping-dictionary.
+        /// The difference to the other CreateRealWorldCoordinates-method is, that this method uses 3 known RealWorldPoints to calculate the 
+        /// millimeter-coordinates of the new RealWorldPoints.
+        /// When to use: As soon as the corner points are given in RealWorldPoints use this method to calculate the RealWorld-coordinates of 
         /// additional points needed.
         /// </summary>
-        /// <param name="kinArray">the KinectPoint-array which should be converted</param>
-        /// <param name="width">the actual width of the two-dimensional KinectPoint-array</param>
-        /// <param name="height">the actual height of the two-dimensional KinectPoint-array</param>
+        /// <param name="kinectPoints">a list of KinectPoints which should be converted</param>
         /// <param name="rwA">RealWorldPoint A which represents a corner point and 
         ///     is used to calculate the coordinates for the new RealWorldPoints</param>
         /// <param name="rwB">RealWorldPoint B which represents a corner point and 
         ///     is used to calculate the coordinates for the new RealWorldPoints</param>
         /// <param name="rwC">RealWorldPoint C which represents a corner point and 
         ///     is used to calculate the coordinates for the new RealWorldPoints</param>
-        /// <returns>Returns an array which contains RealWorldPoints</returns>
-        public RealWorldPoint[,] CreateRealWorldArray(KinectPoint[,] kinArray, int width, int height, RealWorldPoint rwA, RealWorldPoint rwB, RealWorldPoint rwC)
+        /// <returns>>Returns a dictionary which contains KinectPoints and their mapped RealWorldPoints</returns>
+        public Dictionary<KinectPoint, RealWorldPoint> CreateRealWorldCoordinates(List<KinectPoint> kinectPoints , RealWorldPoint rwA, RealWorldPoint rwB, RealWorldPoint rwC)
         {
-            RealWorldPoint[,] rwArray = new RealWorldPoint[640, 480];
+            var dict_Kin2RW = new Dictionary<KinectPoint, RealWorldPoint>();
 
-            for (int y = 0; y < height; ++y)
+            foreach (var kinectPoint in kinectPoints)
             {
-                for (int x = 0; x < width; ++x)
-                {
-                    var rwPoint = CalculateRealWorldPoint(kinArray[x, y], rwA, rwB, rwC);
-                    rwArray[x, y] = rwPoint;
-                }
+                dict_Kin2RW.Add(kinectPoint, CalculateRealWorldPoint(kinectPoint, rwA, rwB, rwC));
             }
-            return rwArray;
+       
+            return dict_Kin2RW;
         }
 
         /// <summary>

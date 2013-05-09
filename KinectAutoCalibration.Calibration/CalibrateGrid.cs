@@ -12,7 +12,7 @@ namespace KinectAutoCalibration.Calibration
         //TODO XML Configuration?
         private const int CALIBRATION_ROUNDS = 2;
 
-        public Dictionary<BeamerPoint, KinectPoint> CalibrateBeamterToKinect(IBeamerWindow beamerWindow, IKinect kinect)
+        public Dictionary<BeamerPoint, KinectPoint> CalibrateBeamerToKinect(IBeamerWindow beamerWindow, IKinect kinect)
         {
             var newPoints = new Dictionary<BeamerPoint, KinectPoint>();
             var simpleStrategy = new CalibrateEdgePoints();
