@@ -9,13 +9,13 @@ using KinectAutoCalibration.Common;
 namespace KinectAutoCalibration.Beamer
 {
     /// <summary>
-    /// Abstraction of the Beamer. Provides the basic funtionality to control the beamer.
+    /// Abstraction of the BeamerWindow
     /// </summary>
-    public class BeamerControl : IBeamerControl
+    public class BeamerWindow : IBeamerWindow
     {
         private readonly Window beamerWindow;
 
-        public BeamerControl()
+        public BeamerWindow()
         {
             beamerWindow = new Window
             {
@@ -35,16 +35,16 @@ namespace KinectAutoCalibration.Beamer
         /// </summary>
         public BeamerPoint DisplayCalibrationImageEdge(bool isInverted, int position)
         {
-            var beamerPoint = BeamerImage.CreateCalibImageEdge(Beamer.GetBeamerWidth(), Beamer.GetBeamerHeight(),
+            var beamerPoint = CalibrationImage.CreateCalibImageEdge(Beamer.GetBeamerWidth(), Beamer.GetBeamerHeight(),
                                                                isInverted, position);
-            var canvas = BeamerImage.GetImageCanvas();
+            var canvas = CalibrationImage.GetImageCanvas();
             DisplayContent(canvas);
             return beamerPoint;
         }
 
         public void DisplayCalibrationImage(bool isInverted, int depth)
         {
-            var canvasImage = BeamerImage.CreateCalibImage(Beamer.GetBeamerWidth(), Beamer.GetBeamerHeight(), isInverted,
+            var canvasImage = CalibrationImage.CreateCalibImage(Beamer.GetBeamerWidth(), Beamer.GetBeamerHeight(), isInverted,
                                                            depth);
             DisplayContent(canvasImage);
         }
@@ -58,11 +58,11 @@ namespace KinectAutoCalibration.Beamer
         public void DisplayArea(List<AreaPoint> objects, IBeamerCorrectionStrategy correctionStrategy)
         {
             var beamerPointOfObjects = objects.Select(correctionStrategy.CalculateBeamerCoordinate).ToList();
-            var canvasImage = BeamerImage.CreateAreaImage(Beamer.GetBeamerWidth(), Beamer.GetBeamerHeight(), beamerPointOfObjects);
+            var canvasImage = CalibrationImage.CreateAreaImage(Beamer.GetBeamerWidth(), Beamer.GetBeamerHeight(), beamerPointOfObjects);
             DisplayContent(canvasImage);
         }
 
-        private void DisplayContent(Canvas imageCanvas)
+        public void DisplayContent(Canvas imageCanvas)
         {
             beamerWindow.Dispatcher.Invoke(
             DispatcherPriority.Render,

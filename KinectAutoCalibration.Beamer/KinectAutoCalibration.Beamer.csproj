@@ -44,9 +44,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Beamer.cs" />
-    <Compile Include="BeamerControl.cs" />
-    <Compile Include="BeamerImage.cs" />
-    <Compile Include="Interfaces\IBeamerControl.cs" />
+    <Compile Include="BeamerWindow.cs" />
+    <Compile Include="CalibrationImage.cs" />
+    <Compile Include="Interfaces\IBeamerWindow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Strategy\IBeamerCorrectionStrategy.cs" />
     <Compile Include="Strategy\LinearCorrection.cs" />

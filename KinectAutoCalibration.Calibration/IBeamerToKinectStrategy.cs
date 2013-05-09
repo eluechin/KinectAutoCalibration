@@ -4,14 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using KinectAutoCalibration.Beamer;
+using KinectAutoCalibration.Common;
 using KinectAutoCalibration.Kinect;
 
 namespace KinectAutoCalibration.Calibration
 {
-    public class IKinectBeamerCalibration
+    public interface IBeamerToKinectStrategy
     {
-        
-
-
+        Dictionary<BeamerPoint, KinectPoint> CalibrateBeamterToKinect(IBeamerWindow beamerWindow, IKinect kinect);
     }
 }

@@ -8,7 +8,7 @@ using KinectAutoCalibration.Common;
 
 namespace KinectAutoCalibration.Beamer
 {
-    internal static class BeamerImage
+    public static class CalibrationImage
     {
         // ReSharper disable InconsistentNaming
         public static readonly int TILE_WIDTH = 70;
@@ -54,8 +54,6 @@ namespace KinectAutoCalibration.Beamer
                 case 4:
                     allElements.AddRange(topLeft.Union(topRight).Union(botRight).Union(botLeft).ToList());
                     break;
-                case 5:
-                    throw new Exception("There is no Point 5!!!!!!");
             }
 
             foreach (var e in allElements)

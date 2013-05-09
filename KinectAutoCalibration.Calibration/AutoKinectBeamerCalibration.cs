@@ -17,7 +17,7 @@ namespace KinectAutoCalibration.Calibration
     {
         //private readonly int WIDTH = Convert.ToInt32(ConfigurationManager.AppSettings["AREA_WIDTH"]);
         //private readonly int HEIGHT = Convert.ToInt32(ConfigurationManager.AppSettings["AREA_WIDTH"]);
-        private readonly IBeamerControl beamerControl;
+        private readonly IBeamerWindow beamerWindow;
         private readonly IKinect kinect;
         private WriteableBitmap diffBitmap;
         private WriteableBitmap pic1;
@@ -45,7 +45,7 @@ namespace KinectAutoCalibration.Calibration
 
         public AutoKinectBeamerCalibration()
         {
-            beamerControl = new BeamerControl();
+            beamerWindow = new BeamerWindow();
             kinect = new Kinect.Kinect();
         }
 
@@ -57,10 +57,10 @@ namespace KinectAutoCalibration.Calibration
 
             for (var i = 0; i < CALIBRATION_POINTS; i++)
             {
-                var beamerPoint = beamerControl.DisplayCalibrationImageEdge(true, i);
+                var beamerPoint = beamerWindow.DisplayCalibrationImageEdge(true, i);
                 p1 = kinect.GetColorImage();
                 Thread.Sleep(1000);
-                beamerControl.DisplayCalibrationImageEdge(false, i);
+                beamerWindow.DisplayCalibrationImageEdge(false, i);
                 Thread.Sleep(1000);
                 p2 = kinect.GetColorImage();
 
@@ -121,7 +121,7 @@ namespace KinectAutoCalibration.Calibration
             _height = myList[1].Value;
             _width = myList[2].Value;
 
-            beamerControl.DisplayBlank();
+            beamerWindow.DisplayBlank();
             Thread.Sleep(1000);
             _white = kinect.GetColorImage();
         }
@@ -135,10 +135,10 @@ namespace KinectAutoCalibration.Calibration
         {
             for (var i = 1; i <= CALIBRATION_ROUNDS; i++)
             {
-                beamerControl.DisplayCalibrationImage(true, i);
+                beamerWindow.DisplayCalibrationImage(true, i);
                 p1 = kinect.GetColorImage();
                 Thread.Sleep(1000);
-                beamerControl.DisplayCalibrationImage(false, i);
+                beamerWindow.DisplayCalibrationImage(false, i);
                 p2 = kinect.GetColorImage();
             }
             //    _differenceImage = kinect.GetDifferenceImage(p1, p2, 80);
@@ -198,11 +198,11 @@ namespace KinectAutoCalibration.Calibration
 
         public void GetObstacles(int c)
         {
-            beamerControl.DisplayCalibrationImage(true, c);
+            beamerWindow.DisplayCalibrationImage(true, c);
             Thread.Sleep(1000);
             p1 = kinect.GetColorImage();
             Thread.Sleep(500);
-            beamerControl.DisplayCalibrationImage(false, c);
+            beamerWindow.DisplayCalibrationImage(false, c);
             Thread.Sleep(1000);
             p2 = kinect.GetColorImage();
             _differenceImage = kinect.GetDifferenceImage(p1, p2, 80);
@@ -253,7 +253,7 @@ namespace KinectAutoCalibration.Calibration
         private Vector2D CalculateBeamerCoordinate(Vector2D areaVector)
         {
             /*
-            // 1400 = beamerControl width
+            // 1400 = beamerWindow width
             // 70 = tile width
             var s = new Vector2D{X = areaVector.X * (1400 - 2*70) / _width, Y = areaVector.Y + 70};
             var b = _corners2D[1];
@@ -282,7 +282,7 @@ namespace KinectAutoCalibration.Calibration
 
         public void GetObstacles()
         {
-            beamerControl.DisplayBlank();
+            beamerWindow.DisplayBlank();
             //MessageBox.Show("Display Obst");
             Thread.Sleep(1000);
             p2 = kinect.GetColorImage();
@@ -357,12 +357,12 @@ namespace KinectAutoCalibration.Calibration
 
         public void DisplayBlank()
         {
-            beamerControl.DisplayBlank();
+            beamerWindow.DisplayBlank();
         }
 
         public void DisplayArea()
         {
-            //beamerControl.DisplayBitmap(diffBitmap);
+            //beamerWindow.DisplayBitmap(diffBitmap);
         }
 
         public Bitmap GetColorBitmap()

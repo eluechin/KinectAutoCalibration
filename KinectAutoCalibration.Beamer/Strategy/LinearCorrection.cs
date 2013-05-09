@@ -9,8 +9,8 @@ namespace KinectAutoCalibration.Beamer
             var width = Beamer.GetBeamerWidth();
             var height = Beamer.GetBeamerHeight();
 
-            var px = areaCoordinate.X * (width - 2 * BeamerImage.TILE_WIDTH) / width;
-            var py = (areaCoordinate.Y) * (height - 2 * BeamerImage.TILE_HEIGHT) / height;
+            var px = areaCoordinate.X * (width - 2 * CalibrationImage.TILE_WIDTH) / width;
+            var py = (areaCoordinate.Y) * (height - 2 * CalibrationImage.TILE_HEIGHT) / height;
 
             return new BeamerPoint { X = px, Y = py };
         }

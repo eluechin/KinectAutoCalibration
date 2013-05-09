@@ -46,6 +46,10 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CalibrateEdgePoints.cs" />
+    <Compile Include="CalibrateGrid.cs" />
+    <Compile Include="IBeamerToKinectStrategy.cs" />
+    <Compile Include="IKinectToRealWorldStrategy.cs" />
     <Compile Include="Interfaces\IAutoKinectBeamerCalibration.cs" />
     <Compile Include="AutoKinectBeamerCalibration.cs" />
     <Compile Include="Interfaces\IKinectBeamerCalibration.cs" />
