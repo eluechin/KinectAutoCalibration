@@ -13,12 +13,10 @@ using KinectAutoCalibration.Kinect;
 
 namespace KinectAutoCalibration.Calibration
 {
-    public class AutoKinectCalibration : IAutoKinectCalibration
+    public class AutoKinectBeamerCalibration : IAutoKinectBeamerCalibration
     {
         //private readonly int WIDTH = Convert.ToInt32(ConfigurationManager.AppSettings["AREA_WIDTH"]);
         //private readonly int HEIGHT = Convert.ToInt32(ConfigurationManager.AppSettings["AREA_WIDTH"]);
-        private readonly int WIDTH = 1400;
-        private readonly int HEIGHT = 1050;
         private readonly IBeamerControl beamerControl;
         private readonly IKinect kinect;
         private WriteableBitmap diffBitmap;
@@ -45,7 +43,7 @@ namespace KinectAutoCalibration.Calibration
         private const int CALIBRATION_POINTS = 4;
         private const int THRESHOLD = 80;
 
-        public AutoKinectCalibration()
+        public AutoKinectBeamerCalibration()
         {
             beamerControl = new BeamerControl();
             kinect = new Kinect.Kinect();
@@ -407,7 +405,7 @@ namespace KinectAutoCalibration.Calibration
             return rwCorners;
         }
 
-        void IAutoKinectCalibration.GetObstacles(int c)
+        void IAutoKinectBeamerCalibration.GetObstacles(int c)
         {
             GetObstacles(c);
         }

@@ -33,7 +33,7 @@ namespace WpfApplication1
         private byte[] _colorImagePixelData1;
         private byte[] _colorImagePixelData2;
         private byte[] _colorImagePixelData3;
-        private IAutoKinectCalibration _kC;
+        private IAutoKinectBeamerCalibration _kC;
 
         public MainWindow()
         {
@@ -41,7 +41,7 @@ namespace WpfApplication1
             try
             {
                 
-                _kC = new AutoKinectCalibration();
+                _kC = new AutoKinectBeamerCalibration();
 
                 CompositionTarget.Rendering += CompositionTarget_Rendering;
 
