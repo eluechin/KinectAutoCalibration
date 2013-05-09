@@ -1,4 +1,6 @@
-﻿namespace KinectAutoCalibration.Beamer
+﻿using KinectAutoCalibration.Common;
+
+namespace KinectAutoCalibration.Beamer
 {
     public class LinearCorrection : IBeamerCorrectionStrategy
     {

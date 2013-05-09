@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using KinectAutoCalibration.Common;
 
 namespace KinectAutoCalibration.Beamer
 {
