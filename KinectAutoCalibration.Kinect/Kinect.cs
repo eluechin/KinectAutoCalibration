@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using KinectAutoCalibration.Common.Algorithms;
 using Microsoft.Kinect;
 using KinectAutoCalibration.Common;
 
@@ -21,6 +17,7 @@ namespace KinectAutoCalibration.Kinect
         internal int _colorImageStride;
         internal readonly KinectConverters _kinectConverters;
         private readonly RecoverDepthInformation _recoverDepthInformation;
+        private readonly RealWorld _realWorld;
         public const int MIN_ELEVATION_ANGLE = -27;
         public const int MAX_ELEVATION_ANGLE = 27;
         public const int KINECT_IMAGE_WIDTH = 640;
@@ -34,10 +31,12 @@ namespace KinectAutoCalibration.Kinect
             DiscoverKinectSensor();
             _kinectConverters = new KinectConverters(this);
             _recoverDepthInformation = new RecoverDepthInformation();
+            _realWorld = new RealWorld();
         }
 
         /// <summary>
-        /// This method must be used to discover a already connected kinect.</summary>
+        /// This method must be used to discover a already connected kinect. 
+        /// Do not start calling methods which need the KinectCamera without calling this method first!</summary>
         /// <returns>
         /// Returns the discovered KinectSensor-Object if a Kinect is connected. Otherwise "null" will be returned.</returns>
         public KinectSensor DiscoverKinectSensor()
@@ -46,7 +45,6 @@ namespace KinectAutoCalibration.Kinect
             {
                 this._kinect = null;
             }
-
 
             if (this._kinect == null)
             {
@@ -87,12 +85,10 @@ namespace KinectAutoCalibration.Kinect
         {
             if (image1 != null || image2 != null)
             {
-
                 int width = _kinect.ColorStream.FrameWidth;
                 int height = _kinect.ColorStream.FrameHeight;
 
                 KinectPoint[,] diffImage = new KinectPoint[width, height];
-
 
                 for (int y = 0; y < height; ++y)
                 {
@@ -128,67 +124,14 @@ namespace KinectAutoCalibration.Kinect
             }
         }
 
-
         /// <summary>
-        /// This method is used to get a specific x/y-point out of a KinectPoint-array.</summary>
-        /// <param name="kinArray">the array where the needed point is contained in.</param>
-        /// <param name="x">x-coordinate of the needed point</param>
-        /// <param name="y">y-coordinate of the needed point</param>
-        /// <returns>Returns the requested KinectPoint</returns>
-        public KinectPoint GetKinectPoint(KinectPoint[,] kinArray, int x, int y)
-        {
-            //TODO: Exception Handling
-            if ((x >= 0 && x < KINECT_IMAGE_WIDTH) &&
-                (y >= 0 && y < KINECT_IMAGE_HEIGHT))
-            {
-                KinectPoint kinPoint = new KinectPoint();
-                kinPoint = kinArray[x, y];
-
-                return kinPoint;
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-
-        public byte[] GetColorImageAsByteArray()
-        {
-            try
-            {
-
-                using (ColorImageFrame frame = this._kinect.ColorStream.OpenNextFrame(10))
-                {
-                    if (frame != null)
-                    {
-                        byte[] pixelData = new byte[frame.PixelDataLength];
-                        frame.CopyPixelDataTo(pixelData);
-
-
-                        return pixelData;
-                    }
-
-                    return null;
-                }
-
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-
-        }
-
-        /// <summary>
-        /// This method requests an image from the Color Stream of a connected kinect</summary>
+        /// This method requests an image from the Color Stream of a connected kinect.</summary>
         /// <returns>
         /// returns the retrieved color data as an array of KinectPoints</returns>
         public KinectPoint[,] GetColorImage()
         {
             try
             {
-
                 using (ColorImageFrame frame = this._kinect.ColorStream.OpenNextFrame(10))
                 {
                     if (frame != null)
@@ -262,10 +205,7 @@ namespace KinectAutoCalibration.Kinect
                     if (depthFrame != null)
                     {
                         byte[] newImage = new byte[depthFrame.Height * depthFrame.Width * 4];
-                        //int newImageIndex = 0;
-
                         depthFrame.CopyPixelDataTo(depthPixelData);
-
                         depthFrame.CopyDepthImagePixelDataTo(depthImagePixelData);
 
                         _kinect.CoordinateMapper.MapDepthFrameToColorFrame(depthFrame.Format, depthImagePixelData,
@@ -348,12 +288,38 @@ namespace KinectAutoCalibration.Kinect
             }
         }
 
-        /// <summary>
-        /// This method is used to convert an array of KinectPoints to a WriteableBitmap.</summary>
-        /// <param name="kinArray">the array that should be printed</param>
-        /// <param name="width">the width of the passed array, e.g. 640</param>
-        /// <param name="height">the height of the passed array, e.g. 480</param>
-        /// <returns>Returns the passed array written to a Bitmap ready to use it in a WPF- or WinForms-Project</returns>
+        public void RaiseKinect()
+        {
+            if (_kinect.ElevationAngle != MAX_ELEVATION_ANGLE)
+            {
+                _kinect.ElevationAngle += 1;
+            }
+        }
+
+        public void LowerKinect()
+        {
+            if (_kinect.ElevationAngle != MIN_ELEVATION_ANGLE)
+            {
+                _kinect.ElevationAngle -= 1;
+            }
+        }
+
+        public bool IsValidKinectPoint(int colorInDepthX, int colorInDepthY, short depthValue)
+        {
+            if (colorInDepthX > 0 && colorInDepthX < this._kinect.DepthStream.FrameWidth &&
+                colorInDepthY >= 0 && colorInDepthY < this._kinect.DepthStream.FrameHeight)
+            {
+
+                if (depthValue != this._kinect.DepthStream.TooNearDepth &&
+                    depthValue != this._kinect.DepthStream.TooFarDepth &&
+                    depthValue != this._kinect.DepthStream.UnknownDepth)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public WriteableBitmap ConvertKinectPointArrayToWritableBitmap(KinectPoint[,] kinArray, int width, int height)
         {
             return _kinectConverters.ConvertKinectPointArrayToWritableBitmap(kinArray, width, height);
@@ -371,7 +337,22 @@ namespace KinectAutoCalibration.Kinect
             return _kinectConverters.ConvertKinectPointArrayToBitmap(kinArray, width, height);
         }
 
+        public RealWorldPoint[,] CreateRealWorldArray(KinectPoint[,] kinArray, int width, int height)
+        {
+            return _realWorld.CreateRealWorldArray(kinArray, width, height);
+        }
 
+        public RealWorldPoint[,] CreateRealWorldArray(KinectPoint[,] kinArray, int width, int height, RealWorldPoint rwA, RealWorldPoint rwB, RealWorldPoint rwC)
+        {
+            return _realWorld.CreateRealWorldArray(kinArray, width, height, rwA, rwB, rwC);
+        }
+
+        public Vector3D CreateRealWorldVector(RealWorldPoint p)
+        {
+            return _realWorld.CreateRealWorldVector(p);
+        }
+
+        /*
         /// <summary>
         /// This method prints the image information of an array of KinectPoints directly to a bitmap.</summary>
         /// <param name="kinArray">the array that should be printed</param>
@@ -406,128 +387,57 @@ namespace KinectAutoCalibration.Kinect
             }
 
             wrBitmap.WritePixels(this._colorImageBitmapRect, pixelData, this._colorImageStride, 0);
-        }
+        }*/
 
-        /// <summary>
-        /// TO DO</summary>
-        /// <param name="kinArray">TO DO</param>
-        /// <returns>TO DO</returns>
-        public RealWorldPoint[,] CreateRealWorldArray(KinectPoint[,] kinArray, int width, int height)
+        /*
+       /// <summary>
+       /// This method is used to get a specific x/y-point out of a KinectPoint-array.</summary>
+       /// <param name="kinArray">the array where the needed point is contained in.</param>
+       /// <param name="x">x-coordinate of the needed point</param>
+       /// <param name="y">y-coordinate of the needed point</param>
+       /// <returns>Returns the requested KinectPoint</returns>
+       public KinectPoint GetKinectPoint(KinectPoint[,] kinArray, int x, int y)
+       {
+           //TODO: Exception Handling
+           if ((x >= 0 && x < KINECT_IMAGE_WIDTH) &&
+               (y >= 0 && y < KINECT_IMAGE_HEIGHT))
+           {
+               KinectPoint kinPoint = new KinectPoint();
+               kinPoint = kinArray[x, y];
+
+               return kinPoint;
+           }
+           else
+           {
+               return null;
+           }
+       }*/
+        /*
+        public byte[] GetColorImageAsByteArray()
         {
-            RealWorldPoint[,] rwArray = new RealWorldPoint[640, 480];
-
-            //var a = new KinectPoint(0, 0, 0, 0, 0);
-            //var b = new KinectPoint(1, 1, 0, 0, 0);
-            //var c = new KinectPoint(2, 2, 0, 0, 0);
-
-            //var rwA = CalculateRealWorldPoint(a);
-            //var rwB = CalculateRealWorldPoint(b);
-            //var rwC = CalculateRealWorldPoint(c);
-                
-            for (int y = 0; y < height; ++y)
+            try
             {
-                for (int x = 0; x < width; ++x)
+
+                using (ColorImageFrame frame = this._kinect.ColorStream.OpenNextFrame(10))
                 {
-                    var rwPoint = CalculateRealWorldPoint(kinArray[x, y]);
-                    rwArray[x, y] = rwPoint;
+                    if (frame != null)
+                    {
+                        byte[] pixelData = new byte[frame.PixelDataLength];
+                        frame.CopyPixelDataTo(pixelData);
+
+
+                        return pixelData;
+                    }
+
+                    return null;
                 }
-            }
-            return rwArray;
-        }
-        
-        public RealWorldPoint[,] CreateRealWorldArray(KinectPoint[,] kinArray, int width, int height, RealWorldPoint rwA, RealWorldPoint rwB, RealWorldPoint rwC)
-        {
-            RealWorldPoint[,] rwArray = new RealWorldPoint[640, 480];
 
-            for (int y = 0; y < height; ++y)
+            }
+            catch (Exception)
             {
-                for (int x = 0; x < width; ++x)
-                {
-                    var rwPoint = CalculateRealWorldPoint(kinArray[x, y], rwA, rwB, rwC);
-                    rwArray[x, y] = rwPoint;
-                }
+                return null;
             }
-            return rwArray;
-        }
 
-        private RealWorldPoint CalculateRealWorldPoint(KinectPoint p)
-        {
-            var rwPoint = new RealWorldPoint();
-
-            rwPoint.Z = p.Z;
-            rwPoint.X = (int) ((p.X - (KINECT_IMAGE_WIDTH/2))* rwPoint.Z/WIDTH_CONST);
-            rwPoint.Y = (int)((p.Y - (KINECT_IMAGE_HEIGHT / 2)) * rwPoint.Z / HEIGHT_CONST);
-
-            return rwPoint;
-        }
-
-        private RealWorldPoint CalculateRealWorldPoint(KinectPoint p, RealWorldPoint rA, RealWorldPoint rB, RealWorldPoint rC)
-        {
-            var rwPoint = new RealWorldPoint();
-            var vec_rA = CreateRealWorldVector(rA);
-            var vec_rB = CreateRealWorldVector(rB);
-            var vec_rC = CreateRealWorldVector(rC);
-
-            var vec_N = (vec_rB.Subtract(vec_rA)).CrossProduct(vec_rC.Subtract(vec_rA));
-            var q = vec_N.ScalarProduct(vec_rA);
-
-            var x = (int)((p.X - (KINECT_IMAGE_WIDTH / 2)) / WIDTH_CONST);
-            var y = (int)((p.Y - (KINECT_IMAGE_HEIGHT / 2)) / HEIGHT_CONST);
-
-            var vec_rP = new Vector3D(x,y,1);
-
-            rwPoint.Z = (int)(q / (vec_N.ScalarProduct(vec_rP)));
-
-
-            //RWPoint.Z = kinectPoint.Z;
-
-            //var numerator = 2*(a.Z * b.Y * c.X - a.Y * b.Z * c.X - a.Z * b.X * c.Y + a.X * b.Z * c.Y + a.Y * b.X * c.Z - a.X * b.Y * c.Z) * HEIGHT_CONST * WIDTH_CONST;
-            //var denominator = ((a.Z*(b.X - c.X) + b.Z*c.X - b.X*c.Z + a.X*(-b.Z + c.Z))*(KINECT_IMAGE_HEIGHT - 2*p.Y)*WIDTH_CONST + HEIGHT_CONST*((-a.Y*b.Z + a.Z*(b.Y-c.Y) + b.Z*c.Y + a.Y*c.Z*-b.Y*c.Z) * (2*p.X - KINECT_IMAGE_WIDTH) + 2*(-a.X*b.Y + a.Y*(b.X-c.X) + b.Y*c.X + a.X*c.Y - b.X*c.Y)*WIDTH_CONST));
-            //var numerator = 1;
-            //var denominator = 1;
-            //rwPoint.Z = (int) (numerator/denominator);
-            
-            rwPoint.X = (int) ((p.X - (KINECT_IMAGE_WIDTH/2))*rwPoint.Z/WIDTH_CONST);
-            rwPoint.Y = (int)((p.Y - (KINECT_IMAGE_HEIGHT / 2)) * rwPoint.Z / HEIGHT_CONST);
-
-            return rwPoint;
-        }
-
-        public Vector3D CreateRealWorldVector(RealWorldPoint p)
-        {
-            return new Vector3D { X = p.X, Y = p.Y, Z = p.Z };
-        }
-
-        public void RaiseKinect()
-        {
-            if (_kinect.ElevationAngle != MAX_ELEVATION_ANGLE)
-            {
-                _kinect.ElevationAngle += 1;
-            }
-        }
-
-        public void LowerKinect()
-        {
-            if (_kinect.ElevationAngle != MIN_ELEVATION_ANGLE)
-            {
-                _kinect.ElevationAngle -= 1;
-            }
-        }
-
-        public bool IsValidKinectPoint(int colorInDepthX, int colorInDepthY, short depthValue)
-        {
-            if (colorInDepthX > 0 && colorInDepthX < this._kinect.DepthStream.FrameWidth &&
-                colorInDepthY >= 0 && colorInDepthY < this._kinect.DepthStream.FrameHeight)
-            {
-
-                if (depthValue != this._kinect.DepthStream.TooNearDepth &&
-                    depthValue != this._kinect.DepthStream.TooFarDepth &&
-                    depthValue != this._kinect.DepthStream.UnknownDepth)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
+        }*/
     }
 }

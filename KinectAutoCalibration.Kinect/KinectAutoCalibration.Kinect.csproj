@@ -49,6 +49,7 @@
     <Compile Include="KinectConverters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Algorithms\RecoverDepthInformation.cs" />
+    <Compile Include="Algorithms\RealWorld.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\KinectAutoCalibration.Common\KinectAutoCalibration.Common.csproj">
