@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="Interfaces\IKinect.cs" />
     <Compile Include="Kinect.cs" />
+    <Compile Include="KinectConverters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
