@@ -46,5 +46,19 @@ namespace KinectAutoCalibration.Common
         public int B { get; set; }
         public int Type { get; set; }
 
+        public bool Equals(KinectPoint kinectPoint)
+        {
+            if (this.X == kinectPoint.X &&
+                this.Y == kinectPoint.Y &&
+                this.Z == kinectPoint.Z)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
     }
 }

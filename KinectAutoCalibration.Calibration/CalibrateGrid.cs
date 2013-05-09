@@ -16,7 +16,7 @@ namespace KinectAutoCalibration.Calibration
         {
             var newPoints = new Dictionary<BeamerPoint, KinectPoint>();
             var simpleStrategy = new CalibrateEdgePoints();
-            var beamerToKinect = simpleStrategy.CalibrateBeamterToKinect(beamerWindow, kinect);
+            var beamerToKinect = simpleStrategy.CalibrateBeamerToKinect(beamerWindow, kinect);
 
             var diffImages = new Dictionary<int, KinectPoint[,]>();
 
