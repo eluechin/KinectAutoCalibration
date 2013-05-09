@@ -9,9 +9,6 @@ namespace KinectAutoCalibration.Calibration
     {
         void DrawPointOnArea(int x, int y, Color c);
 
-        List<AreaPoint> GetAllObstaclePoints();
-        AreaPoint GetCentroidOfObstacle();
-
         WriteableBitmap GetDifferenceImage();
         WriteableBitmap GetKinectImage();
         WriteableBitmap GetAreaImage();

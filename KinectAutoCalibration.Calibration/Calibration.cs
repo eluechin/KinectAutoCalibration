@@ -37,16 +37,6 @@ namespace KinectAutoCalibration.Calibration
             throw new NotImplementedException();
         }
 
-        public List<AreaPoint> GetAllObstaclePoints()
-        {
-            throw new NotImplementedException();
-        }
-
-        public AreaPoint GetCentroidOfObstacle()
-        {
-            throw new NotImplementedException();
-        }
-
         public WriteableBitmap GetDifferenceImage()
         {
             throw new NotImplementedException();
