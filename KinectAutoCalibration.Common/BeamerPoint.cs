@@ -1,6 +1,6 @@
-﻿namespace KinectAutoCalibration.Beamer
+﻿namespace KinectAutoCalibration.Common
 {
-    public class AreaPoint2D
+    public class BeamerPoint
     {
         public int X { get; set; }
         public int Y { get; set; }

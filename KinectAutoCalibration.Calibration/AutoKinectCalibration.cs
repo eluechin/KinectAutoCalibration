@@ -62,7 +62,7 @@ namespace KinectAutoCalibration.Calibration
 
         public void InitialCalibration()
         {
-            var beamerToKinect = new Dictionary<BeamerPoint2D, KinectPoint>();
+            var beamerToKinect = new Dictionary<BeamerPoint, KinectPoint>();
 
             kinP = kinect.CreateKinectPointArray();
 
