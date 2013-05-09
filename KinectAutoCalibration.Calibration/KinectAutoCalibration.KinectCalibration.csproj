@@ -46,9 +46,11 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CalculateToRealWorldStrategy.cs" />
     <Compile Include="CalibrateEdgePoints.cs" />
     <Compile Include="CalibrateGrid.cs" />
     <Compile Include="Calibration.cs" />
+    <Compile Include="ConvertToRealWorldStrategy.cs" />
     <Compile Include="IBeamerToKinectStrategy.cs" />
     <Compile Include="IKinectToRealWorldStrategy.cs" />
     <Compile Include="Interfaces\IAutoKinectBeamerCalibration.cs" />
@@ -72,9 +74,6 @@
       <Project>{DC908959-89E9-487A-A54E-868465DB099C}</Project>
       <Name>KinectAutoCalibration.Kinect</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

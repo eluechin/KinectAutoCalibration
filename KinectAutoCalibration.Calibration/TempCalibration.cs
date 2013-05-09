@@ -149,7 +149,7 @@ namespace KinectAutoCalibration.Calibration
             }
             return lengthDict;
         }
-
+        /*
         public Dictionary<int, RealWorldPoint> GetCornerPoints(KinectPoint[,] diffImage)
         {
             var kinArray = kinect.CreateKinectPointArray();
@@ -171,7 +171,7 @@ namespace KinectAutoCalibration.Calibration
             rwCorners.Add(3, rwCornersList[3]);
 
             return rwCorners;
-        }
+        }*/
 
         public WriteableBitmap GetPic1Bitmap()
         {

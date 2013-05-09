@@ -15,7 +15,7 @@ namespace KinectAutoCalibration.Calibration
         //TODO XML Configuration?
         private const int CALIBRATION_ROUNDS = 2;
 
-        public Dictionary<BeamerPoint, KinectPoint> CalibrateBeamterToKinect(IBeamerWindow beamerWindow, IKinect kinect)
+        public Dictionary<BeamerPoint, KinectPoint> CalibrateBeamerToKinect(IBeamerWindow beamerWindow, IKinect kinect)
         {
             for (var i = 1; i <= CALIBRATION_ROUNDS; i++)
             {
