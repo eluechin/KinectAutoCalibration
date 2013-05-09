@@ -36,6 +36,25 @@ namespace KinectAutoCalibration.Calibration
                 var centroids = KMeans.DoKMeans(KMeansHelper.ExtractBlackPointsAs2dVector(diffKinectPoints), initPoints);
                 var kinectPoint = kinectPoints[(int)centroids[0].X, (int)centroids[0].Y];
                 beamerToKinect.Add(beamerPoint, kinectPoint);
+
+                string name = "";
+                switch (i)
+                {
+                    case 1:
+                        name = "A";
+                        break;
+                    case 2:
+                        name = "B";
+                        break;
+                    case 3:
+                        name = "C";
+                        break;
+                    case 4:
+                        name = "D";
+                        break;
+                }
+
+                Calibration.Points.Add(new Point { Name = name, BeamerPoint = beamerPoint, KinectPoint = kinectPoint });
             }
             return beamerToKinect;
         }

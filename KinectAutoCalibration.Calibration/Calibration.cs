@@ -10,16 +10,22 @@ namespace KinectAutoCalibration.Calibration
 {
     public abstract class Calibration : ICalibration
     {
+        //TODO: New Name...
+        public static List<Point> Points; 
+
         protected readonly IBeamerWindow beamerWindow;
         protected readonly IKinect kinect;
-
+                
         protected readonly Dictionary<BeamerPoint, KinectPoint> beamerToKinect;
         protected readonly Dictionary<KinectPoint, RealWorldPoint> kinectToRealWorld;
         protected readonly Dictionary<RealWorldPoint, KinectPoint> realWorldToArea; 
 
         protected Calibration()
         {
+            Points = new List<Point>();
             beamerToKinect = new Dictionary<BeamerPoint, KinectPoint>();
+            kinectToRealWorld = new Dictionary<KinectPoint, RealWorldPoint>();
+            realWorldToArea = new Dictionary<RealWorldPoint, KinectPoint>();
 
             try
             {
