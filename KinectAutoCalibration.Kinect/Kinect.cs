@@ -15,21 +15,25 @@ namespace KinectAutoCalibration.Kinect
 {
     public class Kinect : IKinect
     {
-        private KinectSensor _kinect;
-        private WriteableBitmap _colorImageBitmap;
-        private Int32Rect _colorImageBitmapRect;
-        private int _colorImageStride;
-        private const int MIN_ELEVATION_ANGLE = -27;
-        private const int MAX_ELEVATION_ANGLE = 27;
-        private const int KINECT_IMAGE_WIDTH = 640;
-        private const int KINECT_IMAGE_HEIGHT = 480;
-        private const double WIDTH_CONST = 544.945;
-        private const double HEIGHT_CONST = 585.258;
-        private const int BYTES_PER_PIXEL = 4;
+        internal KinectSensor _kinect;
+        internal WriteableBitmap _colorImageBitmap;
+        internal Int32Rect _colorImageBitmapRect;
+        internal int _colorImageStride;
+        internal readonly KinectConverters _kinectConverters;
+        private readonly RecoverDepthInformation _recoverDepthInformation;
+        public const int MIN_ELEVATION_ANGLE = -27;
+        public const int MAX_ELEVATION_ANGLE = 27;
+        public const int KINECT_IMAGE_WIDTH = 640;
+        public const int KINECT_IMAGE_HEIGHT = 480;
+        public const double WIDTH_CONST = 544.945;
+        public const double HEIGHT_CONST = 585.258;
+        public const int BYTES_PER_PIXEL = 4;
 
         public Kinect()
         {
             DiscoverKinectSensor();
+            _kinectConverters = new KinectConverters(this);
+            _recoverDepthInformation = new RecoverDepthInformation();
         }
 
         /// <summary>
@@ -124,39 +128,6 @@ namespace KinectAutoCalibration.Kinect
             }
         }
 
-        /// <summary>
-        /// This method converts a byte array into an array of KinectPoints</summary>
-        /// <param name="bytearray">the array which should be converted</param>
-        /// <param name="width">the width of the new 2D-array, e.g. 640</param>
-        /// <param name="height">the height of the new 2D-array, e.g. 480</param>
-        /// <returns>Returns the converted byte array as an array of KinectPoints</returns>
-        private KinectPoint[,] ConvertToKinectPoint(byte[] bytearray, int width, int height)
-        {
-            int bitPositionByteArray = 0;
-            const int BytesPerPixel = 4;
-            KinectPoint[,] kinectArray = new KinectPoint[width, height];
-
-
-
-            for (int y = 0; y < height; ++y)
-            {
-
-                for (int x = (width - 1); x >= 0; --x)
-                {
-                    kinectArray[x, y] = new KinectPoint(
-                                            x,
-                                            y,
-                                            (byte)bytearray[bitPositionByteArray + 2],
-                                            (byte)bytearray[bitPositionByteArray + 1],
-                                            (byte)bytearray[bitPositionByteArray]);
-                    bitPositionByteArray += BytesPerPixel;
-                }
-            }
-            return kinectArray;
-        }
-
-
-
 
         /// <summary>
         /// This method is used to get a specific x/y-point out of a KinectPoint-array.</summary>
@@ -167,8 +138,8 @@ namespace KinectAutoCalibration.Kinect
         public KinectPoint GetKinectPoint(KinectPoint[,] kinArray, int x, int y)
         {
             //TODO: Exception Handling
-            if ((x >= 0 || x < KINECT_IMAGE_WIDTH) &&
-                (y >= 0 || y < KINECT_IMAGE_HEIGHT))
+            if ((x >= 0 && x < KINECT_IMAGE_WIDTH) &&
+                (y >= 0 && y < KINECT_IMAGE_HEIGHT))
             {
                 KinectPoint kinPoint = new KinectPoint();
                 kinPoint = kinArray[x, y];
@@ -225,7 +196,7 @@ namespace KinectAutoCalibration.Kinect
                         byte[] pixelData1 = new byte[frame.PixelDataLength];
                         frame.CopyPixelDataTo(pixelData1);
 
-                        KinectPoint[,] picKin = ConvertToKinectPoint(pixelData1, 640, 480);
+                        KinectPoint[,] picKin = _kinectConverters.ConvertByteArrayToKinectPoint(pixelData1, 640, 480);
                         return picKin;
                     }
 
@@ -368,7 +339,7 @@ namespace KinectAutoCalibration.Kinect
 
                     }
                 }
-                kinArray = RecoverDepthInformationOfKinectPointArray(kinArray);
+                kinArray = _recoverDepthInformation.RecoverDepthInformationOfKinectPointArray(kinArray);
                 return kinArray;
             }
             catch (Exception)
@@ -385,95 +356,19 @@ namespace KinectAutoCalibration.Kinect
         /// <returns>Returns the passed array written to a Bitmap ready to use it in a WPF- or WinForms-Project</returns>
         public WriteableBitmap ConvertKinectPointArrayToWritableBitmap(KinectPoint[,] kinArray, int width, int height)
         {
-            var stride = width * 4; // bytes per row
-
-
-            byte[] pixelData = new byte[height * stride];
-            int index = 0;
-
-            for (int y = 0; y < height; ++y)
-            {
-                for (int x = 0; x < width; ++x)
-                {
-                    //var color = colorArray[y, x];
-                    //var index = (y * stride) + (x * 4);
-                    if (kinArray[x, y].Z != -1)
-                    {
-                        pixelData[index + 2] = (byte)kinArray[x, y].R;
-                        pixelData[index + 1] = (byte)kinArray[x, y].G;
-                        pixelData[index] = (byte)kinArray[x, y].B;
-                        //pixelData[index + 3] = color.A; // color.A;
-
-                    }
-                    else
-                    {
-                        pixelData[index + 2] = 0xFF;
-                        pixelData[index + 1] = 0x00;
-                        pixelData[index] = 0x00;
-                    }
-                    index += BYTES_PER_PIXEL;
-                }
-            }
-
-            this._colorImageBitmap.WritePixels(this._colorImageBitmapRect, pixelData, this._colorImageStride, 0);
-            return this._colorImageBitmap;
+            return _kinectConverters.ConvertKinectPointArrayToWritableBitmap(kinArray, width, height);
         }
 
 
         public byte[] ConvertKinectPointArrayToByteArray(KinectPoint[,] kinArray, int width, int height)
         {
-            var stride = width * 4; // bytes per row
-
-            byte[] pixelData = new byte[height * stride];
-            int index = 0;
-
-            for (int y = 0; y < height; ++y)
-            {
-                for (int x = 0; x < width; ++x)
-                {
-                    //var color = colorArray[y, x];
-                    //var index = (y * stride) + (x * 4);
-                    if (kinArray[x, y].Z != -1)
-                    {
-                        pixelData[index + 2] = (byte)kinArray[x, y].R;
-                        pixelData[index + 1] = (byte)kinArray[x, y].G;
-                        pixelData[index] = (byte)kinArray[x, y].B;
-                        //pixelData[index + 3] = color.A; // color.A;
-
-                    } else {
-                        pixelData[index + 2] = 0xFF;
-                        pixelData[index + 1] = 0x00;
-                        pixelData[index] = 0x00;
-                    }
-                    
-                    index += BYTES_PER_PIXEL;
-                }
-            }
-
-            return pixelData;
+            return _kinectConverters.ConvertKinectPointArrayToByteArray(kinArray, width, height);
         }
 
 
         public Bitmap ConvertKinectPointArrayToBitmap(KinectPoint[,] kinArray, int width, int height)
         {
-            Bitmap bmp = new Bitmap(width, height);
-
-            for (int y = 0; y < height; ++y)
-            {
-                for (int x = 0; x < width; ++x)
-                {
-                    //var color = colorArray[y, x];
-                    //var index = (y * stride) + (x * 4);
-                    KinectPoint p = kinArray[x, y];
-                    if (p.Z != -1)
-                    {
-                        System.Drawing.Color c = System.Drawing.Color.FromArgb(0, p.R, p.G, p.B);
-                        bmp.SetPixel(p.X, p.Y, c);
-
-                    }
-                }
-            }
-            return bmp;
+            return _kinectConverters.ConvertKinectPointArrayToBitmap(kinArray, width, height);
         }
 
 
@@ -633,89 +528,6 @@ namespace KinectAutoCalibration.Kinect
                 }
             }
             return false;
-        }
-
-        public KinectPoint[,] RecoverDepthInformationOfKinectPointArray(KinectPoint[,] kinArray)
-        {
-            var recoveredKinArray = new KinectPoint[KINECT_IMAGE_WIDTH,KINECT_IMAGE_HEIGHT];
-
-            for (int y = 0; y < KINECT_IMAGE_HEIGHT; ++y)
-            {
-                for (int x = 0; x < KINECT_IMAGE_WIDTH; ++x)
-                {
-                    if (kinArray[x,y].Z == -1)
-                    {
-                        int correctionRadius = 1;
-                        int z = -1;
-                        int depthMeanValue = 0;
-
-                        do
-                        {
-                            var neighbors = GetNeighborsOfKinectPoint(kinArray, kinArray[x,y], correctionRadius);
-                            depthMeanValue = CalculateDepthMeanValue(neighbors);
-
-                            ++correctionRadius;
-
-                        } while (depthMeanValue == 0);
-
-                        kinArray[x,y].Z = depthMeanValue;
-                        recoveredKinArray[x,y] = kinArray[x,y];
-
-                    }
-                    else
-                    {
-                        recoveredKinArray[x, y] = kinArray[x, y];
-                    }
-                }
-            }
-   
-            return recoveredKinArray;
-        } 
-
-        public List<KinectPoint> GetNeighborsOfKinectPoint(KinectPoint[,] kinArray, KinectPoint kinPoint, int correctionRadius)
-        {
-            var neighbors = new List<KinectPoint>();
-
-            for (int i = correctionRadius; i >= -correctionRadius; --i)
-            {
-                for (int j = correctionRadius; j >= -correctionRadius; --j)
-                {
-                    int x = kinPoint.X + i;
-                    int y = kinPoint.Y + j;
-
-                    if ((x >= 0 && x < KINECT_IMAGE_WIDTH) &&
-                        (y >= 0 && y < KINECT_IMAGE_HEIGHT))
-                    {
-                        neighbors.Add(kinArray[x, y]);
-                    }
-                }
-            }
-            return neighbors;
-        }
-
-        public int CalculateDepthMeanValue(List<KinectPoint> neighbors)
-        {
-            int sum = 0;
-            int validNeighbors = 0;
-
-            foreach (var kinPoint in neighbors)
-            {
-                if (kinPoint.Z != -1)
-                {
-                    sum += kinPoint.Z;
-                    ++validNeighbors;
-                }
-
-            }
-            if (validNeighbors != 0)
-            {
-                return (int) (sum/validNeighbors);
-            }
-            else
-            {
-                return 0;
-            }
-            
         }
     }
 }
