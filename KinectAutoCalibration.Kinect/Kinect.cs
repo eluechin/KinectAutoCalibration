@@ -115,7 +115,6 @@ namespace KinectAutoCalibration.Kinect
                         }
                     }
                 }
-
                 return diffImage;
             }
             else
@@ -276,7 +275,6 @@ namespace KinectAutoCalibration.Kinect
                                                         (colorImagePixelData[depthIndex].X + 1) * 4]);
                             }
                         }
-
                     }
                 }
                 kinArray = _recoverDepthInformation.RecoverDepthInformationOfKinectPointArray(kinArray);
