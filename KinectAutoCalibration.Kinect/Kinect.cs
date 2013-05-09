@@ -20,6 +20,7 @@ namespace KinectAutoCalibration.Kinect
         internal Int32Rect _colorImageBitmapRect;
         internal int _colorImageStride;
         internal readonly KinectConverters _kinectConverters;
+        private readonly RecoverDepthInformation _recoverDepthInformation;
         public const int MIN_ELEVATION_ANGLE = -27;
         public const int MAX_ELEVATION_ANGLE = 27;
         public const int KINECT_IMAGE_WIDTH = 640;
@@ -32,6 +33,7 @@ namespace KinectAutoCalibration.Kinect
         {
             DiscoverKinectSensor();
             _kinectConverters = new KinectConverters(this);
+            _recoverDepthInformation = new RecoverDepthInformation();
         }
 
         /// <summary>
@@ -337,7 +339,7 @@ namespace KinectAutoCalibration.Kinect
 
                     }
                 }
-                kinArray = RecoverDepthInformationOfKinectPointArray(kinArray);
+                kinArray = _recoverDepthInformation.RecoverDepthInformationOfKinectPointArray(kinArray);
                 return kinArray;
             }
             catch (Exception)
@@ -526,89 +528,6 @@ namespace KinectAutoCalibration.Kinect
                 }
             }
             return false;
-        }
-
-        public KinectPoint[,] RecoverDepthInformationOfKinectPointArray(KinectPoint[,] kinArray)
-        {
-            var recoveredKinArray = new KinectPoint[KINECT_IMAGE_WIDTH,KINECT_IMAGE_HEIGHT];
-
-            for (int y = 0; y < KINECT_IMAGE_HEIGHT; ++y)
-            {
-                for (int x = 0; x < KINECT_IMAGE_WIDTH; ++x)
-                {
-                    if (kinArray[x,y].Z == -1)
-                    {
-                        int correctionRadius = 1;
-                        int z = -1;
-                        int depthMeanValue = 0;
-
-                        do
-                        {
-                            var neighbors = GetNeighborsOfKinectPoint(kinArray, kinArray[x,y], correctionRadius);
-                            depthMeanValue = CalculateDepthMeanValue(neighbors);
-
-                            ++correctionRadius;
-
-                        } while (depthMeanValue == 0);
-
-                        kinArray[x,y].Z = depthMeanValue;
-                        recoveredKinArray[x,y] = kinArray[x,y];
-
-                    }
-                    else
-                    {
-                        recoveredKinArray[x, y] = kinArray[x, y];
-                    }
-                }
-            }
-   
-            return recoveredKinArray;
-        } 
-
-        public List<KinectPoint> GetNeighborsOfKinectPoint(KinectPoint[,] kinArray, KinectPoint kinPoint, int correctionRadius)
-        {
-            var neighbors = new List<KinectPoint>();
-
-            for (int i = correctionRadius; i >= -correctionRadius; --i)
-            {
-                for (int j = correctionRadius; j >= -correctionRadius; --j)
-                {
-                    int x = kinPoint.X + i;
-                    int y = kinPoint.Y + j;
-
-                    if ((x >= 0 && x < KINECT_IMAGE_WIDTH) &&
-                        (y >= 0 && y < KINECT_IMAGE_HEIGHT))
-                    {
-                        neighbors.Add(kinArray[x, y]);
-                    }
-                }
-            }
-            return neighbors;
-        }
-
-        public int CalculateDepthMeanValue(List<KinectPoint> neighbors)
-        {
-            int sum = 0;
-            int validNeighbors = 0;
-
-            foreach (var kinPoint in neighbors)
-            {
-                if (kinPoint.Z != -1)
-                {
-                    sum += kinPoint.Z;
-                    ++validNeighbors;
-                }
-
-            }
-            if (validNeighbors != 0)
-            {
-                return (int) (sum/validNeighbors);
-            }
-            else
-            {
-                return 0;
-            }
-            
         }
     }
 }
