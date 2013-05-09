@@ -81,7 +81,7 @@ namespace KinectAutoCalibration.Calibration
 
                 beamerToKinect.Add(beamerPoint, kinP[(int) centroids[0].X, (int) centroids[0].Y]);
 
-                
+
 
                 //rwCorners = GetCornerPoints(_differenceImage);
                 //foreach (var rwCorner in rwCorners)

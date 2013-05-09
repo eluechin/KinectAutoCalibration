@@ -566,18 +566,32 @@ namespace KinectAutoCalibration.Kinect
             return rwPoint;
         }
 
-        private RealWorldPoint CalculateRealWorldPoint(KinectPoint p, RealWorldPoint a, RealWorldPoint b, RealWorldPoint c)
+        private RealWorldPoint CalculateRealWorldPoint(KinectPoint p, RealWorldPoint rA, RealWorldPoint rB, RealWorldPoint rC)
         {
             var rwPoint = new RealWorldPoint();
+            var vec_rA = CreateRealWorldVector(rA);
+            var vec_rB = CreateRealWorldVector(rB);
+            var vec_rC = CreateRealWorldVector(rC);
+
+            var vec_N = (vec_rB.Subtract(vec_rA)).CrossProduct(vec_rC.Subtract(vec_rA));
+            var q = vec_N.ScalarProduct(vec_rA);
+
+            var x = (int)((p.X - (KINECT_IMAGE_WIDTH / 2)) / WIDTH_CONST);
+            var y = (int)((p.Y - (KINECT_IMAGE_HEIGHT / 2)) / HEIGHT_CONST);
+
+            var vec_rP = new Vector3D(x,y,1);
+
+            rwPoint.Z = (int)(q / (vec_N.ScalarProduct(vec_rP)));
+
 
             //RWPoint.Z = kinectPoint.Z;
 
-            var numerator = 2*(a.Z * b.Y * c.X - a.Y * b.Z * c.X - a.Z * b.X * c.Y + a.X * b.Z * c.Y + a.Y * b.X * c.Z - a.X * b.Y * c.Z) * HEIGHT_CONST * WIDTH_CONST;
-            var denominator = ((a.Z*(b.X - c.X) + b.Z*c.X - b.X*c.Z + a.X*(-b.Z + c.Z))*(KINECT_IMAGE_HEIGHT - 2*p.Y)*WIDTH_CONST + HEIGHT_CONST*((-a.Y*b.Z + a.Z*(b.Y-c.Y) + b.Z*c.Y + a.Y*c.Z*-b.Y*c.Z) * (2*p.X - KINECT_IMAGE_WIDTH) + 2*(-a.X*b.Y + a.Y*(b.X-c.X) + b.Y*c.X + a.X*c.Y - b.X*c.Y)*WIDTH_CONST));
+            //var numerator = 2*(a.Z * b.Y * c.X - a.Y * b.Z * c.X - a.Z * b.X * c.Y + a.X * b.Z * c.Y + a.Y * b.X * c.Z - a.X * b.Y * c.Z) * HEIGHT_CONST * WIDTH_CONST;
+            //var denominator = ((a.Z*(b.X - c.X) + b.Z*c.X - b.X*c.Z + a.X*(-b.Z + c.Z))*(KINECT_IMAGE_HEIGHT - 2*p.Y)*WIDTH_CONST + HEIGHT_CONST*((-a.Y*b.Z + a.Z*(b.Y-c.Y) + b.Z*c.Y + a.Y*c.Z*-b.Y*c.Z) * (2*p.X - KINECT_IMAGE_WIDTH) + 2*(-a.X*b.Y + a.Y*(b.X-c.X) + b.Y*c.X + a.X*c.Y - b.X*c.Y)*WIDTH_CONST));
             //var numerator = 1;
             //var denominator = 1;
-
-            rwPoint.Z = (int) (numerator/denominator);
+            //rwPoint.Z = (int) (numerator/denominator);
+            
             rwPoint.X = (int) ((p.X - (KINECT_IMAGE_WIDTH/2))*rwPoint.Z/WIDTH_CONST);
             rwPoint.Y = (int)((p.Y - (KINECT_IMAGE_HEIGHT / 2)) * rwPoint.Z / HEIGHT_CONST);
 
