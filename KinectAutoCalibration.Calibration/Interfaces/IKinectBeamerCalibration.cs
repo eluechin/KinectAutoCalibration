@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using KinectAutoCalibration.Beamer;
-using KinectAutoCalibration.Kinect;
-
-namespace KinectAutoCalibration.Calibration
+﻿namespace KinectAutoCalibration.Calibration
 {
     public interface IKinectBeamerCalibration : ICalibration
     {
-        
-
-
+        void CalibrateBeamerToKinect(IBeamerToKinectStrategy beamerToKinectStrategy);
+        void ConvertKinectToRealWorld(IKinectToRealWorldStrategy kinectToRealWorldStrategy);
+        void RealWorldToArea();
     }
 }
