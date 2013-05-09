@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="CalibrateEdgePoints.cs" />
     <Compile Include="CalibrateGrid.cs" />
+    <Compile Include="Calibration.cs" />
     <Compile Include="IBeamerToKinectStrategy.cs" />
     <Compile Include="IKinectToRealWorldStrategy.cs" />
     <Compile Include="Interfaces\IAutoKinectBeamerCalibration.cs" />
@@ -56,6 +57,7 @@
     <Compile Include="Interfaces\IKinectBeamerCalibration.cs" />
     <Compile Include="KinectBeamerCalibration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TempCalibration.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\KinectAutoCalibration.Beamer\KinectAutoCalibration.Beamer.csproj">
@@ -71,7 +73,9 @@
       <Name>KinectAutoCalibration.Kinect</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
