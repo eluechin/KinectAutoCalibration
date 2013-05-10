@@ -16,7 +16,7 @@ namespace KinectAutoCalibration.Calibration
         {
             var newPoints = new Dictionary<BeamerPoint, KinectPoint>();
             var simpleStrategy = new CalibrateEdgePoints();
-            var beamerToKinect = simpleStrategy.CalibrateBeamterToKinect(beamerWindow, kinect);
+            var beamerToKinect = simpleStrategy.CalibrateBeamerToKinect(beamerWindow, kinect);
 
             var diffImages = new Dictionary<int, KinectPoint[,]>();
 
@@ -29,17 +29,27 @@ namespace KinectAutoCalibration.Calibration
                 var picture2 = kinect.GetColorImage();
 
                 var diffKinectPoints = kinect.GetDifferenceImage(picture1, picture2, KinectBeamerCalibration.THRESHOLD);
-
-                var initPoints = new List<Vector2D>() { new Vector2D { X = 0, Y = 0 } };
+                //var initPoints = CalculateInitVectors(beamerToKinect.Values.GetEnumerator(), i);
                 diffImages.Add(i, diffKinectPoints);
             }
             //TODO Implement
             throw new NotImplementedException();
         }
 
-        private List<Vector2D> CalculateInitVectors()
+        private List<Vector2D> CalculateInitVectors(List<Vector2D> points, int round)
         {
-            return new List<Vector2D>();
-        } 
+            var initVectors = new List<Vector2D>();
+            if (round == 1)
+            {
+                initVectors.Add(new Vector2D {X = 0, Y = 0});
+            }
+            else
+            {
+                
+            }
+            return initVectors;
+        }
+
+
     }
 }

@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading;
-using System.Threading.Tasks;
 using KinectAutoCalibration.Beamer;
 using KinectAutoCalibration.Common;
 using KinectAutoCalibration.Common.Algorithms;
@@ -37,8 +33,8 @@ namespace KinectAutoCalibration.Calibration
                 var kinectPoint = kinectPoints[(int)centroids[0].X, (int)centroids[0].Y];
                 beamerToKinect.Add(beamerPoint, kinectPoint);
 
-                string name = "";
-                switch (i)
+                var name = "";
+                switch (i + 1)
                 {
                     case 1:
                         name = "A";
