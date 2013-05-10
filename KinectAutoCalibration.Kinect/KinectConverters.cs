@@ -139,5 +139,28 @@ namespace KinectAutoCalibration.Kinect
             }
             return kinectArray;
         }
+
+        /// <summary>
+        /// This method flips a KinectPoint-Array by its x-axis.
+        /// So for example the Point (0,0) becomes the Point (639,0).
+        /// The y-values do not change. </summary>
+        /// <param name="bytearray">the array which should be transformed</param>
+        /// <param name="width">the width of the new two-dimensional array, e.g. 640</param>
+        /// <param name="height">the height of the new two-dimensional array, e.g. 480</param>
+        /// <returns>Returns the flipped KinectPoint-Array</returns>
+        public KinectPoint[,] FlipArray(KinectPoint[,] kinArray, int width, int height)
+        {
+            var newKinArray = new KinectPoint[width,height];
+
+            for (int y = 0; y < height; ++y)
+            {
+                for (int x = (width - 1); x >= 0; --x)
+                {
+                    newKinArray[x, y] = kinArray[((width - 1) - x), y];
+                }
+            }
+
+            return newKinArray;
+        } 
     }
 }

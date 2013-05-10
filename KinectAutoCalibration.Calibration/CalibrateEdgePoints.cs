@@ -16,6 +16,7 @@ namespace KinectAutoCalibration.Calibration
         {
             var beamerToKinect = new Dictionary<BeamerPoint, KinectPoint>();
             var kinectPoints = kinect.CreateKinectPointArray();
+            
 
             for (var i = 0; i < CALIBRATION_POINTS; i++)
             {

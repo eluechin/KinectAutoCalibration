@@ -19,6 +19,7 @@ namespace KinectAutoCalibration.Calibration
             }
 
             var rwCornerPoints = kinect.CreateRealWorldCoordinates(cornerPoints);
+            //TODO: necessary? strategy ConvertToRealWorldStrategy always needed?
             foreach (var point in Calibration.Points)
             {
                 foreach (var realWorldPoint in rwCornerPoints)
