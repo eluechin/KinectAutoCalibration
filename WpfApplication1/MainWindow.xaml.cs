@@ -41,11 +41,7 @@ namespace WpfApplication1
             InitializeComponent();
             try
             {
-                IKinectBeamerCalibration kbc = new KinectBeamerCalibration();
-                kbc.CalibrateBeamerToKinect(new CalibrateEdgePoints());
-                kbc.ConvertKinectToRealWorld(new ConvertToRealWorldStrategy());
-                kbc.RealWorldToArea();
-                kBO = kbc.CreateKinectBeamerOperation();
+                
 
                 CompositionTarget.Rendering += CompositionTarget_Rendering;
 
@@ -65,10 +61,7 @@ namespace WpfApplication1
                 this.ColorImageElement4.Source = this._colorImageBitmap4;
                 this.ColorImageElement5.Source = this._colorImageBitmap5;
 
-                var h = "Area Height: ";
-                var w = "Area Width: ";
-                AreaHeight.Text = h + kBO.GetAreaHeight().ToString();
-                AreaWidth.Text = w + kBO.GetAreaWidth().ToString();
+                
 
 
                 //this.ColorImageElement1.Source = kC.GetDifferenceBitmap();
@@ -89,6 +82,17 @@ namespace WpfApplication1
 
         private void InitialCalibration(object sender, RoutedEventArgs e)
         {
+            IKinectBeamerCalibration kbc = new KinectBeamerCalibration();
+            kbc.CalibrateBeamerToKinect(new CalibrateEdgePoints());
+            kbc.ConvertKinectToRealWorld(new ConvertToRealWorldStrategy());
+            kbc.RealWorldToArea();
+            kBO = kbc.CreateKinectBeamerOperation();
+
+            var h = "Area Height: ";
+            var w = "Area Width: ";
+            AreaHeight.Text = h + kBO.GetAreaHeight().ToString();
+            AreaWidth.Text = w + kBO.GetAreaWidth().ToString();
+
             //_kC.InitialCalibration();
             ////this.ColorImageElement1.Source = _kC.GetPic1Bitmap();
             ////this.ColorImageElement2.Source = _kC.GetPic2Bitmap();
@@ -114,7 +118,7 @@ namespace WpfApplication1
         private void Obst(object sender, RoutedEventArgs e)
         {
             //_kC.GetObstacles();
-
+            
             //var pixelsObst = _kC.GetDifferenceImageObst();
             //this._colorImageBitmap2.WritePixels(this._colorImageBitmapRect, pixelsObst, this._colorImageStride, 0);
 
