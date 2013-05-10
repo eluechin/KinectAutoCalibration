@@ -18,14 +18,14 @@ namespace KinectAutoCalibration.Calibration
                 
         protected readonly Dictionary<BeamerPoint, KinectPoint> beamerToKinect;
         protected readonly Dictionary<KinectPoint, RealWorldPoint> kinectToRealWorld;
-        protected readonly Dictionary<RealWorldPoint, KinectPoint> realWorldToArea; 
+        protected readonly Dictionary<RealWorldPoint, AreaPoint> realWorldToArea; 
 
         protected Calibration()
         {
             Points = new List<Point>();
             beamerToKinect = new Dictionary<BeamerPoint, KinectPoint>();
             kinectToRealWorld = new Dictionary<KinectPoint, RealWorldPoint>();
-            realWorldToArea = new Dictionary<RealWorldPoint, KinectPoint>();
+            realWorldToArea = new Dictionary<RealWorldPoint, AreaPoint>();
 
             try
             {

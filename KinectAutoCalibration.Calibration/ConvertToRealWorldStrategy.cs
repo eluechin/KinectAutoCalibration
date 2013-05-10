@@ -8,7 +8,7 @@ using KinectAutoCalibration.Kinect;
 
 namespace KinectAutoCalibration.Calibration
 {
-    class ConvertToRealWorldStrategy : IKinectToRealWorldStrategy
+    public class ConvertToRealWorldStrategy : IKinectToRealWorldStrategy
     {
         public Dictionary<KinectPoint, RealWorldPoint> TransformKinectToRealWorld(IKinect kinect, List<KinectPoint> kinectPoints)
         {

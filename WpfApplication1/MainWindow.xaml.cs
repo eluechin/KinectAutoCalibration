@@ -34,14 +34,18 @@ namespace WpfApplication1
         private byte[] _colorImagePixelData2;
         private byte[] _colorImagePixelData3;
         private IAutoKinectBeamerCalibration _kC;
+        private IKinectBeamerOperation kBO;
 
         public MainWindow()
         {
             InitializeComponent();
             try
             {
-                
-                _kC = new AutoKinectBeamerCalibration();
+                IKinectBeamerCalibration kbc = new KinectBeamerCalibration();
+                kbc.CalibrateBeamerToKinect(new CalibrateEdgePoints());
+                kbc.ConvertKinectToRealWorld(new ConvertToRealWorldStrategy());
+                kbc.RealWorldToArea();
+                kBO = kbc.CreateKinectBeamerOperation();
 
                 CompositionTarget.Rendering += CompositionTarget_Rendering;
 
@@ -60,6 +64,11 @@ namespace WpfApplication1
                 this.ColorImageElement3.Source = this._colorImageBitmap3;
                 this.ColorImageElement4.Source = this._colorImageBitmap4;
                 this.ColorImageElement5.Source = this._colorImageBitmap5;
+
+                var h = "Area Height: ";
+                var w = "Area Width: ";
+                AreaHeight.Text = h + kBO.GetAreaHeight().ToString();
+                AreaWidth.Text = w + kBO.GetAreaWidth().ToString();
 
 
                 //this.ColorImageElement1.Source = kC.GetDifferenceBitmap();

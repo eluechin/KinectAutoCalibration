@@ -19,7 +19,8 @@ namespace KinectAutoCalibration.Common
             this.Type = 0;
         }
 
-        public KinectPoint(int x, int y, int r, int g, int b) : this()
+        public KinectPoint(int x, int y, int r, int g, int b)
+            : this()
         {
             this.X = x;
             this.Y = y;
@@ -28,7 +29,8 @@ namespace KinectAutoCalibration.Common
             this.B = b;
         }
 
-        public KinectPoint(int x, int y, int z, int r, int g, int b) : this()
+        public KinectPoint(int x, int y, int z, int r, int g, int b)
+            : this()
         {
             this.X = x;
             this.Y = y;
@@ -58,6 +60,11 @@ namespace KinectAutoCalibration.Common
             {
                 return false;
             }
+        }
+
+        public Vector3D ToVector3D()
+        {
+            return new Vector3D { X = X, Y = Y, Z = Z };
         }
 
     }

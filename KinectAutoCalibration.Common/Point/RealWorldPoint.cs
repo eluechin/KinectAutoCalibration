@@ -38,6 +38,12 @@ namespace KinectAutoCalibration.Common
             this.B = b;
         }
 
+        public Vector3D ToVector3D()
+        {
+            return new Vector3D { X = X, Y = Y, Z = Z };
+        }
+
+
         public int X { get; set; }
         public int Y { get; set; }
         public int Z { get; set; }
