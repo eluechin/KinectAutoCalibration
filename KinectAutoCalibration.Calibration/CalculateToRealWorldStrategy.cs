@@ -12,7 +12,29 @@ namespace KinectAutoCalibration.Calibration
     {
         public Dictionary<KinectPoint, RealWorldPoint> TransformKinectToRealWorld(IKinect kinect, List<KinectPoint> kinectPoints)
         {
-            throw new NotImplementedException();
+            var cornerPoints = new List<KinectPoint>();
+            foreach (var point in Calibration.Points)
+            {
+                cornerPoints.Add(point.KinectPoint);
+            }
+
+            var rwCornerPoints = kinect.CreateRealWorldCoordinates(cornerPoints);
+            foreach (var point in Calibration.Points)
+            {
+                foreach (var realWorldPoint in rwCornerPoints)
+                {
+                    if (point.KinectPoint.Equals(realWorldPoint.Key))
+                    {
+                        point.RealWorldPoint = realWorldPoint.Value;
+                    }
+                }
+            }
+
+            RealWorldPoint rA = Calibration.Points.Find(x => x.Name == "A").RealWorldPoint;
+            RealWorldPoint rB = Calibration.Points.Find(x => x.Name == "B").RealWorldPoint;
+            RealWorldPoint rC = Calibration.Points.Find(x => x.Name == "C").RealWorldPoint;
+
+            return kinect.CreateRealWorldCoordinates(kinectPoints, rA, rB, rC);
         }
     }
 }
