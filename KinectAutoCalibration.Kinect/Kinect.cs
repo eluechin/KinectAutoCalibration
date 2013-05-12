@@ -282,7 +282,7 @@ namespace KinectAutoCalibration.Kinect
                     }
                 }
                 //kinArray = _kinectConverters.FlipArray(kinArray, KINECT_IMAGE_WIDTH, KINECT_IMAGE_HEIGHT);
-                kinArray = _recoverDepthInformation.RecoverDepthInformationOfKinectPointArray(kinArray);
+                //kinArray = _recoverDepthInformation.RecoverDepthInformationOfKinectPointArray(kinArray);
                 return kinArray;
             }
             catch (Exception ex)
