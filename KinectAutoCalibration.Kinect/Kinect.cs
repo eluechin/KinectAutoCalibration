@@ -139,7 +139,7 @@ namespace KinectAutoCalibration.Kinect
                         byte[] pixelData1 = new byte[frame.PixelDataLength];
                         frame.CopyPixelDataTo(pixelData1);
 
-                        KinectPoint[,] picKin = _kinectConverters.ConvertByteArrayToKinectPoint(pixelData1, 640, 480);
+                        KinectPoint[,] picKin = _kinectConverters.ConvertByteArrayToKinectPoint(pixelData1, KINECT_IMAGE_WIDTH, KINECT_IMAGE_HEIGHT);
                         return picKin;
                     }
 
@@ -205,7 +205,7 @@ namespace KinectAutoCalibration.Kinect
 
                     if (depthFrame != null)
                     {
-                        byte[] newImage = new byte[depthFrame.Height * depthFrame.Width * 4];
+                        byte[] newImage = new byte[depthFrame.Height * depthFrame.Width * BYTES_PER_PIXEL];
                         depthFrame.CopyPixelDataTo(depthPixelData);
                         depthFrame.CopyDepthImagePixelDataTo(depthImagePixelData);
 
@@ -251,14 +251,14 @@ namespace KinectAutoCalibration.Kinect
                                                     colorImagePixelData[depthIndex].Y,
                                                     depthImagePixelData[depthIndex].Depth,
                                                     colorPixelData[
-                                                        colorImagePixelData[depthIndex].Y * depthFrame.Width * 4 +
-                                                        (colorImagePixelData[depthIndex].X + 1) * 4 + 2],
+                                                        colorImagePixelData[depthIndex].Y * depthFrame.Width * BYTES_PER_PIXEL +
+                                                        (colorImagePixelData[depthIndex].X + 1) * BYTES_PER_PIXEL + 2],
                                                     colorPixelData[
-                                                        colorImagePixelData[depthIndex].Y * depthFrame.Width * 4 +
-                                                        (colorImagePixelData[depthIndex].X + 1) * 4 + 1],
+                                                        colorImagePixelData[depthIndex].Y * depthFrame.Width * BYTES_PER_PIXEL +
+                                                        (colorImagePixelData[depthIndex].X + 1) * BYTES_PER_PIXEL + 1],
                                                     colorPixelData[
-                                                        colorImagePixelData[depthIndex].Y * depthFrame.Width * 4 +
-                                                        (colorImagePixelData[depthIndex].X + 1) * 4]);
+                                                        colorImagePixelData[depthIndex].Y * depthFrame.Width * BYTES_PER_PIXEL +
+                                                        (colorImagePixelData[depthIndex].X + 1) * BYTES_PER_PIXEL]);
    
                             }
                             else
@@ -269,14 +269,14 @@ namespace KinectAutoCalibration.Kinect
                                                     colorImagePixelData[depthIndex].Y,
                                                     -1,
                                                     colorPixelData[
-                                                        colorImagePixelData[depthIndex].Y * depthFrame.Width * 4 +
-                                                        (colorImagePixelData[depthIndex].X + 1) * 4 + 2],
+                                                        colorImagePixelData[depthIndex].Y * depthFrame.Width * BYTES_PER_PIXEL +
+                                                        (colorImagePixelData[depthIndex].X + 1) * BYTES_PER_PIXEL + 2],
                                                     colorPixelData[
-                                                        colorImagePixelData[depthIndex].Y * depthFrame.Width * 4 +
-                                                        (colorImagePixelData[depthIndex].X + 1) * 4 + 1],
+                                                        colorImagePixelData[depthIndex].Y * depthFrame.Width * BYTES_PER_PIXEL +
+                                                        (colorImagePixelData[depthIndex].X + 1) * BYTES_PER_PIXEL + 1],
                                                     colorPixelData[
-                                                        colorImagePixelData[depthIndex].Y * depthFrame.Width * 4 +
-                                                        (colorImagePixelData[depthIndex].X + 1) * 4]);
+                                                        colorImagePixelData[depthIndex].Y * depthFrame.Width * BYTES_PER_PIXEL +
+                                                        (colorImagePixelData[depthIndex].X + 1) * BYTES_PER_PIXEL]);
                             }
                         }
                     }

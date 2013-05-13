@@ -77,7 +77,7 @@ namespace KinectAutoCalibration.Kinect
             var rwPoint = new RealWorldPoint();
 
             rwPoint.Z = p.Z;
-            rwPoint.X = (int) ((p.X - (Kinect.KINECT_IMAGE_WIDTH/2))* rwPoint.Z/Kinect.WIDTH_CONST);
+            rwPoint.X = (int) ((p.X - (Kinect.KINECT_IMAGE_WIDTH / 2))* rwPoint.Z/Kinect.WIDTH_CONST);
             rwPoint.Y = (int)((p.Y - (Kinect.KINECT_IMAGE_HEIGHT / 2)) * rwPoint.Z /Kinect.HEIGHT_CONST);
 
             return rwPoint;
@@ -121,7 +121,7 @@ namespace KinectAutoCalibration.Kinect
             //var denominator = 1;
             //rwPoint.Z = (int) (numerator/denominator);
             
-            rwPoint.X = (int) ((p.X - (Kinect.KINECT_IMAGE_WIDTH/2))*rwPoint.Z/Kinect.WIDTH_CONST);
+            rwPoint.X = (int) ((p.X - (Kinect.KINECT_IMAGE_WIDTH / 2))*rwPoint.Z/Kinect.WIDTH_CONST);
             rwPoint.Y = (int)((p.Y - (Kinect.KINECT_IMAGE_HEIGHT / 2)) * rwPoint.Z /Kinect.HEIGHT_CONST);
 
             return rwPoint;
