@@ -40,7 +40,7 @@ namespace KinectAutoCalibration.Calibration
             var areaPointC = Calibration.Points.Find((e) => e.Name == "C").AreaPoint;
 
             areaWidth = (int) Math.Sqrt(Math.Pow(areaPointB.X - areaPointA.X, 2) + Math.Pow(areaPointB.Y - areaPointB.Y, 2));
-            areaWidth = (int)Math.Sqrt(Math.Pow(areaPointB.X - areaPointC.X, 2) + Math.Pow(areaPointB.Y - areaPointC.Y, 2));
+            areaHeight = (int)Math.Sqrt(Math.Pow(areaPointB.X - areaPointC.X, 2) + Math.Pow(areaPointB.Y - areaPointC.Y, 2));
         }
     }
 }
