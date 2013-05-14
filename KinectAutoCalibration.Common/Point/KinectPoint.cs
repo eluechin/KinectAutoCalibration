@@ -67,5 +67,9 @@ namespace KinectAutoCalibration.Common
             return new Vector3D { X = X, Y = Y, Z = Z };
         }
 
+        public Vector2D ToVector2D()
+        {
+            return new Vector2D { X = X, Y = Y };
+        }
     }
 }

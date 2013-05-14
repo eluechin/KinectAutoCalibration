@@ -6,6 +6,7 @@ namespace KinectAutoCalibration.Calibration
     {
         void ColorizePoint(int x, int y, Color color);
         Color GetColorAtPoint(int x, int y);
+        void DrawAreaToBeamer();
 
         int GetAreaWidth();
         int GetAreaHeight();
