@@ -224,9 +224,10 @@ namespace KinectAutoCalibration.Kinect
 
                     for (int y = 0; y < depthFrame.Height; ++y)
                     {
-                        for (int x = 0; x < depthFrame.Width; ++x)
+                        //for (int x = 0; x < depthFrame.Width; ++x)
+                        for (int x = depthFrame.Width - 1; x >= 0; --x)
                         {
-                            kinArray[x, y] = new KinectPoint(x, y, -1, 0, 0, 0);
+                            kinArray[x, y] = new KinectPoint((KINECT_IMAGE_WIDTH-1)-x, y, -1, 0, 0, 0);
                         }
                     }
 
