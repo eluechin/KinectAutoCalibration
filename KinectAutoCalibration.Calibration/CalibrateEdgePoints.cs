@@ -30,7 +30,7 @@ namespace KinectAutoCalibration.Calibration
 
                 //TODO Refactoring
                 var initPoints = new List<Vector2D>() { new Vector2D { X = 0, Y = 0 } };
-                var centroids = KMeans.DoKMeans(KMeansHelper.ExtractBlackPointsAs2dVector(diffKinectPoints), initPoints);
+                var centroids = KMeans.DoKMeans(KinectPointArrayHelper.ExtractBlackPointsAs2dVector(diffKinectPoints), initPoints);
                 var kinectPoint = kinectPoints[(int)centroids[0].X, (int)centroids[0].Y];
                 beamerToKinect.Add(beamerPoint, kinectPoint);
 
