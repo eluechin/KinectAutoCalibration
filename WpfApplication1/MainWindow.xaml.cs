@@ -34,7 +34,7 @@ namespace WpfApplication1
         private byte[] _colorImagePixelData2;
         private byte[] _colorImagePixelData3;
         private IAutoKinectBeamerCalibration _kC;
-        private IKinectBeamerOperation kBO;
+        private IKinectBeamerOperation kinectBeamerOperation;
 
         public MainWindow()
         {
@@ -82,16 +82,16 @@ namespace WpfApplication1
 
         private void InitialCalibration(object sender, RoutedEventArgs e)
         {
-            IKinectBeamerCalibration kbc = new KinectBeamerCalibration();
-            kbc.CalibrateBeamerToKinect(new CalibrateEdgePoints());
-            kbc.ConvertKinectToRealWorld(new ConvertToRealWorldStrategy());
-            kbc.RealWorldToArea();
-            kBO = kbc.CreateKinectBeamerOperation();
+            IKinectBeamerCalibration kinectBeamerCalibration = new KinectBeamerCalibration();
+            kinectBeamerCalibration.CalibrateBeamerToKinect(new CalibrateEdgePoints());
+            kinectBeamerCalibration.ConvertKinectToRealWorld(new ConvertToRealWorldStrategy());
+            kinectBeamerCalibration.RealWorldToArea();
+            kinectBeamerOperation = kinectBeamerCalibration.CreateKinectBeamerOperation();
 
-            var h = "Area Height: ";
-            var w = "Area Width: ";
-            AreaHeight.Text = h + kBO.GetAreaHeight().ToString();
-            AreaWidth.Text = w + kBO.GetAreaWidth().ToString();
+            const string height = "Area Height: ";
+            const string width = "Area Width: ";
+            AreaHeight.Text = height + kinectBeamerOperation.GetAreaHeight();
+            AreaWidth.Text = width + kinectBeamerOperation.GetAreaWidth();
 
             //_kC.InitialCalibration();
             ////this.ColorImageElement1.Source = _kC.GetPic1Bitmap();

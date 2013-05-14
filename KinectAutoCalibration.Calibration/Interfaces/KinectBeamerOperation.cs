@@ -9,7 +9,8 @@ namespace KinectAutoCalibration.Calibration
         private int areaWidth;
         private int areaHeight;
 
-        private AreaPoint[,] area;
+        private readonly AreaPoint[,] area;
+        
 
         public KinectBeamerOperation()
         {
