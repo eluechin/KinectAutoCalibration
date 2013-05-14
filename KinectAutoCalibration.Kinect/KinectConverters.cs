@@ -120,7 +120,6 @@ namespace KinectAutoCalibration.Kinect
         public KinectPoint[,] ConvertByteArrayToKinectPoint(byte[] bytearray, int width, int height)
         {
             int bitPositionByteArray = 0;
-            const int BytesPerPixel = 4;
             KinectPoint[,] kinectArray = new KinectPoint[width, height];
 
             for (int y = 0; y < height; ++y)
@@ -134,7 +133,7 @@ namespace KinectAutoCalibration.Kinect
                         (byte)bytearray[bitPositionByteArray + 2],
                         (byte)bytearray[bitPositionByteArray + 1],
                         (byte)bytearray[bitPositionByteArray]);
-                    bitPositionByteArray += BytesPerPixel;
+                    bitPositionByteArray += Kinect.BYTES_PER_PIXEL;
                 }
             }
             return kinectArray;
