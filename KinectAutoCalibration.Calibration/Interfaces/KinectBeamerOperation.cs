@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using KinectAutoCalibration.Common;
 
 namespace KinectAutoCalibration.Calibration
 {
@@ -8,17 +9,25 @@ namespace KinectAutoCalibration.Calibration
         private int areaWidth;
         private int areaHeight;
 
+        private AreaPoint[,] area;
+
         public KinectBeamerOperation()
         {
             CalculateAreaDimensions();
+            area = new AreaPoint[areaWidth,areaHeight];
         }
 
         public void ColorizePoint(int x, int y, Color color)
         {
-            throw new NotImplementedException();
+            area[x,y] = new AreaPoint{Color = color, X = x, Y = y};
         }
 
         public Color GetColorAtPoint(int x, int y)
+        {
+            return area[x, y].Color;
+        }
+
+        public void DrawAreaToBeamer()
         {
             throw new NotImplementedException();
         }
