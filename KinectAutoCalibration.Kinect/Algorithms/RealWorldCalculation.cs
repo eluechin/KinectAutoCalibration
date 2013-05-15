@@ -103,8 +103,8 @@ namespace KinectAutoCalibration.Kinect.Algorithms
             var vec_rB = CreateRealWorldVector(rB);
             var vec_rC = CreateRealWorldVector(rC);
 
-            var vec_N = (vec_rB.Subtract(vec_rA)).CrossProduct(vec_rC.Subtract(vec_rA));
-            var q = vec_N.ScalarProduct(vec_rA);
+            var vec_N = (vec_rA.Subtract(vec_rB)).CrossProduct(vec_rC.Subtract(vec_rB));
+            var q = vec_N.ScalarProduct(vec_rB);
 
             var x = (int)((p.X - (Kinect.KINECT_IMAGE_WIDTH / 2)) /Kinect.WIDTH_CONST);
             var y = (int)((p.Y - (Kinect.KINECT_IMAGE_HEIGHT / 2)) /Kinect.HEIGHT_CONST);

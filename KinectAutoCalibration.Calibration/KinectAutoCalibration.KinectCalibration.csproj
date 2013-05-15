@@ -58,7 +58,7 @@
     <Compile Include="Interfaces\ICalibration.cs" />
     <Compile Include="Interfaces\IKinectBeamerCalibration.cs" />
     <Compile Include="Interfaces\IKinectBeamerOperation.cs" />
-    <Compile Include="Interfaces\KinectBeamerOperation.cs" />
+    <Compile Include="KinectBeamerOperation.cs" />
     <Compile Include="KinectBeamerCalibration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TempCalibration.cs" />

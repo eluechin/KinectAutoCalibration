@@ -13,7 +13,7 @@ namespace KinectAutoCalibration.Calibration
         public Dictionary<KinectPoint, RealWorldPoint> TransformKinectToRealWorld(IKinect kinect, List<KinectPoint> kinectPoints)
         {
             var cornerPoints = new List<KinectPoint>();
-            foreach (var point in Calibration.Points)
+            foreach (var point in Calibration.GetEdgePoints())
             {
                 cornerPoints.Add(point.KinectPoint);
             }

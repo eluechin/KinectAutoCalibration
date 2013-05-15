@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using KinectAutoCalibration.Common;
 
 namespace KinectAutoCalibration.Calibration
 {
@@ -10,5 +11,8 @@ namespace KinectAutoCalibration.Calibration
 
         int GetAreaWidth();
         int GetAreaHeight();
+        void CalculateObstacleCentroid();
+        int GetObstacleCentroidX();
+        int GetObstacleCentroidY();
     }
 }
