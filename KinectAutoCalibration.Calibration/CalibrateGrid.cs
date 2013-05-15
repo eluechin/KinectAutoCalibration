@@ -10,18 +10,16 @@ namespace KinectAutoCalibration.Calibration
 {
     public class CalibrateGrid : IBeamerToKinectStrategy
     {
-        private List<Point> edgePoints;
+        private Point pointA;
+        private Point pointB;
+        private Point pointC;
+        private Point pointD;
         //TODO XML Configuration?
         private const int CALIBRATION_ROUNDS = 2;
 
         public Dictionary<BeamerPoint, KinectPoint> CalibrateBeamerToKinect(IBeamerWindow beamerWindow, IKinect kinect)
         {
-            //var newPoints = new Dictionary<BeamerPoint, KinectPoint>();
-
-            var simpleStrategy = new CalibrateEdgePoints();
-            var beamerToKinect = simpleStrategy.CalibrateBeamerToKinect(beamerWindow, kinect);
-
-            edgePoints = Calibration.GetEdgePoints();
+            RunSimpleStrategy(beamerWindow, kinect);
 
             for (var i = 1; i <= CALIBRATION_ROUNDS; i++)
             {
@@ -36,95 +34,82 @@ namespace KinectAutoCalibration.Calibration
                 var diffKinectPoints = kinect.GetDifferenceImage(picture1, picture2, KinectBeamerCalibration.THRESHOLD);
                 var diffKinectVectors = KinectPointArrayHelper.ExtractBlackPointsAs2dVector(diffKinectPoints);
 
-                var newPoints = CalculateNewPoints(i, diffKinectVectors);
+                //var newPoints = CalculateNewPoints(i, diffKinectVectors);
 
                 //var initPoints = CalculateNewPoints(beamerToKinect.Values.GetEnumerator(), i);
             }
+
+            return new Dictionary<BeamerPoint, KinectPoint>();
             //TODO Implement
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+        }
+
+        private void RunSimpleStrategy(IBeamerWindow beamerWindow, IKinect kinect)
+        {
+            var simpleStrategy = new CalibrateEdgePoints();
+            simpleStrategy.CalibrateBeamerToKinect(beamerWindow, kinect);
+
+            var edgePoints = Calibration.GetEdgePoints();
+            pointA = edgePoints.Find((e) => e.Name == "A");
+            pointB = edgePoints.Find((e) => e.Name == "B");
+            pointC = edgePoints.Find((e) => e.Name == "C");
+            pointD = edgePoints.Find((e) => e.Name == "D");
         }
 
         private List<Vector2D> CalculateNewPoints(int round, List<Vector2D> diffKinectVectors)
         {
-            var numberOfAreaHorizontal = (int) Math.Pow(2, round);
+            var divisor = (int)Math.Pow(2, round);
+            var numberOfAreaHorizontal = divisor;
             var numberOfAreaVertical = numberOfAreaHorizontal;
 
-            var edgePoints = Calibration.GetEdgePoints();
+            var beamerWidth = (int)Math.Sqrt(Math.Pow(pointA.BeamerPoint.X, 2) + Math.Pow(pointB.BeamerPoint.X, 2)) / 2;
+            var beamerHeight = (int)Math.Sqrt(Math.Pow(pointA.BeamerPoint.Y, 2) + Math.Pow(pointD.BeamerPoint.Y, 2)) / 2;
 
+            var beameAreaWidth = beamerWidth / divisor;
+            var beamerAreaHeight = beamerHeight / divisor;
 
-            for(var i = 1; i<= numberOfAreaHorizontal; i++)
+            var kinectVectorA = pointA.KinectPoint.ToVector2D();
+            var kinectVectorB = pointA.KinectPoint.ToVector2D();
+            var kinectVectorC = pointA.KinectPoint.ToVector2D();
+            var kinectVectorD = pointA.KinectPoint.ToVector2D();
+
+            for (var i = 0; i <= numberOfAreaHorizontal; i++)
             {
-                for (var j = 1; j <= numberOfAreaVertical; j++)
+                for (var j = 0; j <= numberOfAreaVertical; j++)
                 {
-                    
+                    if (i == 0 && j == 0 || i == numberOfAreaHorizontal && j == 0 || i == 0 && j == numberOfAreaVertical || i == numberOfAreaHorizontal && j == numberOfAreaVertical)
+                    {
+                        continue;
+                    }
+
+                    var beamerPoint = new BeamerPoint
+                        {
+                            X = pointA.BeamerPoint.X + i * beameAreaWidth,
+                            Y = pointA.BeamerPoint.Y + j * beamerAreaHeight
+                        };
+
+                    var kinectPointPredicted = new KinectPoint();
+
+
                 }
             }
-            
-            
-            
-            
-            //var edgePoints = Calibration.GetEdgePoints();
-
-
-
-
-
-
-            //var initVectors = new List<Vector2D>();
-            //var widthDivisor = (int) Math.Pow(2, round);
-
-            //for (var i = 1; i <= round; i++)
-            //{
-            //    for (int j = 0; j < round; j++)
-            //    {
-                    
-            //    }
-            //    initVectors.AddRange(CalculateTopLine(i, widthDivisor));
-            //}
-
-            
-          
-            //return initVectors;
 
             throw new NotImplementedException();
         }
 
-        private IEnumerable<Vector2D> CalculateInnerGrid(Vector2D topLeft, Vector2D topRight, Vector2D bottomRight, Vector2D bottomLeft)
-        {
-            var innerPoints = new List<Vector2D>
-                {
-                    // top point
-                    topLeft.Add(topRight).Divide(2),
-                    // middle left point
-                    topLeft.Add(bottomLeft).Divide(2),
-                    // middle point
-                    topLeft.Add(bottomRight).Divide(2),
-                    // middle right point
-                    topRight.Add(bottomRight).Divide(2),
-                    // bottom point
-                    bottomLeft.Add(bottomRight).Divide(2)
-                };
-            return innerPoints;
-        }
+        //private void CalculateInnerArea(int widthFactor, int heightFactor, int round)
+        //{
+        //    var topPoint = new Point();
+        //    var middleLeftPoint = new Point();
+        //    var middlePoint = new Point();
+        //    var middleRightPoint = new Point();
+        //    var bottomPoint = new Point();
 
-        private IEnumerable<Vector2D> CalculateTopLine(int numberOfPoints, int divisor)
-        {
-            var topVectors = new List<Vector2D>();
+        //    topPoint.BeamerPoint = new BeamerPoint { X = widthFactor * (pointA.X + pointB.X) / round, Y = (pointA.Y + pointB.Y) / 2 };
+        //    middleLeftPoint.BeamerPoint = new BeamerPoint { X = (pointA.X + pointD.X) / 2, Y = heightFactor * (pointA.Y + pointD.Y) / heightFactor };
 
-            var kinectPointA = edgePoints.Find(d => d.Name == "A").KinectPoint;
-            var kinectPointB = edgePoints.Find(d => d.Name == "B").KinectPoint;
-            var vectorA = kinectPointA.ToVector2D();
-            var vectorB = kinectPointB.ToVector2D();
 
-            var localDivisor = divisor;
 
-            for (var i = 1; i <= numberOfPoints; i++)
-            {
-                topVectors.Add(vectorA.Add(vectorB.Subtract(vectorA).Divide(localDivisor)));
-                localDivisor += divisor;
-            }
-
-            return topVectors;
-        }
+        //}
     }
 }
