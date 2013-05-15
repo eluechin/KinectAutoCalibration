@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using KinectAutoCalibration.Common;
 
-namespace KinectAutoCalibration.Kinect
+namespace KinectAutoCalibration.Kinect.Algorithms
 {
     public class RealWorldCalculation
     {
@@ -91,9 +91,9 @@ namespace KinectAutoCalibration.Kinect
         /// <param name="p">the KinectPoint which should be transformed to a RealWorldPoint </param>
         /// <param name="rA">the RealWorldPoint A which represents a corner point and 
         ///     is used to calculate the coordinates for the new RealWorldPoints </param>
-        /// <param name="rA">the RealWorldPoint B which represents a corner point and 
+        /// <param name="rB">the RealWorldPoint B which represents a corner point and 
         ///     is used to calculate the coordinates for the new RealWorldPoints </param>
-        /// <param name="rA">the RealWorldPoint C which represents a corner point and 
+        /// <param name="rC">the RealWorldPoint C which represents a corner point and 
         ///     is used to calculate the coordinates for the new RealWorldPoints </param>
         /// <returns>Returns the RealWorldPoint corresponding to the passed KinectPoint</returns>
         private RealWorldPoint CalculateRealWorldPoint(KinectPoint p, RealWorldPoint rA, RealWorldPoint rB, RealWorldPoint rC)
