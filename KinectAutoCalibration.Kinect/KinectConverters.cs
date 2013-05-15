@@ -140,10 +140,10 @@ namespace KinectAutoCalibration.Kinect
         }
 
         /// <summary>
-        /// This method flips a KinectPoint-Array by its x-axis.
+        /// This method is used to reflect the picture seen by the kinect on the y-axis.
         /// So for example the Point (0,0) becomes the Point (639,0).
         /// The y-values do not change. </summary>
-        /// <param name="bytearray">the array which should be transformed</param>
+        /// <param name="kinArray">the array which should be transformed</param>
         /// <param name="width">the width of the new two-dimensional array, e.g. 640</param>
         /// <param name="height">the height of the new two-dimensional array, e.g. 480</param>
         /// <returns>Returns the flipped KinectPoint-Array</returns>

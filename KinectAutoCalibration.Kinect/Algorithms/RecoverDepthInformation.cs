@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using KinectAutoCalibration.Common;
 
-namespace KinectAutoCalibration.Kinect
+namespace KinectAutoCalibration.Kinect.Algorithms
 {
     public class RecoverDepthInformation
     {
@@ -26,7 +26,7 @@ namespace KinectAutoCalibration.Kinect
                     if (kinArray[x,y].Z == -1)
                     {
                         int correctionRadius = 1;
-                        int z = -1;
+                        //int z = -1;
                         int depthMeanValue = 0;
 
                         do

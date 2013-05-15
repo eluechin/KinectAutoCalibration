@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using KinectAutoCalibration.Kinect.Algorithms;
 using Microsoft.Kinect;
 using KinectAutoCalibration.Common;
 
@@ -187,7 +188,7 @@ namespace KinectAutoCalibration.Kinect
         /// This method requests one image of the color stream and one of the depth stream.
         /// Then it maps the pixels of the depth data with the pixels of the color data</summary>
         /// <returns>
-        /// Returns an array which contains the merged color and depth data</returns>
+        /// Returns an array which contains the merged color and depth data.</returns>
         public KinectPoint[,] CreateKinectPointArray()
         {
 
@@ -224,9 +225,10 @@ namespace KinectAutoCalibration.Kinect
 
                     for (int y = 0; y < depthFrame.Height; ++y)
                     {
-                        for (int x = 0; x < depthFrame.Width; ++x)
+                        //for (int x = 0; x < depthFrame.Width; ++x)
+                        for (int x = depthFrame.Width - 1; x >= 0; --x)
                         {
-                            kinArray[x, y] = new KinectPoint(x, y, -1, 0, 0, 0);
+                            kinArray[x, y] = new KinectPoint((KINECT_IMAGE_WIDTH-1)-x, y, -1, 0, 0, 0);
                         }
                     }
 
@@ -291,6 +293,8 @@ namespace KinectAutoCalibration.Kinect
             }
         }
 
+        /// <summary>
+        /// This methods instructs the Kinect to raise its angle by one.</summary>
         public void RaiseKinect()
         {
             if (_kinect.ElevationAngle != MAX_ELEVATION_ANGLE)
@@ -299,6 +303,8 @@ namespace KinectAutoCalibration.Kinect
             }
         }
 
+        /// <summary>
+        /// This methods instructs the Kinect to lower its angle by one.</summary>
         public void LowerKinect()
         {
             if (_kinect.ElevationAngle != MIN_ELEVATION_ANGLE)
@@ -307,7 +313,15 @@ namespace KinectAutoCalibration.Kinect
             }
         }
 
-        public bool IsValidKinectPoint(int colorInDepthX, int colorInDepthY, short depthValue)
+        /// <summary>
+        /// This method checks whether a KinectPoint can be mapped between the ColorImageStream and the DepthImageStream.
+        /// It verifies also that the Depth value of the mapped point is valid. </summary>
+        /// <param name="colorInDepthX">The calculated x-value of the KinectPoint which should be mapped</param>
+        /// <param name="colorInDepthY">The calculated y-value of the KinectPoint which should be mapped</param>
+        /// <param name="depthValue">The depth value of the KinectPoint which should be mapped</param>
+        /// <returns>
+        /// Returns true if a KinectPoint can be mapped and has a valid depth value. Otherwise false will be returned.</returns>
+        private bool IsValidKinectPoint(int colorInDepthX, int colorInDepthY, short depthValue)
         {
             if (colorInDepthX > 0 && colorInDepthX < this._kinect.DepthStream.FrameWidth &&
                 colorInDepthY >= 0 && colorInDepthY < this._kinect.DepthStream.FrameHeight)

@@ -21,9 +21,11 @@ namespace KinectAutoCalibration.Calibration
             for (var i = 0; i < CALIBRATION_POINTS; i++)
             {
                 var beamerPoint = beamerWindow.DisplayCalibrationImageEdge(true, i);
+                Thread.Sleep(KinectBeamerCalibration.THREAD_SLEEP);
                 var picture1 = kinect.GetColorImage();
                 Thread.Sleep(KinectBeamerCalibration.THREAD_SLEEP);
                 beamerWindow.DisplayCalibrationImageEdge(false, i);
+                Thread.Sleep(KinectBeamerCalibration.THREAD_SLEEP);
                 var picture2 = kinect.GetColorImage();
 
                 var diffKinectPoints = kinect.GetDifferenceImage(picture1, picture2, KinectBeamerCalibration.THRESHOLD);
