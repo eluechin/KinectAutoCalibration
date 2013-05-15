@@ -117,14 +117,13 @@ namespace WpfApplication1
 
         private void Obst(object sender, RoutedEventArgs e)
         {
-            /*kinectBeamerOperation.CalculateObstacleCentroid();
+            kinectBeamerOperation.CalculateObstacleCentroid();
 
             var x = "Obstacle x: ";
             var y = "Obstacle y: ";
             ObstacleX.Text = x + kinectBeamerOperation.GetObstacleCentroidX();
-            ObstacleY.Text = y + kinectBeamerOperation.GetObstacleCentroidY();*/
+            ObstacleY.Text = y + kinectBeamerOperation.GetObstacleCentroidY();
             
-            kinectBeamerOperation.CompareZCalcStrategies(new CalculateToRealWorldStrategy());
 
             //old:
             //_kC.GetObstacles();
@@ -171,6 +170,11 @@ namespace WpfApplication1
         private void KinectDown(object sender, RoutedEventArgs e)
         {
             //_kC.LowerKinect();
+        }
+
+        private void CompareZCalc(object sender, RoutedEventArgs e)
+        {
+            kinectBeamerOperation.CompareZCalcStrategies(new CalculateToRealWorldStrategy());
         }
     }
 

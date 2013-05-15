@@ -38,7 +38,7 @@
             <Button Content="Display Area" Click="dsplArea"></Button>
             <Button Content="Display Blank" Click="dsplBlank"></Button>
             <Button Content="Calib Beamer" Click="CalibBeamer"></Button>
-
+            <Button Content="Compare Z Calc" Click="CompareZCalc"></Button>
             <StackPanel Orientation="Vertical">
                 <Button Content="Kinect UP" Click="KinectUp"/>
                 <Button Content="Kinect DOWN" Click="KinectDown"/>
