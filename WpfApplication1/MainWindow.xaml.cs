@@ -117,12 +117,16 @@ namespace WpfApplication1
 
         private void Obst(object sender, RoutedEventArgs e)
         {
-            kinectBeamerOperation.CalculateObstacleCentroid();
+            /*kinectBeamerOperation.CalculateObstacleCentroid();
 
             var x = "Obstacle x: ";
             var y = "Obstacle y: ";
             ObstacleX.Text = x + kinectBeamerOperation.GetObstacleCentroidX();
-            ObstacleY.Text = y + kinectBeamerOperation.GetObstacleCentroidY();
+            ObstacleY.Text = y + kinectBeamerOperation.GetObstacleCentroidY();*/
+            
+            kinectBeamerOperation.CompareZCalcStrategies(new CalculateToRealWorldStrategy());
+
+            //old:
             //_kC.GetObstacles();
 
             //var pixelsObst = _kC.GetDifferenceImageObst();

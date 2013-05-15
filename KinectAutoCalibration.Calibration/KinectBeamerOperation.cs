@@ -124,5 +124,29 @@ namespace KinectAutoCalibration.Calibration
             areaHeight = (int)Math.Sqrt(Math.Pow(areaPointB.X - areaPointC.X, 2) + Math.Pow(areaPointB.Y - areaPointC.Y, 2));
         }
 
+        public void CompareZCalcStrategies(IKinectToRealWorldStrategy kinectToRealWorldStrategy)
+        {
+            var kinectPoints = kinect.CreateKinectPointArray();
+            var kinectPointsList = new List<KinectPoint>();
+
+            for (int y = 0; y < Kinect.Kinect.KINECT_IMAGE_HEIGHT ; ++y)
+            {
+                for (int x = 0; x < Kinect.Kinect.KINECT_IMAGE_WIDTH; ++x)
+                    kinectPointsList.Add(kinectPoints[x,y]);
+            }
+
+            var dictPoints = kinectToRealWorldStrategy.TransformKinectToRealWorld(kinect, kinectPointsList);
+
+            var diffPoints = new KinectPoint[Kinect.Kinect.KINECT_IMAGE_WIDTH,Kinect.Kinect.KINECT_IMAGE_HEIGHT];
+            var differences = new List<int>();
+
+            foreach (var p in dictPoints)
+            {
+                differences.Add(p.Key.Z - p.Value.Z);
+            }
+
+            differences.Sort();
+        }
+
     }
 }
