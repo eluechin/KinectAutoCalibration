@@ -150,7 +150,7 @@ namespace KinectAutoCalibration.Calibration
             var maxDiff = differences.Max();
             var minDiff = differences.Min();
             var rangeDiff = maxDiff - minDiff;
-            var levels = 20;
+            //var levels = 20;
 
             //Grey : 128, 128, 128
             var r = 0x80;
@@ -165,9 +165,9 @@ namespace KinectAutoCalibration.Calibration
                 //g = 0x80 + diff / 1;
                 //b = 0x80 + diff / 1;
 
-                r = (0x80 + diff / 1) % 127;
-                g = (0x80 + diff / 1) % 127;
-                b = (0x80 + diff / 1) % 127;
+                r = 0x80 + (diff % 127);
+                g = 0x80 + (diff % 127);
+                b = 0x80 + (diff % 127);
 
                 diffPoints[p.Key.X, p.Key.Y] = new KinectPoint(p.Key.X, p.Key.Y, diff, r, g, b);
             }
