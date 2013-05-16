@@ -56,8 +56,10 @@ namespace KinectAutoCalibration.Calibration
             var vectorRealWorldC = realWorldPointC.ToVector3D();
             var vectorRealWorldD = realWorldPointD.ToVector3D();
 
-            //var coordinateSystemPoints = GetOriginPoint(vectorRealWorldA, vectorRealWorldB, vectorRealWorldC, vectorRealWorldD);
-            ChangeOfBasis.InitializeChangeOfBasis(vectorRealWorldA, vectorRealWorldB, vectorRealWorldC);
+            var coordinateSystemPoints = GetOriginPoint(vectorRealWorldA, vectorRealWorldB, vectorRealWorldC, vectorRealWorldD);
+            ChangeOfBasis.InitializeChangeOfBasis(coordinateSystemPoints[1], coordinateSystemPoints[0], coordinateSystemPoints[2]);
+            //ChangeOfBasis.InitializeChangeOfBasis(vectorRealWorldA, vectorRealWorldB, vectorRealWorldC);
+
 
             var vectorAreaA = ChangeOfBasis.GetVectorInNewBasis(vectorRealWorldA);
             var vectorAreaB = ChangeOfBasis.GetVectorInNewBasis(vectorRealWorldB);
@@ -80,20 +82,56 @@ namespace KinectAutoCalibration.Calibration
             d.AreaPoint = areaPointD;
         }
 
-        private List<Vector3D> GetOriginPoint(Vector3D rwvA, Vector3D rwvB, Vector3D rwvC, Vector3D rwvD)
+        private Vector3D[] GetOriginPoint(Vector3D rwvA, Vector3D rwvB, Vector3D rwvC, Vector3D rwvD)
         {
-            var dictVectors = new Dictionary<List<Vector3D>, double>();
-            dictVectors.Add(new List<Vector3D> { rwvA, rwvB }, (rwvB.Subtract(rwvA)).GetLength());
-            dictVectors.Add(new List<Vector3D> { rwvA, rwvD }, (rwvD.Subtract(rwvA)).GetLength());
-            dictVectors.Add(new List<Vector3D> { rwvB, rwvA }, (rwvA.Subtract(rwvB)).GetLength());
-            dictVectors.Add(new List<Vector3D> { rwvB, rwvC }, (rwvC.Subtract(rwvB)).GetLength());
-            dictVectors.Add(new List<Vector3D> { rwvC, rwvB }, (rwvB.Subtract(rwvC)).GetLength());
-            dictVectors.Add(new List<Vector3D> { rwvC, rwvD }, (rwvD.Subtract(rwvC)).GetLength());
-            dictVectors.Add(new List<Vector3D> { rwvD, rwvC }, (rwvC.Subtract(rwvD)).GetLength());
-            dictVectors.Add(new List<Vector3D> { rwvD, rwvA }, (rwvA.Subtract(rwvD)).GetLength());
+            Vector3D[] coordinateSystemPoints = new Vector3D[3];
             
+            var dictVectorsA = new Dictionary<Vector3D, int>();
+            dictVectorsA.Add(rwvB, (int)(rwvB.Subtract(rwvA)).GetLength());
+            dictVectorsA.Add(rwvD, (int)(rwvD.Subtract(rwvA)).GetLength());
+            int sumA = dictVectorsA.Values.Sum();
 
-            return null;
+            var dictVectorsB = new Dictionary<Vector3D, int>();
+            dictVectorsB.Add(rwvA, (int)(rwvA.Subtract(rwvB)).GetLength());
+            dictVectorsB.Add(rwvC, (int)(rwvC.Subtract(rwvB)).GetLength());
+            int sumB = dictVectorsB.Values.Sum();
+
+            var dictVectorsC = new Dictionary<Vector3D, int>();
+            dictVectorsC.Add(rwvB, (int)(rwvB.Subtract(rwvC)).GetLength());
+            dictVectorsC.Add(rwvD, (int)(rwvD.Subtract(rwvC)).GetLength());
+            int sumC = dictVectorsC.Values.Sum();
+
+            var dictVectorsD = new Dictionary<Vector3D, int>();
+            dictVectorsD.Add(rwvC, (int)(rwvC.Subtract(rwvD)).GetLength());
+            dictVectorsD.Add(rwvA, (int)(rwvA.Subtract(rwvD)).GetLength());
+            int sumD = dictVectorsD.Values.Sum();
+
+            if (sumA < sumB && sumA < sumC && sumA < sumD)
+            {
+                coordinateSystemPoints[0] = rwvA;
+                coordinateSystemPoints[1] = dictVectorsA.FirstOrDefault((x) => x.Value == dictVectorsA.Values.Max()).Key;
+                coordinateSystemPoints[2] = dictVectorsA.FirstOrDefault((x) => x.Value == dictVectorsA.Values.Min()).Key;
+            }
+            else if (sumB < sumA && sumB < sumC && sumB < sumD)
+            {
+                coordinateSystemPoints[0] = rwvB;
+                coordinateSystemPoints[1] = dictVectorsB.FirstOrDefault((x) => x.Value == dictVectorsB.Values.Max()).Key;
+                coordinateSystemPoints[2] = dictVectorsB.FirstOrDefault((x) => x.Value == dictVectorsB.Values.Min()).Key;
+            } 
+            else if ( sumC < sumA && sumC < sumB && sumC < sumD)
+            {
+                coordinateSystemPoints[0] = rwvC;
+                coordinateSystemPoints[1] = dictVectorsC.FirstOrDefault((x) => x.Value == dictVectorsC.Values.Max()).Key;
+                coordinateSystemPoints[2] = dictVectorsC.FirstOrDefault((x) => x.Value == dictVectorsC.Values.Min()).Key;
+            }
+            else
+            {
+                coordinateSystemPoints[0] = rwvD;
+                coordinateSystemPoints[1] = dictVectorsD.FirstOrDefault((x) => x.Value == dictVectorsD.Values.Max()).Key;
+                coordinateSystemPoints[2] = dictVectorsD.FirstOrDefault((x) => x.Value == dictVectorsD.Values.Min()).Key;
+            }
+
+            return coordinateSystemPoints;
         }
 
         public IKinectBeamerOperation CreateKinectBeamerOperation()
