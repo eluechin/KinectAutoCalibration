@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using KinectAutoCalibration.Beamer;
@@ -55,6 +56,7 @@ namespace KinectAutoCalibration.Calibration
             var vectorRealWorldC = realWorldPointC.ToVector3D();
             var vectorRealWorldD = realWorldPointD.ToVector3D();
 
+            //var coordinateSystemPoints = GetOriginPoint(vectorRealWorldA, vectorRealWorldB, vectorRealWorldC, vectorRealWorldD);
             ChangeOfBasis.InitializeChangeOfBasis(vectorRealWorldA, vectorRealWorldB, vectorRealWorldC);
 
             var vectorAreaA = ChangeOfBasis.GetVectorInNewBasis(vectorRealWorldA);
@@ -76,6 +78,22 @@ namespace KinectAutoCalibration.Calibration
             b.AreaPoint = areaPointB;
             c.AreaPoint = areaPointC;
             d.AreaPoint = areaPointD;
+        }
+
+        private List<Vector3D> GetOriginPoint(Vector3D rwvA, Vector3D rwvB, Vector3D rwvC, Vector3D rwvD)
+        {
+            var dictVectors = new Dictionary<List<Vector3D>, double>();
+            dictVectors.Add(new List<Vector3D> { rwvA, rwvB }, (rwvB.Subtract(rwvA)).GetLength());
+            dictVectors.Add(new List<Vector3D> { rwvA, rwvD }, (rwvD.Subtract(rwvA)).GetLength());
+            dictVectors.Add(new List<Vector3D> { rwvB, rwvA }, (rwvA.Subtract(rwvB)).GetLength());
+            dictVectors.Add(new List<Vector3D> { rwvB, rwvC }, (rwvC.Subtract(rwvB)).GetLength());
+            dictVectors.Add(new List<Vector3D> { rwvC, rwvB }, (rwvB.Subtract(rwvC)).GetLength());
+            dictVectors.Add(new List<Vector3D> { rwvC, rwvD }, (rwvD.Subtract(rwvC)).GetLength());
+            dictVectors.Add(new List<Vector3D> { rwvD, rwvC }, (rwvC.Subtract(rwvD)).GetLength());
+            dictVectors.Add(new List<Vector3D> { rwvD, rwvA }, (rwvA.Subtract(rwvD)).GetLength());
+            
+
+            return null;
         }
 
         public IKinectBeamerOperation CreateKinectBeamerOperation()
