@@ -161,18 +161,19 @@ namespace KinectAutoCalibration.Calibration
             {
                 int diff = p.Key.Z - p.Value.Z;
                 //diff positiv --> gegen weiss, diff negativ --> gegen schwarz
-                //r = 0x80 + diff / 1;
-                //g = 0x80 + diff / 1;
-                //b = 0x80 + diff / 1;
+                r = 0x80 + diff / 1;
+                g = 0x80 + diff / 1;
+                b = 0x80 + diff / 1;
 
-                r = 0x80 + (diff % 127);
-                g = 0x80 + (diff % 127);
-                b = 0x80 + (diff % 127);
+                //r = 0x80 + (diff % 127);
+                //g = 0x80 + (diff % 127);
+                //b = 0x80 + (diff % 127);
 
                 diffPoints[p.Key.X, p.Key.Y] = new KinectPoint(p.Key.X, p.Key.Y, diff, r, g, b);
             }
 
-            return kinect.ConvertKinectPointArrayToByteArray(diffPoints, Kinect.Kinect.KINECT_IMAGE_WIDTH, Kinect.Kinect.KINECT_IMAGE_HEIGHT);
+            //return kinect.ConvertKinectPointArrayToByteArray(diffPoints, Kinect.Kinect.KINECT_IMAGE_WIDTH, Kinect.Kinect.KINECT_IMAGE_HEIGHT);
+            return kinect.ConvertKinectPointArrayToByteArray(kinectPoints,Kinect.Kinect.KINECT_IMAGE_WIDTH, Kinect.Kinect.KINECT_IMAGE_HEIGHT);
         }
         
         /*
