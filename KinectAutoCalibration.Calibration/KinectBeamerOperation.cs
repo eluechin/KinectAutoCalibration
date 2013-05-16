@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Threading;
@@ -124,7 +125,7 @@ namespace KinectAutoCalibration.Calibration
             areaHeight = (int)Math.Sqrt(Math.Pow(areaPointB.X - areaPointC.X, 2) + Math.Pow(areaPointB.Y - areaPointC.Y, 2));
         }
 
-        public void CompareZCalcStrategies(IKinectToRealWorldStrategy kinectToRealWorldStrategy)
+        public byte[] CompareZCalcStrategies(IKinectToRealWorldStrategy kinectToRealWorldStrategy)
         {
             var kinectPoints = kinect.CreateKinectPointArray();
             var kinectPointsList = new List<KinectPoint>();
@@ -144,8 +145,29 @@ namespace KinectAutoCalibration.Calibration
             {
                 differences.Add(p.Key.Z - p.Value.Z);
             }
+            //differences.Sort();
+            var maxDiff = differences.Max();
+            var minDiff = differences.Min();
+            var rangeDiff = maxDiff - minDiff;
+            var levels = 20;
 
-            differences.Sort();
+            //Grey : 128, 128, 128
+            var r = 0x80;
+            var g = 0x80;
+            var b = 0x80;
+
+            foreach (var p in dictPoints)
+            {
+                int diff = p.Key.Z - p.Value.Z;
+                
+                r = 0x80 + diff / 1;
+                g = 0x80 + diff / 1;
+                b = 0x80 + diff / 1;
+
+                diffPoints[p.Key.X, p.Key.Y] = new KinectPoint(p.Key.X, p.Key.Y, diff, r, g, b);
+            }
+
+            return kinect.ConvertKinectPointArrayToByteArray(diffPoints, Kinect.Kinect.KINECT_IMAGE_WIDTH, Kinect.Kinect.KINECT_IMAGE_HEIGHT);
         }
 
     }

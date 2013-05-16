@@ -174,7 +174,8 @@ namespace WpfApplication1
 
         private void CompareZCalc(object sender, RoutedEventArgs e)
         {
-            kinectBeamerOperation.CompareZCalcStrategies(new CalculateToRealWorldStrategy());
+            var diffPoints = kinectBeamerOperation.CompareZCalcStrategies(new CalculateToRealWorldStrategy());
+            this._colorImageBitmap1.WritePixels(this._colorImageBitmapRect, diffPoints, this._colorImageStride, 0);
         }
     }
 
