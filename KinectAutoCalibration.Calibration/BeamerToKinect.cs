@@ -17,10 +17,10 @@ namespace KinectAutoCalibration.Calibration
         static BeamerToKinect()
         {
             var edgePoints = Calibration.GetEdgePoints();
-            pointA = edgePoints.Find((e) => e.Name == "A");
-            pointB = edgePoints.Find((e) => e.Name == "B");
-            pointC = edgePoints.Find((e) => e.Name == "C");
-            pointD = edgePoints.Find((e) => e.Name == "D");
+            pointA = edgePoints.Find(e => e.Name == "A");
+            pointB = edgePoints.Find(e => e.Name == "B");
+            pointC = edgePoints.Find(e => e.Name == "C");
+            pointD = edgePoints.Find(e => e.Name == "D");
         }
 
         public static KinectPoint CalculateKinectPoint(BeamerPoint beamerPoint)
@@ -51,28 +51,27 @@ namespace KinectAutoCalibration.Calibration
             var detCP = beamerVectorC.Determinant(beamerVectorP);
             var detPA = beamerVectorP.Determinant(beamerVectorA);
             var detPB = beamerVectorP.Determinant(beamerVectorB);
-            var detPP = beamerVectorP.Determinant(beamerVectorP);
             var detAP = beamerVectorA.Determinant(beamerVectorP);
             var detPC = beamerVectorP.Determinant(beamerVectorC);
             // ReSharper restore InconsistentNaming
 
             var alphaMy = detDA - detDB - detCA + detCB;
             var betaMy = -2 * detDA + detDB + detDP + detCA - detCP + detPA - detPB;
-            var gammaMy = detDA - detDP - detPA + detPP;
+            var gammaMy = detDA - detDP - detPA;
 
-            var my1 = (-(betaMy / 2) + Math.Sqrt(betaMy * betaMy - 4 * alphaMy * gammaMy)) / (2 * alphaMy);
-            var my2 = (-(betaMy / 2) - Math.Sqrt(betaMy * betaMy - 4 * alphaMy * gammaMy)) / (2 * alphaMy);
+            var detMy = Math.Sqrt(betaMy * betaMy - 4 * alphaMy * gammaMy);
+            var my1 = (-(betaMy / 2) + detMy) / (2 * alphaMy);
+            var my2 = (-(betaMy / 2) - detMy) / (2 * alphaMy);
 
             var my = my1 >= 0 && my1 <= 1 ? my1 : my2;
 
             var alphaLambda = detDC - detDB - detAC + detAB;
             var betaLambda = -2 * detDC + detDB + detDP + detAC - detAP + detPB;
-            var gammaLambda = detDC - detDP - detPC + detPP;
+            var gammaLambda = detDC - detDP - detPC;
 
-            var lambda1 = (-(betaLambda / 2) + Math.Sqrt(betaLambda * betaLambda - 4 * alphaLambda * gammaLambda)) / (2 *
-                                                                                                            alphaLambda);
-            var lambda2 = (-(betaLambda / 2) - Math.Sqrt(betaLambda * betaLambda - 4 * alphaLambda * gammaLambda)) / (2 *
-                                                                                                            alphaLambda);
+            var detLambda = Math.Sqrt(betaLambda * betaLambda - 4 * alphaLambda * gammaLambda);
+            var lambda1 = (-(betaLambda / 2) + detLambda) / (2 * alphaLambda);
+            var lambda2 = (-(betaLambda / 2) - detLambda) / (2 * alphaLambda);
 
             var lambda = lambda1 >= 0 && lambda1 <= 1 ? lambda1 : lambda2;
 
