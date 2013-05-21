@@ -62,6 +62,16 @@ namespace KinectAutoCalibration.Beamer
             DisplayContent(canvasImage);
         }
 
+        public int GetWidth()
+        {
+            return Beamer.GetBeamerWidth();
+        }
+
+        public int GetHeight()
+        {
+            return Beamer.GetBeamerHeight();
+        }
+
         public void DisplayContent(Canvas imageCanvas)
         {
             beamerWindow.Dispatcher.Invoke(

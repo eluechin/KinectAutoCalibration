@@ -8,6 +8,8 @@ namespace KinectAutoCalibration.Beamer
         BeamerPoint DisplayCalibrationImageEdge(bool isInverted, int position);
         void DisplayCalibrationImage(bool isInverted, int depth);
         void DisplayBlank();
+        int GetWidth();
+        int GetHeight();
 
         void DisplayContent(Canvas imageCanvas);
     }
