@@ -42,15 +42,15 @@ namespace KinectAutoCalibration.Calibration
 
         private List<Vector2D> CalculateNewPoints()
         {
-            var divisor = (int)Math.Pow(2, CALIBRATION_ROUNDS);
+            var divisor = (int) Math.Pow(2, CALIBRATION_ROUNDS);
             var numberOfAreaHorizontal = divisor;
             var numberOfAreaVertical = numberOfAreaHorizontal;
 
-            var beamerWidth = (int)Math.Sqrt(Math.Pow(pointA.BeamerPoint.X, 2) + Math.Pow(pointB.BeamerPoint.X, 2)) / 2;
-            var beamerHeight = (int)Math.Sqrt(Math.Pow(pointA.BeamerPoint.Y, 2) + Math.Pow(pointD.BeamerPoint.Y, 2)) / 2;
+            var beamerWidth = (int) Math.Sqrt(Math.Pow(pointA.BeamerPoint.X, 2) + Math.Pow(pointB.BeamerPoint.X, 2))/2;
+            var beamerHeight = (int) Math.Sqrt(Math.Pow(pointA.BeamerPoint.Y, 2) + Math.Pow(pointD.BeamerPoint.Y, 2))/2;
 
-            var beameAreaWidth = beamerWidth / divisor;
-            var beamerAreaHeight = beamerHeight / divisor;
+            var beameAreaWidth = beamerWidth/divisor;
+            var beamerAreaHeight = beamerHeight/divisor;
 
             var kinectVectorA = pointA.KinectPoint.ToVector2D();
             var kinectVectorB = pointA.KinectPoint.ToVector2D();
@@ -75,15 +75,16 @@ namespace KinectAutoCalibration.Calibration
             {
                 for (var j = 0; j <= numberOfAreaVertical; j++)
                 {
-                    if (i == 0 && j == 0 || i == numberOfAreaHorizontal && j == 0 || i == 0 && j == numberOfAreaVertical || i == numberOfAreaHorizontal && j == numberOfAreaVertical)
+                    if (i == 0 && j == 0 || i == numberOfAreaHorizontal && j == 0 || i == 0 && j == numberOfAreaVertical ||
+                        i == numberOfAreaHorizontal && j == numberOfAreaVertical)
                     {
                         continue;
                     }
 
                     var beamerPoint = new BeamerPoint
                         {
-                            X = pointA.BeamerPoint.X + i * beameAreaWidth,
-                            Y = pointA.BeamerPoint.Y + j * beamerAreaHeight
+                            X = pointA.BeamerPoint.X + i*beameAreaWidth,
+                            Y = pointA.BeamerPoint.Y + j*beamerAreaHeight
                         };
                     var beamerVectorP = beamerPoint.ToVector2D();
 
@@ -96,22 +97,22 @@ namespace KinectAutoCalibration.Calibration
                     var detPC = beamerVectorP.Determinant(beamerVectorC);
 
                     var alphaMy = detDA - detDB - detCA + detCB;
-                    var betaMy = -2 * detDA + detDB + detDP + detCA - detCP + detPA - detPB;
+                    var betaMy = -2*detDA + detDB + detDP + detCA - detCP + detPA - detPB;
                     var gammaMy = detDA - detDP - detPA + detPP;
 
-                    var my1 = (-(betaMy / 2) + Math.Sqrt(betaMy * betaMy - 4 * alphaMy * gammaMy)) / (2 * alphaMy);
-                    var my2 = (-(betaMy / 2) - Math.Sqrt(betaMy * betaMy - 4 * alphaMy * gammaMy)) / (2 * alphaMy);
+                    var my1 = (-(betaMy/2) + Math.Sqrt(betaMy*betaMy - 4*alphaMy*gammaMy))/(2*alphaMy);
+                    var my2 = (-(betaMy/2) - Math.Sqrt(betaMy*betaMy - 4*alphaMy*gammaMy))/(2*alphaMy);
 
                     var my = my1 >= 0 && my1 <= 1 ? my1 : my2;
 
                     var alphaLambda = detDC - detDB - detAC + detAB;
-                    var betaLambda = -2 * detDC + detDB + detDP + detAC - detAP + detPB;
+                    var betaLambda = -2*detDC + detDB + detDP + detAC - detAP + detPB;
                     var gammaLambda = detDC - detDP - detPC + detPP;
 
-                    var lambda1 = (-(betaLambda / 2) + Math.Sqrt(betaLambda * betaLambda - 4 * alphaLambda * gammaLambda)) / (2 *
-                                  alphaLambda);
-                    var lambda2 = (-(betaLambda / 2) - Math.Sqrt(betaLambda * betaLambda - 4 * alphaLambda * gammaLambda)) / (2 *
-                                  alphaLambda);
+                    var lambda1 = (-(betaLambda/2) + Math.Sqrt(betaLambda*betaLambda - 4*alphaLambda*gammaLambda))/(2*
+                                                                                                                    alphaLambda);
+                    var lambda2 = (-(betaLambda/2) - Math.Sqrt(betaLambda*betaLambda - 4*alphaLambda*gammaLambda))/(2*
+                                                                                                                    alphaLambda);
 
                     var lambda = lambda1 >= 0 && lambda1 <= 1 ? lambda1 : lambda2;
 
@@ -131,7 +132,7 @@ namespace KinectAutoCalibration.Calibration
                     Calibration.Points.Add(newPoint);
                 }
             }
-            
+
             return new List<Vector2D>();
         }
     }
