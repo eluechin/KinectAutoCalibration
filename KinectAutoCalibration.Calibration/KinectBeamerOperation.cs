@@ -56,9 +56,23 @@ namespace KinectAutoCalibration.Calibration
             return area[x, y].Color;
         }
 
-        public void DrawAreaToBeamer()
+        public void ColorizeObstacle()
         {
-            throw new NotImplementedException();
+            kinect.GetColorImage();
+
+            var diffImage = kinect.GetDifferenceImage(kinect.GetColorImage(), blankImage,
+                                                      KinectBeamerCalibration.THRESHOLD);
+
+            var kinectPoints = KinectPointArrayHelper.ExtractBlackPoints(diffImage);
+
+            var image = new OperationImage();
+
+            foreach (var kinectPoint in kinectPoints)
+            {
+                var point = Calibration.Points.Find((e) => e.KinectPoint.X == kinectPoint.X && e.KinectPoint.Y == kinectPoint.Y);
+                image.ColorizePoint(point.BeamerPoint);
+            }
+            beamerWindow.DisplayContent(image.OperationCanvas);
         }
 
         public int GetAreaWidth()
