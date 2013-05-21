@@ -4,7 +4,6 @@ using System.Threading;
 using KinectAutoCalibration.Beamer;
 using KinectAutoCalibration.Common;
 using KinectAutoCalibration.Kinect;
-using System.Linq;
 
 namespace KinectAutoCalibration.Calibration
 {
@@ -21,23 +20,8 @@ namespace KinectAutoCalibration.Calibration
         {
             RunSimpleStrategy(beamerWindow, kinect);
 
-            for (var i = 1; i <= CALIBRATION_ROUNDS; i++)
-            {
-                beamerWindow.DisplayCalibrationImage(true, i);
-                Thread.Sleep(KinectBeamerCalibration.THREAD_SLEEP);
-                var picture1 = kinect.GetColorImage();
-                Thread.Sleep(KinectBeamerCalibration.THREAD_SLEEP);
-                beamerWindow.DisplayCalibrationImage(false, i);
-                Thread.Sleep(KinectBeamerCalibration.THREAD_SLEEP);
-                var picture2 = kinect.GetColorImage();
+            CalculateNewPoints();
 
-                var diffKinectPoints = kinect.GetDifferenceImage(picture1, picture2, KinectBeamerCalibration.THRESHOLD);
-                var diffKinectVectors = KinectPointArrayHelper.ExtractBlackPointsAs2dVector(diffKinectPoints);
-
-                //var newPoints = CalculateNewPoints(i, diffKinectVectors);
-
-                //var initPoints = CalculateNewPoints(beamerToKinect.Values.GetEnumerator(), i);
-            }
 
             return new Dictionary<BeamerPoint, KinectPoint>();
             //TODO Implement
@@ -56,9 +40,9 @@ namespace KinectAutoCalibration.Calibration
             pointD = edgePoints.Find((e) => e.Name == "D");
         }
 
-        private List<Vector2D> CalculateNewPoints(int round, List<Vector2D> diffKinectVectors)
+        private List<Vector2D> CalculateNewPoints()
         {
-            var divisor = (int)Math.Pow(2, round);
+            var divisor = (int)Math.Pow(2, CALIBRATION_ROUNDS);
             var numberOfAreaHorizontal = divisor;
             var numberOfAreaVertical = numberOfAreaHorizontal;
 
@@ -72,6 +56,20 @@ namespace KinectAutoCalibration.Calibration
             var kinectVectorB = pointA.KinectPoint.ToVector2D();
             var kinectVectorC = pointA.KinectPoint.ToVector2D();
             var kinectVectorD = pointA.KinectPoint.ToVector2D();
+
+            var beamerVectorA = pointA.BeamerPoint.ToVector2D();
+            var beamerVectorB = pointB.BeamerPoint.ToVector2D();
+            var beamerVectorC = pointC.BeamerPoint.ToVector2D();
+            var beamerVectorD = pointD.BeamerPoint.ToVector2D();
+
+            var detDA = beamerVectorD.Determinant(beamerVectorA);
+            var detDB = beamerVectorD.Determinant(beamerVectorB);
+            var detCA = beamerVectorC.Determinant(beamerVectorA);
+            var detCB = beamerVectorC.Determinant(beamerVectorB);
+
+            var detDC = beamerVectorD.Determinant(beamerVectorC);
+            var detAB = beamerVectorA.Determinant(beamerVectorB);
+            var detAC = beamerVectorA.Determinant(beamerVectorC);
 
             for (var i = 0; i <= numberOfAreaHorizontal; i++)
             {
@@ -87,17 +85,57 @@ namespace KinectAutoCalibration.Calibration
                             X = pointA.BeamerPoint.X + i * beameAreaWidth,
                             Y = pointA.BeamerPoint.Y + j * beamerAreaHeight
                         };
+                    var beamerVectorP = beamerPoint.ToVector2D();
 
-                    var kinectPointPredicted = new KinectPoint();
+                    var detDP = beamerVectorD.Determinant(beamerVectorP);
+                    var detCP = beamerVectorC.Determinant(beamerVectorP);
+                    var detPA = beamerVectorP.Determinant(beamerVectorA);
+                    var detPB = beamerVectorP.Determinant(beamerVectorB);
+                    var detPP = beamerVectorP.Determinant(beamerVectorP);
+                    var detAP = beamerVectorA.Determinant(beamerVectorP);
+                    var detPC = beamerVectorP.Determinant(beamerVectorC);
 
+                    var alphaMy = detDA - detDB - detCA + detCB;
+                    var betaMy = -2 * detDA + detDB + detDP + detCA - detCP + detPA - detPB;
+                    var gammaMy = detDA - detDP - detPA + detPP;
 
+                    var my1 = (-(betaMy / 2) + Math.Sqrt(betaMy * betaMy - 4 * alphaMy * gammaMy)) / (2 * alphaMy);
+                    var my2 = (-(betaMy / 2) - Math.Sqrt(betaMy * betaMy - 4 * alphaMy * gammaMy)) / (2 * alphaMy);
+
+                    var my = my1 >= 0 && my1 <= 1 ? my1 : my2;
+
+                    var alphaLambda = detDC - detDB - detAC + detAB;
+                    var betaLambda = -2 * detDC + detDB + detDP + detAC - detAP + detPB;
+                    var gammaLambda = detDC - detDP - detPC + detPP;
+
+                    var lambda1 = (-(betaLambda / 2) + Math.Sqrt(betaLambda * betaLambda - 4 * alphaLambda * gammaLambda)) / (2 *
+                                  alphaLambda);
+                    var lambda2 = (-(betaLambda / 2) - Math.Sqrt(betaLambda * betaLambda - 4 * alphaLambda * gammaLambda)) / (2 *
+                                  alphaLambda);
+
+                    var lambda = lambda1 >= 0 && lambda1 <= 1 ? lambda1 : lambda2;
+
+                    var kinectVectorP =
+                        kinectVectorD.Multiply((1 - lambda)*(1 - my))
+                                     .Add(kinectVectorC.Multiply(((1 - lambda)*my)))
+                                     .Add(kinectVectorA.Multiply(lambda*(1 - my)))
+                                     .Add(kinectVectorB.Multiply(my*lambda));
+
+                    var kinectPointPredicted = kinectVectorP.ToKinectPoint();
+
+                    var newPoint = new Point
+                        {
+                            BeamerPoint = beamerPoint,
+                            KinectPoint = kinectPointPredicted
+                        };
+                    Calibration.Points.Add(newPoint);
                 }
             }
-
-            throw new NotImplementedException();
+            
+            return new List<Vector2D>();
         }
 
-        //private void CalculateInnerArea(int widthFactor, int heightFactor, int round)
+        //private void CalculateInnerArea(int widthFactor, int heightFactor, int CALIBRATION_ROUNDS)
         //{
         //    var topPoint = new Point();
         //    var middleLeftPoint = new Point();
@@ -105,7 +143,7 @@ namespace KinectAutoCalibration.Calibration
         //    var middleRightPoint = new Point();
         //    var bottomPoint = new Point();
 
-        //    topPoint.BeamerPoint = new BeamerPoint { X = widthFactor * (pointA.X + pointB.X) / round, Y = (pointA.Y + pointB.Y) / 2 };
+        //    topPoint.BeamerPoint = new BeamerPoint { X = widthFactor * (pointA.X + pointB.X) / CALIBRATION_ROUNDS, Y = (pointA.Y + pointB.Y) / 2 };
         //    middleLeftPoint.BeamerPoint = new BeamerPoint { X = (pointA.X + pointD.X) / 2, Y = heightFactor * (pointA.Y + pointD.Y) / heightFactor };
 
 
