@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using KinectAutoCalibration.Beamer;
 using KinectAutoCalibration.Common;
 using KinectAutoCalibration.Common.Algorithms;
 
@@ -133,9 +134,9 @@ namespace KinectAutoCalibration.Calibration
 
         private void CalculateAllPoints()
         {
-            for (var i = 0; i < beamerWindow.GetWidth(); i++)
+            for (var i = CalibrationImage.TILE_WIDTH + 5; i < beamerWindow.GetWidth() - CalibrationImage.TILE_WIDTH; i++)
             {
-                for (var j = 0; i < beamerWindow.GetHeight(); j++)
+                for (var j = CalibrationImage.TILE_HEIGHT + 5; j < beamerWindow.GetHeight()-CalibrationImage.TILE_HEIGHT; j++)
                 {
                     var point = new Point
                         {

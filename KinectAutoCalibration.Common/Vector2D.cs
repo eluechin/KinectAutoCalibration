@@ -70,5 +70,10 @@ namespace KinectAutoCalibration.Common
                 return false;
             return (int)X == (int)other.X && (int)Y == (int)other.Y;
         }
+
+        public Vector2D Copy()
+        {
+            return new Vector2D{X = X, Y = Y};
+        }
     }
 }
