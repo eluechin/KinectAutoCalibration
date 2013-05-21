@@ -54,6 +54,16 @@ namespace KinectAutoCalibration.Common
             return Math.Sqrt(Math.Pow(X, 2) + Math.Pow(Y, 2));
         }
 
+        public double Determinant(Vector2D vector)
+        {
+            return X * vector.Y - vector.X * Y;
+        }
+
+        public KinectPoint ToKinectPoint()
+        {
+            return new KinectPoint{X=(int) X, Y = (int) Y};
+        }
+
         public bool Equals(Vector2D other)
         {
             if (other == null || GetType() != other.GetType())
