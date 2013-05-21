@@ -1,16 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Documents;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using KinectAutoCalibration.Beamer;
 using KinectAutoCalibration.Common;
 using KinectAutoCalibration.Common.Algorithms;
-using KinectAutoCalibration.Kinect;
 
 namespace KinectAutoCalibration.Calibration
 {
@@ -38,9 +31,8 @@ namespace KinectAutoCalibration.Calibration
             }
         }
 
-        public void RealWorldToArea()
+        public void RealWorldToAreaEdge()
         {
-
             var a = Points.Find((e) => e.Name == "A");
             var b = Points.Find((e) => e.Name == "B");
             var c = Points.Find((e) => e.Name == "C");
@@ -66,7 +58,7 @@ namespace KinectAutoCalibration.Calibration
             var vectorAreaC = ChangeOfBasis.GetVectorInNewBasis(vectorRealWorldC);
             var vectorAreaD = ChangeOfBasis.GetVectorInNewBasis(vectorRealWorldD);
 
-            var areaPointA = new AreaPoint {X = (int) vectorAreaA.X, Y = (int) vectorAreaA.Y};
+            var areaPointA = new AreaPoint { X = (int)vectorAreaA.X, Y = (int)vectorAreaA.Y };
             var areaPointB = new AreaPoint { X = (int)vectorAreaB.X, Y = (int)vectorAreaB.Y };
             var areaPointC = new AreaPoint { X = (int)vectorAreaC.X, Y = (int)vectorAreaC.Y };
             var areaPointD = new AreaPoint { X = (int)vectorAreaD.X, Y = (int)vectorAreaD.Y };
@@ -85,7 +77,7 @@ namespace KinectAutoCalibration.Calibration
         private Vector3D[] GetOriginPoint(Vector3D rwvA, Vector3D rwvB, Vector3D rwvC, Vector3D rwvD)
         {
             Vector3D[] coordinateSystemPoints = new Vector3D[3];
-            
+
             var dictVectorsA = new Dictionary<Vector3D, int>();
             dictVectorsA.Add(rwvB, (int)(rwvB.Subtract(rwvA)).GetLength());
             dictVectorsA.Add(rwvD, (int)(rwvD.Subtract(rwvA)).GetLength());
@@ -117,8 +109,8 @@ namespace KinectAutoCalibration.Calibration
                 coordinateSystemPoints[0] = rwvB;
                 coordinateSystemPoints[1] = dictVectorsB.FirstOrDefault((x) => x.Value == dictVectorsB.Values.Max()).Key;
                 coordinateSystemPoints[2] = dictVectorsB.FirstOrDefault((x) => x.Value == dictVectorsB.Values.Min()).Key;
-            } 
-            else if ( sumC < sumA && sumC < sumB && sumC < sumD)
+            }
+            else if (sumC < sumA && sumC < sumB && sumC < sumD)
             {
                 coordinateSystemPoints[0] = rwvC;
                 coordinateSystemPoints[1] = dictVectorsC.FirstOrDefault((x) => x.Value == dictVectorsC.Values.Max()).Key;
@@ -136,7 +128,26 @@ namespace KinectAutoCalibration.Calibration
 
         public IKinectBeamerOperation CreateKinectBeamerOperation()
         {
+            CalculateAllPoints();
             return new KinectBeamerOperation();
+        }
+
+        private void CalculateAllPoints()
+        {
+            for (var i = CalibrationImage.TILE_WIDTH + 5; i < beamerWindow.GetWidth() - CalibrationImage.TILE_WIDTH; i++)
+            {
+                for (var j = CalibrationImage.TILE_HEIGHT + 5; j < beamerWindow.GetHeight()-CalibrationImage.TILE_HEIGHT; j++)
+                {
+                    var point = new Point
+                        {
+                            BeamerPoint = new BeamerPoint { X = i, Y = j }
+                        };
+                    point.KinectPoint = BeamerToKinect.CalculateKinectPoint(point.BeamerPoint);
+                    point.RealWorldPoint = KinectToRealWorld.CalculateRealWorldPoint(point.KinectPoint);
+                    point.AreaPoint = RealWorldToArea.CalculateAreaPoint(point.RealWorldPoint);
+                    Points.Add(point);
+                }
+            }
         }
     }
 }

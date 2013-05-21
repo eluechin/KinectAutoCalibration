@@ -85,7 +85,7 @@ namespace WpfApplication1
             IKinectBeamerCalibration kinectBeamerCalibration = new KinectBeamerCalibration();
             kinectBeamerCalibration.CalibrateBeamerToKinect(new CalibrateEdgePoints());
             kinectBeamerCalibration.ConvertKinectToRealWorld(new ConvertToRealWorldStrategy());
-            kinectBeamerCalibration.RealWorldToArea();
+            kinectBeamerCalibration.RealWorldToAreaEdge();
             kinectBeamerOperation = kinectBeamerCalibration.CreateKinectBeamerOperation();
 
             const string height = "Area Height: ";

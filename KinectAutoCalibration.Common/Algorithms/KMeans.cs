@@ -17,20 +17,24 @@ namespace KinectAutoCalibration.Common.Algorithms
         public static List<Vector2D> DoKMeans(List<Vector2D> vectorPoints, List<Vector2D> vectorCentroids)
         {
             var movedCentroids = new List<Vector2D>();
-            var oldCentroids = vectorCentroids;
+            var oldCentroids = new List<Vector2D>();
+            vectorCentroids.ForEach((e)=>oldCentroids.Add(e.Copy()));
             var finish = true;
 
             var loopCount = 0;
             
+            //TODO Abbruchkriterium....
             while (finish)
             {
                 var pointsToCentroids = MapPointsToNearestCentroids(vectorPoints, oldCentroids);
                 movedCentroids = MoveCentroids(pointsToCentroids);
 
-                finish = movedCentroids.All(oldCentroids.Contains);
+                finish = !movedCentroids.All(oldCentroids.Contains);
 
-                oldCentroids = movedCentroids;
+                oldCentroids.Clear();
+                movedCentroids.ForEach((e)=>oldCentroids.Add(e.Copy()));
                 loopCount++;
+                finish = false;
             }
 
             return movedCentroids;
@@ -47,9 +51,9 @@ namespace KinectAutoCalibration.Common.Algorithms
                 var sumVector = new Vector2D();
                 foreach (var vectorPoint in points)
                 {
-                    sumVector.Add(vectorPoint);
+                    sumVector = sumVector.Add(vectorPoint);
                 }
-                sumVector.Divide(points.Count);
+                sumVector=sumVector.Divide(points.Count);
 
                 centroid.X = sumVector.X;
                 centroid.Y = sumVector.Y;

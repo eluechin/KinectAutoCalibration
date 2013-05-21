@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Shapes;
 using System.Windows.Threading;
 using KinectAutoCalibration.Common;
 
@@ -14,6 +16,7 @@ namespace KinectAutoCalibration.Beamer
     public class BeamerWindow : IBeamerWindow
     {
         private readonly Window beamerWindow;
+        
 
         public BeamerWindow()
         {
@@ -28,6 +31,7 @@ namespace KinectAutoCalibration.Beamer
                 Height = Beamer.GetBeamerHeight()
             };
             beamerWindow.Show();
+            
         }
 
         /// <summary>
@@ -60,6 +64,16 @@ namespace KinectAutoCalibration.Beamer
             var beamerPointOfObjects = objects.Select(correctionStrategy.CalculateBeamerCoordinate).ToList();
             var canvasImage = CalibrationImage.CreateAreaImage(Beamer.GetBeamerWidth(), Beamer.GetBeamerHeight(), beamerPointOfObjects);
             DisplayContent(canvasImage);
+        }
+
+        public int GetWidth()
+        {
+            return Beamer.GetBeamerWidth();
+        }
+
+        public int GetHeight()
+        {
+            return Beamer.GetBeamerHeight();
         }
 
         public void DisplayContent(Canvas imageCanvas)
