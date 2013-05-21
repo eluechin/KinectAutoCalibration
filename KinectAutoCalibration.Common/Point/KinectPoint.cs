@@ -71,5 +71,10 @@ namespace KinectAutoCalibration.Common
         {
             return new Vector2D { X = X, Y = Y };
         }
+
+        public Vector2D ToVector2D(BeamerPoint beamerPoint)
+        {
+            return new Vector2D { X = X, Y = Y , BeamerPoint = beamerPoint};
+        }
     }
 }
