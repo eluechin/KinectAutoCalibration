@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using KinectAutoCalibration.Beamer;
@@ -55,7 +56,10 @@ namespace KinectAutoCalibration.Calibration
             var vectorRealWorldC = realWorldPointC.ToVector3D();
             var vectorRealWorldD = realWorldPointD.ToVector3D();
 
-            ChangeOfBasis.InitializeChangeOfBasis(vectorRealWorldA, vectorRealWorldB, vectorRealWorldC);
+            var coordinateSystemPoints = GetOriginPoint(vectorRealWorldA, vectorRealWorldB, vectorRealWorldC, vectorRealWorldD);
+            ChangeOfBasis.InitializeChangeOfBasis(coordinateSystemPoints[1], coordinateSystemPoints[0], coordinateSystemPoints[2]);
+            //ChangeOfBasis.InitializeChangeOfBasis(vectorRealWorldA, vectorRealWorldB, vectorRealWorldC);
+
 
             var vectorAreaA = ChangeOfBasis.GetVectorInNewBasis(vectorRealWorldA);
             var vectorAreaB = ChangeOfBasis.GetVectorInNewBasis(vectorRealWorldB);
@@ -76,6 +80,58 @@ namespace KinectAutoCalibration.Calibration
             b.AreaPoint = areaPointB;
             c.AreaPoint = areaPointC;
             d.AreaPoint = areaPointD;
+        }
+
+        private Vector3D[] GetOriginPoint(Vector3D rwvA, Vector3D rwvB, Vector3D rwvC, Vector3D rwvD)
+        {
+            Vector3D[] coordinateSystemPoints = new Vector3D[3];
+            
+            var dictVectorsA = new Dictionary<Vector3D, int>();
+            dictVectorsA.Add(rwvB, (int)(rwvB.Subtract(rwvA)).GetLength());
+            dictVectorsA.Add(rwvD, (int)(rwvD.Subtract(rwvA)).GetLength());
+            int sumA = dictVectorsA.Values.Sum();
+
+            var dictVectorsB = new Dictionary<Vector3D, int>();
+            dictVectorsB.Add(rwvA, (int)(rwvA.Subtract(rwvB)).GetLength());
+            dictVectorsB.Add(rwvC, (int)(rwvC.Subtract(rwvB)).GetLength());
+            int sumB = dictVectorsB.Values.Sum();
+
+            var dictVectorsC = new Dictionary<Vector3D, int>();
+            dictVectorsC.Add(rwvB, (int)(rwvB.Subtract(rwvC)).GetLength());
+            dictVectorsC.Add(rwvD, (int)(rwvD.Subtract(rwvC)).GetLength());
+            int sumC = dictVectorsC.Values.Sum();
+
+            var dictVectorsD = new Dictionary<Vector3D, int>();
+            dictVectorsD.Add(rwvC, (int)(rwvC.Subtract(rwvD)).GetLength());
+            dictVectorsD.Add(rwvA, (int)(rwvA.Subtract(rwvD)).GetLength());
+            int sumD = dictVectorsD.Values.Sum();
+
+            if (sumA < sumB && sumA < sumC && sumA < sumD)
+            {
+                coordinateSystemPoints[0] = rwvA;
+                coordinateSystemPoints[1] = dictVectorsA.FirstOrDefault((x) => x.Value == dictVectorsA.Values.Max()).Key;
+                coordinateSystemPoints[2] = dictVectorsA.FirstOrDefault((x) => x.Value == dictVectorsA.Values.Min()).Key;
+            }
+            else if (sumB < sumA && sumB < sumC && sumB < sumD)
+            {
+                coordinateSystemPoints[0] = rwvB;
+                coordinateSystemPoints[1] = dictVectorsB.FirstOrDefault((x) => x.Value == dictVectorsB.Values.Max()).Key;
+                coordinateSystemPoints[2] = dictVectorsB.FirstOrDefault((x) => x.Value == dictVectorsB.Values.Min()).Key;
+            } 
+            else if ( sumC < sumA && sumC < sumB && sumC < sumD)
+            {
+                coordinateSystemPoints[0] = rwvC;
+                coordinateSystemPoints[1] = dictVectorsC.FirstOrDefault((x) => x.Value == dictVectorsC.Values.Max()).Key;
+                coordinateSystemPoints[2] = dictVectorsC.FirstOrDefault((x) => x.Value == dictVectorsC.Values.Min()).Key;
+            }
+            else
+            {
+                coordinateSystemPoints[0] = rwvD;
+                coordinateSystemPoints[1] = dictVectorsD.FirstOrDefault((x) => x.Value == dictVectorsD.Values.Max()).Key;
+                coordinateSystemPoints[2] = dictVectorsD.FirstOrDefault((x) => x.Value == dictVectorsD.Values.Min()).Key;
+            }
+
+            return coordinateSystemPoints;
         }
 
         public IKinectBeamerOperation CreateKinectBeamerOperation()

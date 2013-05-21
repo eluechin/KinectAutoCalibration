@@ -14,5 +14,7 @@ namespace KinectAutoCalibration.Calibration
         void CalculateObstacleCentroid();
         int GetObstacleCentroidX();
         int GetObstacleCentroidY();
+        byte[] CompareZCalcStrategies(IKinectToRealWorldStrategy kinectToRealWorldStrategy);
+        //byte[] GetObstacleDiffImage();
     }
 }

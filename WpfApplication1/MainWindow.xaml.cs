@@ -118,11 +118,16 @@ namespace WpfApplication1
         private void Obst(object sender, RoutedEventArgs e)
         {
             kinectBeamerOperation.CalculateObstacleCentroid();
+            //var diffImage = kinectBeamerOperation.GetObstacleDiffImage();
+            //this._colorImageBitmap2.WritePixels(this._colorImageBitmapRect, diffImage, this._colorImageStride, 0);
 
             var x = "Obstacle x: ";
             var y = "Obstacle y: ";
             ObstacleX.Text = x + kinectBeamerOperation.GetObstacleCentroidX();
             ObstacleY.Text = y + kinectBeamerOperation.GetObstacleCentroidY();
+            
+
+            //old:
             //_kC.GetObstacles();
 
             //var pixelsObst = _kC.GetDifferenceImageObst();
@@ -167,6 +172,12 @@ namespace WpfApplication1
         private void KinectDown(object sender, RoutedEventArgs e)
         {
             //_kC.LowerKinect();
+        }
+
+        private void CompareZCalc(object sender, RoutedEventArgs e)
+        {
+            var diffPoints = kinectBeamerOperation.CompareZCalcStrategies(new CalculateToRealWorldStrategy());
+            this._colorImageBitmap1.WritePixels(this._colorImageBitmapRect, diffPoints, this._colorImageStride, 0);
         }
     }
 
