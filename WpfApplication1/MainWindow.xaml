@@ -24,9 +24,9 @@
         <TextBlock Text="4" Grid.Row="2" Grid.Column="0" Height="20" Width="525" TextAlignment="Center"></TextBlock>
         <TextBlock Text="'interne' Area" Grid.Row="2" Grid.Column="1" Height="20" Width="525" TextAlignment="Center"></TextBlock>
         <TextBlock Text="Live Bild" Grid.Row="2" Grid.Column="2" Height="20" Width="525" TextAlignment="Center"></TextBlock>
-        <Image x:Name="ColorImageElement4" Grid.Row="3" Grid.Column="0" Height="350" Width="525"/>
-        <Image x:Name="ColorImageElement5" Grid.Row="3" Grid.Column="1" Height="350" Width="525"/>
-        <Image x:Name="ColorImageElement6" Grid.Row="3" Grid.Column="2" Height="350" Width="525"/>
+        <Image x:Name="ColorImageElement4" Grid.Row="3" Grid.Column="0" Height="35" Width="525"/>
+        <Image x:Name="ColorImageElement5" Grid.Row="3" Grid.Column="1" Height="35" Width="525"/>
+        <Image x:Name="ColorImageElement6" Grid.Row="3" Grid.Column="2" Height="35" Width="525"/>
         <StackPanel Height="50" Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal">
             <Button Content="Start Calibration" Click="InitialCalibration"></Button>
             <!--<Button Content="Obstacle Middle" Click="ObstMid"></Button>-->

@@ -166,8 +166,7 @@ namespace KinectAutoCalibration.Calibration
             var maxDiff = differences.Max();
             var minDiff = differences.Min();
             var rangeDiff = maxDiff - minDiff;
-            //var levels = 20;
-
+            
             //Grey : 128, 128, 128
             var r = 0x80;
             var g = 0x80;
@@ -183,8 +182,8 @@ namespace KinectAutoCalibration.Calibration
                 if (diff == 0)
                 {
                     r = 0x00;
-                    b = 0xFF;
-                    g = 0x00;
+                    b = 0x00;
+                    g = 0xFF;
                 }
                 else
                 {
@@ -195,6 +194,14 @@ namespace KinectAutoCalibration.Calibration
                 }
                 
                 diffPoints[p.Key.X, p.Key.Y] = new KinectPoint(p.Key.X, p.Key.Y, diff, r, g, b);
+            }
+
+            var edgepoints = Calibration.GetEdgePoints();
+            foreach (var edgepoint in edgepoints)
+            {
+                var x = edgepoint.KinectPoint.X;
+                var y = edgepoint.KinectPoint.Y;
+                diffPoints[x, y] = new KinectPoint(x,y, 0x00, 0x00, 0xFF);
             }
 
             return kinect.ConvertKinectPointArrayToByteArray(diffPoints, Kinect.Kinect.KINECT_IMAGE_WIDTH, Kinect.Kinect.KINECT_IMAGE_HEIGHT);

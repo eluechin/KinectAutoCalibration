@@ -34,6 +34,7 @@ namespace KinectAutoCalibration.Calibration
             RealWorldPoint rA = Calibration.Points.Find(x => x.Name == "A").RealWorldPoint;
             RealWorldPoint rB = Calibration.Points.Find(x => x.Name == "B").RealWorldPoint;
             RealWorldPoint rC = Calibration.Points.Find(x => x.Name == "C").RealWorldPoint;
+            RealWorldPoint rD = Calibration.Points.Find(x => x.Name == "D").RealWorldPoint;
 
             return kinect.CreateRealWorldCoordinates(kinectPoints, rA, rB, rC);
         }
