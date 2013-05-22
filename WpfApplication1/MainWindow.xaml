@@ -18,7 +18,7 @@
         <TextBlock Text="1" Grid.Row="0" Grid.Column="0" Height="20" Width="525" TextAlignment="Center"></TextBlock>
         <TextBlock Text="Differenz-Bild [Gegenstand]" Grid.Row="0" Grid.Column="1" Height="20" Width="525" TextAlignment="Center"></TextBlock>
         <TextBlock Text="Differenz-Bild [Feld]" Grid.Row="0" Grid.Column="2" Height="20" Width="525" TextAlignment="Center"></TextBlock>
-        <Image x:Name="ColorImageElement1" Grid.Row="1" Grid.Column="0" Height="350" Width="525"/>
+        <Image x:Name="ColorImageElement1" Grid.Row="1" Grid.Column="0" Height="480" Width="640"/>
         <Image x:Name="ColorImageElement2" Grid.Row="1" Grid.Column="1" Height="350" Width="525"/>
         <Image x:Name="ColorImageElement3" Grid.Row="1" Grid.Column="2" Height="350" Width="525"/>
         <TextBlock Text="4" Grid.Row="2" Grid.Column="0" Height="20" Width="525" TextAlignment="Center"></TextBlock>

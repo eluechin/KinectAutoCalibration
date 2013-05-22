@@ -38,7 +38,7 @@ namespace KinectAutoCalibration.Common
                     var p = kinectPoints[j, i];
                     if (p.R - BLACK_TRESHOLD < 0 && p.G - BLACK_TRESHOLD < 0 && p.B - BLACK_TRESHOLD < 0)
                     {
-                        blackPixel.Add(p);
+                        blackPixel.Add(new KinectPoint{X = j, Y = i});
                     }
                 }
             }

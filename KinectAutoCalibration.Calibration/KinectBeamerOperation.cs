@@ -70,6 +70,8 @@ namespace KinectAutoCalibration.Calibration
             foreach (var kinectPoint in kinectPoints)
             {
                 var point = Calibration.Points.Find((e) => e.KinectPoint.X == kinectPoint.X && e.KinectPoint.Y == kinectPoint.Y);
+                if (point == null)
+                    continue;
                 image.ColorizePoint(point.BeamerPoint);
             }
             beamerWindow.DisplayContent(image.OperationCanvas);
@@ -178,11 +180,20 @@ namespace KinectAutoCalibration.Calibration
                 //r = 0x80 + diff / 1;
                 //g = 0x80 + diff / 1;
                 //b = 0x80 + diff / 1;
+                if (diff == 0)
+                {
+                    r = 0x00;
+                    b = 0xFF;
+                    g = 0x00;
+                }
+                else
+                {
+                    r = 0x80 + (int)(diff * 127.0 / rangeDiff);
+                    g = 0x80 + (int)(diff * 127.0 / rangeDiff);
+                    b = 0x80 + (int)(diff * 127.0 / rangeDiff);
 
-                r = 0x80 + (diff % 127);
-                g = 0x80 + (diff % 127);
-                b = 0x80 + (diff % 127);
-
+                }
+                
                 diffPoints[p.Key.X, p.Key.Y] = new KinectPoint(p.Key.X, p.Key.Y, diff, r, g, b);
             }
 

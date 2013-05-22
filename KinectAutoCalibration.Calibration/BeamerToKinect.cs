@@ -59,7 +59,7 @@ namespace KinectAutoCalibration.Calibration
             var my1 = (-(betaMy / 2) + detMy) / (2 * alphaMy);
             var my2 = (-(betaMy / 2) - detMy) / (2 * alphaMy);
 
-            var my = my1 >= 0 && my1 <= 1 ? my1 : my2;
+            var my = -gammaMy/betaMy;
 
             var alphaLambda = detDC - detDB - detAC + detAB;
             var betaLambda = -2 * detDC + detDB + detDP + detAC - detAP + detPB;
@@ -69,7 +69,7 @@ namespace KinectAutoCalibration.Calibration
             var lambda1 = (-(betaLambda / 2) + detLambda) / (2 * alphaLambda);
             var lambda2 = (-(betaLambda / 2) - detLambda) / (2 * alphaLambda);
 
-            var lambda = lambda1 >= 0 && lambda1 <= 1 ? lambda1 : lambda2;
+            var lambda = -gammaLambda/betaLambda;
 
             var kinectVectorP =
                 kinectVectorD.Multiply((1 - lambda) * (1 - my))

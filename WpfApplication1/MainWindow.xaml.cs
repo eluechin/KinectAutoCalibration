@@ -147,7 +147,7 @@ namespace WpfApplication1
 
         private void dsplArea(object sender, RoutedEventArgs e)
         {
-            //_kC.DisplayArea();
+            kinectBeamerOperation.ColorizeObstacle();
         }
 
         private void dsplBlank(object sender, RoutedEventArgs e)

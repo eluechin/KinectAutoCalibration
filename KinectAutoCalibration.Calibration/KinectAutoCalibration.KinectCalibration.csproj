@@ -64,7 +64,6 @@
     <Compile Include="KinectToRealWorld.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RealWorldToArea.cs" />
-    <Compile Include="TempCalibration.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\KinectAutoCalibration.Beamer\KinectAutoCalibration.Beamer.csproj">
