@@ -134,9 +134,9 @@ namespace KinectAutoCalibration.Calibration
 
         private void CalculateAllPoints()
         {
-            for (var i = CalibrationImage.TILE_WIDTH + 5; i < beamerWindow.GetWidth() - CalibrationImage.TILE_WIDTH; i++)
+            for (var i = 0; i < beamerWindow.GetWidth(); i++)
             {
-                for (var j = CalibrationImage.TILE_HEIGHT + 5; j < beamerWindow.GetHeight()-CalibrationImage.TILE_HEIGHT; j++)
+                for (var j = 0; j < beamerWindow.GetHeight(); j++)
                 {
                     var point = new Point
                         {

@@ -58,21 +58,29 @@ namespace KinectAutoCalibration.Calibration
 
         public void ColorizeObstacle()
         {
-            kinect.GetColorImage();
-
             var diffImage = kinect.GetDifferenceImage(kinect.GetColorImage(), blankImage,
                                                       KinectBeamerCalibration.THRESHOLD);
 
             var kinectPoints = KinectPointArrayHelper.ExtractBlackPoints(diffImage);
 
             var image = new OperationImage();
+            var points = new List<Point>();
+            var beamerPoints = new List<BeamerPoint>();
 
             foreach (var kinectPoint in kinectPoints)
             {
-                var point = Calibration.Points.Find((e) => e.KinectPoint.X == kinectPoint.X && e.KinectPoint.Y == kinectPoint.Y);
-                if (point == null)
+                //var point = Calibration.Points.Find((e) => e.KinectPoint.X == kinectPoint.X && e.KinectPoint.Y == kinectPoint.Y);
+                points = Calibration.Points.FindAll(e => e.KinectPoint.X == kinectPoint.X && e.KinectPoint.Y == kinectPoint.Y);
+                //if (point == null)
+                //    continue;
+                if(points.Count == 0)
                     continue;
-                image.ColorizePoint(point.BeamerPoint);
+                beamerPoints.AddRange(points.Select(p => p.BeamerPoint));
+            }
+
+            foreach (var beamerPoint in beamerPoints)
+            {
+                image.ColorizePoint(beamerPoint);
             }
             beamerWindow.DisplayContent(image.OperationCanvas);
         }
