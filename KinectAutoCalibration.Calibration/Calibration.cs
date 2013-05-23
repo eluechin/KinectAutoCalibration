@@ -13,6 +13,8 @@ namespace KinectAutoCalibration.Calibration
         //TODO: New Name...
         public static List<Point> Points;
 
+        public static List<BeamerPoint>[,] KinectSpace; 
+
         protected readonly IBeamerWindow beamerWindow;
         protected readonly IKinect kinect;
 

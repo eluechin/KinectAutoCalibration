@@ -70,12 +70,13 @@ namespace KinectAutoCalibration.Calibration
             foreach (var kinectPoint in kinectPoints)
             {
                 //var point = Calibration.Points.Find((e) => e.KinectPoint.X == kinectPoint.X && e.KinectPoint.Y == kinectPoint.Y);
-                points = Calibration.Points.FindAll(e => e.KinectPoint.X == kinectPoint.X && e.KinectPoint.Y == kinectPoint.Y);
+                //points = Calibration.Points.FindAll(e => e.KinectPoint.X == kinectPoint.X && e.KinectPoint.Y == kinectPoint.Y);
+                
                 //if (point == null)
                 //    continue;
                 if(points.Count == 0)
                     continue;
-                beamerPoints.AddRange(points.Select(p => p.BeamerPoint));
+                beamerPoints.AddRange(Calibration.KinectSpace[kinectPoint.X, kinectPoint.Y]);
             }
 
             foreach (var beamerPoint in beamerPoints)

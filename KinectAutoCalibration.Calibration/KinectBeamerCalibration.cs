@@ -142,7 +142,8 @@ namespace KinectAutoCalibration.Calibration
                         {
                             BeamerPoint = new BeamerPoint { X = i, Y = j }
                         };
-                    point.KinectPoint = BeamerToKinect.CalculateKinectPoint(point.BeamerPoint);
+                    var kinectPoint = BeamerToKinect.CalculateKinectPoint(point.BeamerPoint);
+                    Calibration.KinectSpace[kinectPoint.X, kinectPoint.Y].Add(new BeamerPoint { X = i, Y = j });
                     point.RealWorldPoint = KinectToRealWorld.CalculateRealWorldPoint(point.KinectPoint);
                     point.AreaPoint = RealWorldToArea.CalculateAreaPoint(point.RealWorldPoint);
                     Points.Add(point);
