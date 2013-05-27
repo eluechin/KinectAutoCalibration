@@ -12,7 +12,7 @@ namespace KinectAutoCalibration.Calibration
     {
         public Dictionary<KinectPoint, RealWorldPoint> TransformKinectToRealWorld(IKinect kinect, List<KinectPoint> kinectPoints)
         {
-            var cornerPoints = new List<KinectPoint>();
+            /*var cornerPoints = new List<KinectPoint>();
             foreach (var point in Calibration.GetEdgePoints())
             {
                 cornerPoints.Add(point.KinectPoint);
@@ -29,14 +29,18 @@ namespace KinectAutoCalibration.Calibration
                         point.RealWorldPoint = realWorldPoint.Value;
                     }
                 }
-            }
+            }*/
 
-            RealWorldPoint rA = Calibration.Points.Find(x => x.Name == "A").RealWorldPoint;
-            RealWorldPoint rB = Calibration.Points.Find(x => x.Name == "B").RealWorldPoint;
-            RealWorldPoint rC = Calibration.Points.Find(x => x.Name == "C").RealWorldPoint;
-            RealWorldPoint rD = Calibration.Points.Find(x => x.Name == "D").RealWorldPoint;
+            //RealWorldPoint rA = Calibration.Points.Find(x => x.Name == "A").RealWorldPoint;
+            //RealWorldPoint rB = Calibration.Points.Find(x => x.Name == "B").RealWorldPoint;
+            //RealWorldPoint rC = Calibration.Points.Find(x => x.Name == "C").RealWorldPoint;
+            //RealWorldPoint rD = Calibration.Points.Find(x => x.Name == "D").RealWorldPoint;
+            RealWorldPoint rOrigin = Calibration.Points.Find(x => x.PointType == PointType.Origin).RealWorldPoint;
+            RealWorldPoint rXAxisPoint = Calibration.Points.Find(x => x.PointType == PointType.xAxis).RealWorldPoint;
+            RealWorldPoint rYAxisPoint = Calibration.Points.Find(x => x.PointType == PointType.yAxis).RealWorldPoint;
 
-            return kinect.CreateRealWorldCoordinates(kinectPoints, rA, rB, rC);
+
+            return kinect.CreateRealWorldCoordinates(kinectPoints, rXAxisPoint, rOrigin, rYAxisPoint);
         }
     }
 }

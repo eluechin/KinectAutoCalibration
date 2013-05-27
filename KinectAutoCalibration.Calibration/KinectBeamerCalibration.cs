@@ -123,6 +123,14 @@ namespace KinectAutoCalibration.Calibration
                 coordinateSystemPoints[2] = dictVectorsD.FirstOrDefault((x) => x.Value == dictVectorsD.Values.Min()).Key;
             }
 
+            var originPoint = Calibration.GetEdgePoints().Find((x) => x.RealWorldPoint.Equals(coordinateSystemPoints[0].ToRealWorldPoint()));
+            var xAxisPoint = Calibration.GetEdgePoints().Find((x) => x.RealWorldPoint.Equals(coordinateSystemPoints[1].ToRealWorldPoint()));
+            var yAxisPoint = Calibration.GetEdgePoints().Find((x) => x.RealWorldPoint.Equals(coordinateSystemPoints[2].ToRealWorldPoint()));
+
+            originPoint.PointType = PointType.Origin;
+            xAxisPoint.PointType = PointType.xAxis;
+            yAxisPoint.PointType = PointType.yAxis;
+
             return coordinateSystemPoints;
         }
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace KinectAutoCalibration.Common
 {
-    public class RealWorldPoint
+    public class RealWorldPoint : IEquatable<RealWorldPoint>
     {
          public RealWorldPoint()
         {
@@ -51,5 +51,16 @@ namespace KinectAutoCalibration.Common
         public int G { get; set; }
         public int B { get; set; }
         public int Type { get; set; }
+
+        public bool Equals(RealWorldPoint other)
+        {
+            if (this.X == other.X &&
+                this.Y == other.Y &&
+                this.Z == other.Z)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }
