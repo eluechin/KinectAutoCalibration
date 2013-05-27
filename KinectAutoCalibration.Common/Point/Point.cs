@@ -12,6 +12,7 @@
 
     public enum PointType
     {
+        None,
         Origin,
         xAxis,
         yAxis

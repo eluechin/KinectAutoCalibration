@@ -50,7 +50,6 @@ namespace KinectAutoCalibration.Calibration
 
             var coordinateSystemPoints = GetOriginPoint(vectorRealWorldA, vectorRealWorldB, vectorRealWorldC, vectorRealWorldD);
             ChangeOfBasis.InitializeChangeOfBasis(coordinateSystemPoints[1], coordinateSystemPoints[0], coordinateSystemPoints[2]);
-            //ChangeOfBasis.InitializeChangeOfBasis(vectorRealWorldA, vectorRealWorldB, vectorRealWorldC);
 
 
             var vectorAreaA = ChangeOfBasis.GetVectorInNewBasis(vectorRealWorldA);
