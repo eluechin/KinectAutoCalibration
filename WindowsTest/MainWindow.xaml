@@ -1,0 +1,13 @@
+﻿<Window x:Class="WindowsTest.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="350" Width="525">
+    <StackPanel>
+        <Button Content="DrawCircle" Click="DrawCircle_Click"/>
+        <Button Content="Draw Chessboard Black/White" Click="DrawChessboard1_Click"/>
+        <Button Content="Draw Chessboard White/Black" Click="DrawChessboard2_Click"></Button>
+        <Button Content="Draw Chessboard Green/Red" Click="DrawChessboard3_Click"></Button>
+        <Button Content="Draw Calib img" Click="CalibImg_Click"></Button>
+        <Button Content="Draw Calib img inverted" Click="CalibImgInv_Click"></Button>
+    </StackPanel>
+</Window>
