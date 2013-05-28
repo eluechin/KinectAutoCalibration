@@ -12,6 +12,7 @@ namespace KinectAutoCalibration.Calibration
     {
         //TODO: New Name...
         public static List<Point> Points;
+        public static List<Point> EdgePoints; 
 
         public static List<BeamerPoint>[,] KinectSpace; 
 
@@ -28,6 +29,7 @@ namespace KinectAutoCalibration.Calibration
             beamerToKinect = new Dictionary<BeamerPoint, KinectPoint>();
             kinectToRealWorld = new Dictionary<KinectPoint, RealWorldPoint>();
             realWorldToArea = new Dictionary<RealWorldPoint, AreaPoint>();
+            KinectSpace = new List<BeamerPoint>[640,480];
 
             try
             {

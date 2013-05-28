@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Windows.Media.Imaging;
 using KinectAutoCalibration.Common;
 
 namespace KinectAutoCalibration.Calibration
@@ -15,6 +16,9 @@ namespace KinectAutoCalibration.Calibration
         int GetObstacleCentroidY();
         byte[] CompareZCalcStrategies(IKinectToRealWorldStrategy kinectToRealWorldStrategy);
         void ColorizeObstacle();
+
+        WriteableBitmap GetKinectSpace();
+        void DisplayBlank();
         //byte[] GetObstacleDiffImage();
     }
 }

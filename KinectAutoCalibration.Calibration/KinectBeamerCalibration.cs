@@ -134,16 +134,22 @@ namespace KinectAutoCalibration.Calibration
 
         private void CalculateAllPoints()
         {
-            for (var i = 0; i < beamerWindow.GetWidth(); i++)
+            var width = beamerWindow.GetWidth();
+            var height = beamerWindow.GetHeight();
+            for (var i = 0; i < width; i++)
             {
-                for (var j = 0; j < beamerWindow.GetHeight(); j++)
+                for (var j = 0; j < height; j++)
                 {
                     var point = new Point
                         {
                             BeamerPoint = new BeamerPoint { X = i, Y = j }
                         };
                     var kinectPoint = BeamerToKinect.CalculateKinectPoint(point.BeamerPoint);
+                    if (Calibration.KinectSpace[kinectPoint.X, kinectPoint.Y] == null)
+                        Calibration.KinectSpace[kinectPoint.X, kinectPoint.Y] = new List<BeamerPoint>();
                     Calibration.KinectSpace[kinectPoint.X, kinectPoint.Y].Add(new BeamerPoint { X = i, Y = j });
+
+                    point.KinectPoint = kinectPoint;
                     point.RealWorldPoint = KinectToRealWorld.CalculateRealWorldPoint(point.KinectPoint);
                     point.AreaPoint = RealWorldToArea.CalculateAreaPoint(point.RealWorldPoint);
                     Points.Add(point);

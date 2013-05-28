@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using KinectAutoCalibration.Common;
@@ -17,7 +18,6 @@ namespace KinectAutoCalibration.Beamer
     {
         private readonly Window beamerWindow;
         
-
         public BeamerWindow()
         {
             beamerWindow = new Window
@@ -81,6 +81,17 @@ namespace KinectAutoCalibration.Beamer
             beamerWindow.Dispatcher.Invoke(
             DispatcherPriority.Render,
             new Action(() => beamerWindow.Content = imageCanvas));
+            beamerWindow.WindowState = WindowState.Minimized;
+            beamerWindow.WindowState = WindowState.Maximized;
+        }
+
+        public void DisplayContent(WriteableBitmap bmp)
+        {
+            var image = new Image();
+            beamerWindow.Dispatcher.Invoke(
+            DispatcherPriority.Render,
+            new Action(() => beamerWindow.Content = image));
+            image.Source = bmp;
             beamerWindow.WindowState = WindowState.Minimized;
             beamerWindow.WindowState = WindowState.Maximized;
         }

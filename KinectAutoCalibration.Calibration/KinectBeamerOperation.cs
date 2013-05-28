@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Threading;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using KinectAutoCalibration.Beamer;
 using KinectAutoCalibration.Common;
 using KinectAutoCalibration.Common.Algorithms;
 using KinectAutoCalibration.Kinect;
+using Color = System.Drawing.Color;
 using Point = KinectAutoCalibration.Common.Point;
 
 namespace KinectAutoCalibration.Calibration
@@ -27,7 +31,7 @@ namespace KinectAutoCalibration.Calibration
         public KinectBeamerOperation()
         {
             CalculateAreaDimensions();
-            area = new AreaPoint[areaWidth,areaHeight];
+            area = new AreaPoint[areaWidth, areaHeight];
 
             try
             {
@@ -48,7 +52,7 @@ namespace KinectAutoCalibration.Calibration
 
         public void ColorizePoint(int x, int y, Color color)
         {
-            area[x,y] = new AreaPoint{Color = color, X = x, Y = y};
+            area[x, y] = new AreaPoint { Color = color, X = x, Y = y };
         }
 
         public Color GetColorAtPoint(int x, int y)
@@ -58,32 +62,36 @@ namespace KinectAutoCalibration.Calibration
 
         public void ColorizeObstacle()
         {
-            var diffImage = kinect.GetDifferenceImage(kinect.GetColorImage(), blankImage,
+            Thread.Sleep(500);
+            var obstacleImage = kinect.GetColorImage();
+            var diffImage = kinect.GetDifferenceImage(obstacleImage, blankImage,
                                                       KinectBeamerCalibration.THRESHOLD);
 
             var kinectPoints = KinectPointArrayHelper.ExtractBlackPoints(diffImage);
 
             var image = new OperationImage();
-            var points = new List<Point>();
             var beamerPoints = new List<BeamerPoint>();
 
             foreach (var kinectPoint in kinectPoints)
             {
-                //var point = Calibration.Points.Find((e) => e.KinectPoint.X == kinectPoint.X && e.KinectPoint.Y == kinectPoint.Y);
-                //points = Calibration.Points.FindAll(e => e.KinectPoint.X == kinectPoint.X && e.KinectPoint.Y == kinectPoint.Y);
-                
-                //if (point == null)
-                //    continue;
-                if(points.Count == 0)
-                    continue;
-                beamerPoints.AddRange(Calibration.KinectSpace[kinectPoint.X, kinectPoint.Y]);
+                var x = 639 - kinectPoint.X;
+                if (Calibration.KinectSpace[x, kinectPoint.Y] != null)
+                {
+                    var tbeamerPoints = Calibration.KinectSpace[x, kinectPoint.Y];
+                    beamerPoints.AddRange(tbeamerPoints);
+                }
             }
 
             foreach (var beamerPoint in beamerPoints)
             {
                 image.ColorizePoint(beamerPoint);
             }
-            beamerWindow.DisplayContent(image.OperationCanvas);
+            beamerWindow.DisplayContent(image.BeamerImage);
+        }
+
+        public void DisplayBlank()
+        {
+            beamerWindow.DisplayBlank();
         }
 
         public int GetAreaWidth()
@@ -128,7 +136,7 @@ namespace KinectAutoCalibration.Calibration
             Calibration.Points.Find((x) => x.Name == "ObstacleCentroid").AreaPoint = areaPointObstCentroid;
         }
 
-        public void ConvertKinectToRealWorld(IKinectToRealWorldStrategy kinectToRealWorldStrategy, List<KinectPoint> kinectPoints )
+        public void ConvertKinectToRealWorld(IKinectToRealWorldStrategy kinectToRealWorldStrategy, List<KinectPoint> kinectPoints)
         {
             var newPoints = kinectToRealWorldStrategy.TransformKinectToRealWorld(kinect, kinectPoints);
             foreach (var element in newPoints)
@@ -141,13 +149,52 @@ namespace KinectAutoCalibration.Calibration
             }
         }
 
+        public WriteableBitmap GetKinectSpace()
+        {
+            var kinectSpace = new WriteableBitmap(
+                640,
+                480,
+                96,
+                96,
+                PixelFormats.Bgr32,
+                null);
+
+            for (var i = 0; i < 639; i++)
+            {
+                for (var j = 0; j < 479; j++)
+                {
+                    byte[] ColorData;
+                    if (Calibration.KinectSpace[i, j] == null)
+                    {
+                        ColorData = new byte[] { 255, 255, 255, 0 }; // B G R
+                    }
+                    else
+                    {
+                        ColorData = new byte[] { 255, 0, 0, 0 }; // B G R
+                    }
+
+                    //ColorData = new byte[] { 255, 0, 0, 0 }; // B G R
+
+                    Int32Rect rect = new Int32Rect(
+                            i,
+                            j,
+                            1,
+                            1);
+
+                    kinectSpace.WritePixels(rect, ColorData, 4, 0);
+                }
+            }
+
+            return kinectSpace;
+        }
+
         private void CalculateAreaDimensions()
         {
             var areaPointA = Calibration.Points.Find((e) => e.Name == "A").AreaPoint;
             var areaPointB = Calibration.Points.Find((e) => e.Name == "B").AreaPoint;
             var areaPointC = Calibration.Points.Find((e) => e.Name == "C").AreaPoint;
 
-            areaWidth = (int) Math.Sqrt(Math.Pow(areaPointB.X - areaPointA.X, 2) + Math.Pow(areaPointB.Y - areaPointB.Y, 2));
+            areaWidth = (int)Math.Sqrt(Math.Pow(areaPointB.X - areaPointA.X, 2) + Math.Pow(areaPointB.Y - areaPointB.Y, 2));
             areaHeight = (int)Math.Sqrt(Math.Pow(areaPointB.X - areaPointC.X, 2) + Math.Pow(areaPointB.Y - areaPointC.Y, 2));
         }
 
@@ -156,15 +203,15 @@ namespace KinectAutoCalibration.Calibration
             var kinectPoints = kinect.CreateKinectPointArray();
             var kinectPointsList = new List<KinectPoint>();
 
-            for (int y = 0; y < Kinect.Kinect.KINECT_IMAGE_HEIGHT ; ++y)
+            for (int y = 0; y < Kinect.Kinect.KINECT_IMAGE_HEIGHT; ++y)
             {
                 for (int x = 0; x < Kinect.Kinect.KINECT_IMAGE_WIDTH; ++x)
-                    kinectPointsList.Add(kinectPoints[x,y]);
+                    kinectPointsList.Add(kinectPoints[x, y]);
             }
 
             var dictPoints = kinectToRealWorldStrategy.TransformKinectToRealWorld(kinect, kinectPointsList);
 
-            var diffPoints = new KinectPoint[Kinect.Kinect.KINECT_IMAGE_WIDTH,Kinect.Kinect.KINECT_IMAGE_HEIGHT];
+            var diffPoints = new KinectPoint[Kinect.Kinect.KINECT_IMAGE_WIDTH, Kinect.Kinect.KINECT_IMAGE_HEIGHT];
             var differences = new List<int>();
 
             foreach (var p in dictPoints)
@@ -175,7 +222,7 @@ namespace KinectAutoCalibration.Calibration
             var maxDiff = differences.Max();
             var minDiff = differences.Min();
             var rangeDiff = maxDiff - minDiff;
-            
+
             //Grey : 128, 128, 128
             var r = 0x80;
             var g = 0x80;
@@ -201,7 +248,7 @@ namespace KinectAutoCalibration.Calibration
                     b = 0x80 + (int)(diff * 127.0 / rangeDiff);
 
                 }
-                
+
                 diffPoints[p.Key.X, p.Key.Y] = new KinectPoint(p.Key.X, p.Key.Y, diff, r, g, b);
             }
 
@@ -210,13 +257,13 @@ namespace KinectAutoCalibration.Calibration
             {
                 var x = edgepoint.KinectPoint.X;
                 var y = edgepoint.KinectPoint.Y;
-                diffPoints[x, y] = new KinectPoint(x,y, 0x00, 0x00, 0xFF);
+                diffPoints[x, y] = new KinectPoint(x, y, 0x00, 0x00, 0xFF);
             }
 
             return kinect.ConvertKinectPointArrayToByteArray(diffPoints, Kinect.Kinect.KINECT_IMAGE_WIDTH, Kinect.Kinect.KINECT_IMAGE_HEIGHT);
             //return kinect.ConvertKinectPointArrayToByteArray(kinectPoints,Kinect.Kinect.KINECT_IMAGE_WIDTH, Kinect.Kinect.KINECT_IMAGE_HEIGHT);
         }
-        
+
         /*
         public byte[] GetObstacleDiffImage()
         {

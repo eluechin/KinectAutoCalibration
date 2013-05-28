@@ -1,4 +1,6 @@
-﻿namespace KinectAutoCalibration.Calibration
+﻿using System.Windows.Media.Imaging;
+
+namespace KinectAutoCalibration.Calibration
 {
     public interface IKinectBeamerCalibration : ICalibration
     {
@@ -7,5 +9,6 @@
         void RealWorldToAreaEdge();
 
         IKinectBeamerOperation CreateKinectBeamerOperation();
+        
     }
 }

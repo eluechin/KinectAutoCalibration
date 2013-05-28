@@ -92,6 +92,8 @@ namespace WpfApplication1
             const string width = "Area Width: ";
             AreaHeight.Text = height + kinectBeamerOperation.GetAreaHeight();
             AreaWidth.Text = width + kinectBeamerOperation.GetAreaWidth();
+            var kinectSpace = kinectBeamerOperation.GetKinectSpace();
+            ColorImageElement1.Source = kinectSpace;
 
             //_kC.InitialCalibration();
             ////this.ColorImageElement1.Source = _kC.GetPic1Bitmap();
@@ -152,7 +154,7 @@ namespace WpfApplication1
 
         private void dsplBlank(object sender, RoutedEventArgs e)
         {
-            //_kC.DisplayBlank();
+            kinectBeamerOperation.DisplayBlank();
         }
 
         private void CalibBeamer(object sender, RoutedEventArgs e)

@@ -1,4 +1,5 @@
 ﻿using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 using KinectAutoCalibration.Common;
 
 namespace KinectAutoCalibration.Beamer
@@ -12,5 +13,6 @@ namespace KinectAutoCalibration.Beamer
         int GetHeight();
 
         void DisplayContent(Canvas imageCanvas);
+        void DisplayContent(WriteableBitmap bmp);
     }
 }

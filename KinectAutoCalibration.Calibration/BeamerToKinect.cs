@@ -21,10 +21,10 @@ namespace KinectAutoCalibration.Calibration
 
         public static KinectPoint CalculateKinectPoint(BeamerPoint beamerPoint)
         {
-            var kinectVectorA = pointA.KinectPoint.ToVector2D();
-            var kinectVectorB = pointA.KinectPoint.ToVector2D();
-            var kinectVectorC = pointA.KinectPoint.ToVector2D();
-            var kinectVectorD = pointA.KinectPoint.ToVector2D();
+            var kinectVectorA = new Vector2D { X = 639 - pointA.KinectPoint.X, Y = pointA.KinectPoint.Y };
+            var kinectVectorB = new Vector2D { X = 639 - pointB.KinectPoint.X, Y = pointB.KinectPoint.Y };
+            var kinectVectorC = new Vector2D { X = 639 - pointC.KinectPoint.X, Y = pointC.KinectPoint.Y };
+            var kinectVectorD = new Vector2D { X = 639 - pointD.KinectPoint.X, Y = pointD.KinectPoint.Y };
 
             var beamerVectorA = pointA.BeamerPoint.ToVector2D();
             var beamerVectorB = pointB.BeamerPoint.ToVector2D();
@@ -59,17 +59,19 @@ namespace KinectAutoCalibration.Calibration
             var my1 = (-(betaMy / 2) + detMy) / (2 * alphaMy);
             var my2 = (-(betaMy / 2) - detMy) / (2 * alphaMy);
 
-            var my = -gammaMy/betaMy;
+            var tmy = -gammaMy / betaMy;
+            var my = tmy;
 
             var alphaLambda = detDC - detDB - detAC + detAB;
-            var betaLambda = -2 * detDC + detDB + detDP + detAC - detAP + detPB;
+            var betaLambda = -2 * detDC + detDB + detDP + detAC - detAP + detPC - detPB;
             var gammaLambda = detDC - detDP - detPC;
 
             var detLambda = Math.Sqrt(betaLambda * betaLambda - 4 * alphaLambda * gammaLambda);
             var lambda1 = (-(betaLambda / 2) + detLambda) / (2 * alphaLambda);
             var lambda2 = (-(betaLambda / 2) - detLambda) / (2 * alphaLambda);
 
-            var lambda = -gammaLambda/betaLambda;
+            var tlambda = -gammaLambda / betaLambda;
+            var lambda = tlambda;
 
             var kinectVectorP =
                 kinectVectorD.Multiply((1 - lambda) * (1 - my))
