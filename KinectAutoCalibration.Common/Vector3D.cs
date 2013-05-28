@@ -91,5 +91,10 @@ namespace KinectAutoCalibration.Common
                     (this.Z / magnitude)
                 );
         }
+
+        public RealWorldPoint ToRealWorldPoint()
+        {
+            return new RealWorldPoint{X = (int)this.X, Y = (int)this.Y, Z = (int)this.Z};
+        }
     }
 }

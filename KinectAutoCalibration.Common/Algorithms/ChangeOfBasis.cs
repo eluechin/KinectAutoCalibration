@@ -77,7 +77,7 @@ namespace KinectAutoCalibration.Common.Algorithms
             ChangeOfBasis._point2 = point2;
             ChangeOfBasis._point3 = point3;
 
-            _n = GetNormalVector(); //evtl umschreiben und anstatt _point1 gerade _e1 übergeben!
+            _n = GetNormalVector();
             _e1 = GetE1Vector();
             _e2 = GetE2Vector();
 

@@ -34,6 +34,9 @@ namespace KinectAutoCalibration.Kinect.Algorithms
         /// millimeter-coordinates of the new RealWorldPoints.
         /// When to use: As soon as the corner points are given in RealWorldPoints use this method to calculate the RealWorld-coordinates of 
         /// additional points needed.
+        /// How to use: The parameters rwA, rwB and rwC represent the corner points of the detected field. rwB is the RealWorld-point which is a direct
+        /// of the other RealWorld-points rwA and rwC. Direct means, that those point can be reached from rwB by following the adjacent outlines of the field.
+        /// Important: The list must not contain only NULL-Points!
         /// </summary>
         /// <param name="kinectPoints">a list of KinectPoints which should be converted</param>
         /// <param name="rwA">RealWorldPoint A which represents a corner point and 
@@ -69,6 +72,7 @@ namespace KinectAutoCalibration.Kinect.Algorithms
         /// This method is used to calculate the RealWorldCalculation-coordinates for a given KinectPoint
         /// When to use: use only to calculate the corner points' RealWorldCalculation-coordinates. For other KinectPoints use the other "CalculateRealWorldVector" 
         /// method.
+        /// Important: The passed KinectPoint must not be NULL!
         /// </summary>
         /// <param name="p">the KinectPoint which should be transformed to a RealWorldPoint </param>
         /// <returns>Returns the RealWorldPoint corresponding to the passed KinectPoint</returns>
@@ -87,6 +91,9 @@ namespace KinectAutoCalibration.Kinect.Algorithms
         /// This method is used to calculate the RealWorldCalculation-coordinates for a given KinectPoint
         /// When to use: use only to calculate the corner points' RealWorldCalculation-coordinates. For other KinectPoints use the other "CalculateRealWorldVector" 
         /// method.
+        /// How to use: The parameters rwA, rwB and rwC represent the corner points of the detected field. rwB is the RealWorld-point which is a direct
+        /// of the other RealWorld-points rwA and rwC. Direct means, that those point can be reached from rwB by following the adjacent outlines of the field.
+        /// Important: The passed KinectPoint must not be NULL!
         /// </summary>
         /// <param name="p">the KinectPoint which should be transformed to a RealWorldPoint </param>
         /// <param name="rA">the RealWorldPoint A which represents a corner point and 
@@ -112,14 +119,6 @@ namespace KinectAutoCalibration.Kinect.Algorithms
             var vec_rP = new Vector3D(x,y,1);
 
             rwPoint.Z = (int)(q / (vec_N.ScalarProduct(vec_rP)));
-
-            //RWPoint.Z = kinectPoint.Z;
-
-            //var numerator = 2*(a.Z * b.Y * c.X - a.Y * b.Z * c.X - a.Z * b.X * c.Y + a.X * b.Z * c.Y + a.Y * b.X * c.Z - a.X * b.Y * c.Z) * HEIGHT_CONST * WIDTH_CONST;
-            //var denominator = ((a.Z*(b.X - c.X) + b.Z*c.X - b.X*c.Z + a.X*(-b.Z + c.Z))*(KINECT_IMAGE_HEIGHT - 2*p.Y)*WIDTH_CONST + HEIGHT_CONST*((-a.Y*b.Z + a.Z*(b.Y-c.Y) + b.Z*c.Y + a.Y*c.Z*-b.Y*c.Z) * (2*p.X - KINECT_IMAGE_WIDTH) + 2*(-a.X*b.Y + a.Y*(b.X-c.X) + b.Y*c.X + a.X*c.Y - b.X*c.Y)*WIDTH_CONST));
-            //var numerator = 1;
-            //var denominator = 1;
-            //rwPoint.Z = (int) (numerator/denominator);
             
             rwPoint.X = (int) ((p.X - (Kinect.KINECT_IMAGE_WIDTH / 2))*rwPoint.Z/Kinect.WIDTH_CONST);
             rwPoint.Y = (int)((p.Y - (Kinect.KINECT_IMAGE_HEIGHT / 2)) * rwPoint.Z /Kinect.HEIGHT_CONST);

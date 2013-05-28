@@ -50,7 +50,6 @@ namespace KinectAutoCalibration.Calibration
 
             var coordinateSystemPoints = GetOriginPoint(vectorRealWorldA, vectorRealWorldB, vectorRealWorldC, vectorRealWorldD);
             ChangeOfBasis.InitializeChangeOfBasis(coordinateSystemPoints[1], coordinateSystemPoints[0], coordinateSystemPoints[2]);
-            //ChangeOfBasis.InitializeChangeOfBasis(vectorRealWorldA, vectorRealWorldB, vectorRealWorldC);
 
 
             var vectorAreaA = ChangeOfBasis.GetVectorInNewBasis(vectorRealWorldA);
@@ -122,6 +121,14 @@ namespace KinectAutoCalibration.Calibration
                 coordinateSystemPoints[1] = dictVectorsD.FirstOrDefault((x) => x.Value == dictVectorsD.Values.Max()).Key;
                 coordinateSystemPoints[2] = dictVectorsD.FirstOrDefault((x) => x.Value == dictVectorsD.Values.Min()).Key;
             }
+
+            var originPoint = Calibration.GetEdgePoints().Find((x) => x.RealWorldPoint.Equals(coordinateSystemPoints[0].ToRealWorldPoint()));
+            var xAxisPoint = Calibration.GetEdgePoints().Find((x) => x.RealWorldPoint.Equals(coordinateSystemPoints[1].ToRealWorldPoint()));
+            var yAxisPoint = Calibration.GetEdgePoints().Find((x) => x.RealWorldPoint.Equals(coordinateSystemPoints[2].ToRealWorldPoint()));
+
+            originPoint.PointType = PointType.Origin;
+            xAxisPoint.PointType = PointType.xAxis;
+            yAxisPoint.PointType = PointType.yAxis;
 
             return coordinateSystemPoints;
         }

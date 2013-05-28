@@ -23,7 +23,6 @@ namespace KinectAutoCalibration.Calibration
         private int areaHeight;
         private KinectPoint[,] kinectPoints;
         private KinectPoint[,] blankImage;
-        //private KinectPoint[,] diffImage;
 
         private AreaPoint[,] area;
         private AreaPoint areaPointObstCentroid;
@@ -223,7 +222,6 @@ namespace KinectAutoCalibration.Calibration
             var minDiff = differences.Min();
             var rangeDiff = maxDiff - minDiff;
 
-            //Grey : 128, 128, 128
             var r = 0x80;
             var g = 0x80;
             var b = 0x80;
@@ -232,9 +230,7 @@ namespace KinectAutoCalibration.Calibration
             {
                 int diff = p.Key.Z - p.Value.Z;
                 //diff positiv --> gegen weiss, diff negativ --> gegen schwarz
-                //r = 0x80 + diff / 1;
-                //g = 0x80 + diff / 1;
-                //b = 0x80 + diff / 1;
+   
                 if (diff == 0)
                 {
                     r = 0x00;
@@ -261,14 +257,7 @@ namespace KinectAutoCalibration.Calibration
             }
 
             return kinect.ConvertKinectPointArrayToByteArray(diffPoints, Kinect.Kinect.KINECT_IMAGE_WIDTH, Kinect.Kinect.KINECT_IMAGE_HEIGHT);
-            //return kinect.ConvertKinectPointArrayToByteArray(kinectPoints,Kinect.Kinect.KINECT_IMAGE_WIDTH, Kinect.Kinect.KINECT_IMAGE_HEIGHT);
         }
-
-        /*
-        public byte[] GetObstacleDiffImage()
-        {
-            return kinect.ConvertKinectPointArrayToByteArray(diffImage, Kinect.Kinect.KINECT_IMAGE_WIDTH, Kinect.Kinect.KINECT_IMAGE_HEIGHT);
-        }*/
 
     }
 }

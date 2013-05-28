@@ -82,7 +82,7 @@ namespace KinectAutoCalibration.Kinect
         ///     A small threshold detects pixels with a slightly color change. </param>
         /// <returns>
         /// Returns the difference image as a KinectPoint-array (2-dimensional array).
-        /// Can also return "null" if at least one of the passed images is null.</returns>
+        /// Caution: Can also return "null" if at least one of the passed images is null.</returns>
         public KinectPoint[,] GetDifferenceImage(KinectPoint[,] image2, KinectPoint[,] image1, int threshold)
         {
             if (image1 != null || image2 != null)
@@ -128,7 +128,8 @@ namespace KinectAutoCalibration.Kinect
         /// <summary>
         /// This method requests an image from the Color Stream of a connected kinect.</summary>
         /// <returns>
-        /// returns the retrieved color data as an array of KinectPoints</returns>
+        /// returns the retrieved color data as an array of KinectPoints
+        /// Caution: Returns null if no frame is received from the kinect.</returns>
         public KinectPoint[,] GetColorImage()
         {
             try
@@ -158,7 +159,8 @@ namespace KinectAutoCalibration.Kinect
         /// <summary>
         /// This method requests an image from the Depth Stream of a connected kinect</summary>
         /// <returns>
-        /// returns the retrieved depth data as a short-array</returns>
+        /// returns the retrieved depth data as a short-array
+        /// Caution: Returns null if no frame is received from the kinect.</returns>
         public short[] GetDepthImage()
         {
             try
@@ -225,7 +227,6 @@ namespace KinectAutoCalibration.Kinect
 
                     for (int y = 0; y < depthFrame.Height; ++y)
                     {
-                        //for (int x = 0; x < depthFrame.Width; ++x)
                         for (int x = depthFrame.Width - 1; x >= 0; --x)
                         {
                             kinArray[x, y] = new KinectPoint((KINECT_IMAGE_WIDTH-1)-x, y, -1, 0, 0, 0);
@@ -234,7 +235,6 @@ namespace KinectAutoCalibration.Kinect
 
                     for (int y = 0; y < depthFrame.Height; ++y)
                     {
-                        //for (int x = 0; x < depthFrame.Width; ++x)
                         for (int x = depthFrame.Width - 1; x >= 0; --x)
                         {
                             int depthIndex = x + (y * this._kinect.DepthStream.FrameWidth);
@@ -248,7 +248,6 @@ namespace KinectAutoCalibration.Kinect
                             if (IsValidKinectPoint(colorInDepthX, colorInDepthY, depthImagePixelData[depthIndex].Depth))
                             {
                                 kinArray[(KINECT_IMAGE_WIDTH - 1) - colorInDepthX, colorInDepthY] =
-                                //kinArray[colorInDepthX, colorInDepthY] =
                                     new KinectPoint(colorImagePixelData[depthIndex].X,
                                                     colorImagePixelData[depthIndex].Y,
                                                     depthImagePixelData[depthIndex].Depth,
@@ -266,7 +265,6 @@ namespace KinectAutoCalibration.Kinect
                             else
                             {
                                 kinArray[(KINECT_IMAGE_WIDTH - 1) - colorInDepthX, colorInDepthY] =
-                                //kinArray[colorInDepthX, colorInDepthY] =
                                     new KinectPoint(colorImagePixelData[depthIndex].X,
                                                     colorImagePixelData[depthIndex].Y,
                                                     -1,

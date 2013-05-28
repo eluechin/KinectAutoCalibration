@@ -12,31 +12,12 @@ namespace KinectAutoCalibration.Calibration
     {
         public Dictionary<KinectPoint, RealWorldPoint> TransformKinectToRealWorld(IKinect kinect, List<KinectPoint> kinectPoints)
         {
-            var cornerPoints = new List<KinectPoint>();
-            foreach (var point in Calibration.GetEdgePoints())
-            {
-                cornerPoints.Add(point.KinectPoint);
-            }
+            
+            RealWorldPoint rOrigin = Calibration.Points.Find(x => x.PointType == PointType.Origin).RealWorldPoint;
+            RealWorldPoint rXAxisPoint = Calibration.Points.Find(x => x.PointType == PointType.xAxis).RealWorldPoint;
+            RealWorldPoint rYAxisPoint = Calibration.Points.Find(x => x.PointType == PointType.yAxis).RealWorldPoint;
 
-            var rwCornerPoints = kinect.CreateRealWorldCoordinates(cornerPoints);
-            //TODO: necessary? strategy ConvertToRealWorldStrategy always needed?
-            foreach (var point in Calibration.Points)
-            {
-                foreach (var realWorldPoint in rwCornerPoints)
-                {
-                    if (point.KinectPoint.Equals(realWorldPoint.Key))
-                    {
-                        point.RealWorldPoint = realWorldPoint.Value;
-                    }
-                }
-            }
-
-            RealWorldPoint rA = Calibration.Points.Find(x => x.Name == "A").RealWorldPoint;
-            RealWorldPoint rB = Calibration.Points.Find(x => x.Name == "B").RealWorldPoint;
-            RealWorldPoint rC = Calibration.Points.Find(x => x.Name == "C").RealWorldPoint;
-            RealWorldPoint rD = Calibration.Points.Find(x => x.Name == "D").RealWorldPoint;
-
-            return kinect.CreateRealWorldCoordinates(kinectPoints, rA, rB, rC);
+            return kinect.CreateRealWorldCoordinates(kinectPoints, rXAxisPoint, rOrigin, rYAxisPoint);
         }
     }
 }
