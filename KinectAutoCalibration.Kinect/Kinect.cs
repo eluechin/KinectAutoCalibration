@@ -82,7 +82,7 @@ namespace KinectAutoCalibration.Kinect
         ///     A small threshold detects pixels with a slightly color change. </param>
         /// <returns>
         /// Returns the difference image as a KinectPoint-array (2-dimensional array).
-        /// Can also return "null" if at least one of the passed images is null.</returns>
+        /// Caution: Can also return "null" if at least one of the passed images is null.</returns>
         public KinectPoint[,] GetDifferenceImage(KinectPoint[,] image2, KinectPoint[,] image1, int threshold)
         {
             if (image1 != null || image2 != null)
@@ -128,7 +128,8 @@ namespace KinectAutoCalibration.Kinect
         /// <summary>
         /// This method requests an image from the Color Stream of a connected kinect.</summary>
         /// <returns>
-        /// returns the retrieved color data as an array of KinectPoints</returns>
+        /// returns the retrieved color data as an array of KinectPoints
+        /// Caution: Returns null if no frame is received from the kinect.</returns>
         public KinectPoint[,] GetColorImage()
         {
             try
@@ -158,7 +159,8 @@ namespace KinectAutoCalibration.Kinect
         /// <summary>
         /// This method requests an image from the Depth Stream of a connected kinect</summary>
         /// <returns>
-        /// returns the retrieved depth data as a short-array</returns>
+        /// returns the retrieved depth data as a short-array
+        /// Caution: Returns null if no frame is received from the kinect.</returns>
         public short[] GetDepthImage()
         {
             try

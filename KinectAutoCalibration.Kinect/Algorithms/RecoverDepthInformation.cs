@@ -12,6 +12,7 @@ namespace KinectAutoCalibration.Kinect.Algorithms
         /// <summary>
         /// This method is used to recover missing depth information of the KinectPoints delivered by the Kinect. 
         /// This solves the problem of having incorrect depth values or NULL-values in the KinectPoint-array.  
+        /// Important: The array must not contain only NULL-Points!
         /// </summary>
         /// <param name="kinArray">the array whose KinectPoint-values have to be corrected.</param>
         /// <returns>Returns a new KinectPoint-array containing valid depth information for every KinectPoint</returns>
@@ -53,7 +54,8 @@ namespace KinectAutoCalibration.Kinect.Algorithms
         }
 
         /// <summary>
-        /// This method searches all neighbors of a KinectPoint within a KinectPoint-array   
+        /// This method searches all neighbors of a KinectPoint within a KinectPoint-array 
+        /// Important: The array must not contain only NULL-Points!  
         /// </summary>
         /// <param name="kinArray">the array which contains the needed KinectPoints </param>
         /// /// <param name="kinPoint">the KinectPoint whose neighbors should be found </param>

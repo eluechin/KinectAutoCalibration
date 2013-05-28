@@ -21,7 +21,7 @@ namespace KinectAutoCalibration.Kinect
         /// <returns>Returns the passed array written to a Bitmap ready to use it in a WPF- or WinForms-Project</returns>
         public WriteableBitmap ConvertKinectPointArrayToWritableBitmap(KinectPoint[,] kinArray, int width, int height)
         {
-            var stride = width * 4; // bytes per row
+            var stride = width * Kinect.BYTES_PER_PIXEL;
 
             byte[] pixelData = new byte[height * stride];
             int index = 0;
@@ -58,7 +58,7 @@ namespace KinectAutoCalibration.Kinect
         /// <returns>Returns the passed array as a one-dimensional array of bytes</returns>
         public byte[] ConvertKinectPointArrayToByteArray(KinectPoint[,] kinArray, int width, int height)
         {
-            var stride = width * 4; // bytes per row
+            var stride = width * Kinect.BYTES_PER_PIXEL;
 
             byte[] pixelData = new byte[height * stride];
             int index = 0;
