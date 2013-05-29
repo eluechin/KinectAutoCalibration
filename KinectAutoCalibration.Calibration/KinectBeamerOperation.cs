@@ -61,6 +61,7 @@ namespace KinectAutoCalibration.Calibration
 
         public void ColorizeObstacle()
         {
+            beamerWindow.DisplayBlank();
             Thread.Sleep(KinectBeamerCalibration.THREAD_SLEEP);
             var obstacleImage = kinect.GetColorImage();
             var diffImage = kinect.GetDifferenceImage(obstacleImage, blankImage,
@@ -90,6 +91,7 @@ namespace KinectAutoCalibration.Calibration
 
         public WriteableBitmap ObstacleToArea()
         {
+            beamerWindow.DisplayBlank();
             Thread.Sleep(KinectBeamerCalibration.THREAD_SLEEP);
             var obstacleImage = kinect.GetColorImage();
             var diffImage = kinect.GetDifferenceImage(obstacleImage, blankImage,

@@ -23,11 +23,7 @@ namespace WpfApplication1
     /// </summary>
     public partial class MainWindow : Window
     {
-        private WriteableBitmap _colorImageBitmap1;
-        private WriteableBitmap _colorImageBitmap2;
-        private WriteableBitmap _colorImageBitmap3;
-        private WriteableBitmap _colorImageBitmap4;
-        private WriteableBitmap _colorImageBitmap5;
+
         private Int32Rect _colorImageBitmapRect;
         private int _colorImageStride;
         private byte[] _colorImagePixelData1;
@@ -42,25 +38,12 @@ namespace WpfApplication1
             try
             {
                 CompositionTarget.Rendering += CompositionTarget_Rendering;
-
-                //_kC.InitialCalibration();
                 this._colorImageBitmapRect = new Int32Rect(0, 0, 640, 480);
                 this._colorImageStride = 640 * 4;
            
-                this._colorImageBitmap1 = new WriteableBitmap(640, 480, 96, 96, PixelFormats.Bgr32, null);
-                this._colorImageBitmap2 = new WriteableBitmap(640, 480, 96, 96, PixelFormats.Bgr32, null);
-                this._colorImageBitmap3 = new WriteableBitmap(640, 480, 96, 96, PixelFormats.Bgr32, null);
-                this._colorImageBitmap4 = new WriteableBitmap(640, 480, 96, 96, PixelFormats.Bgr32, null);
-                this._colorImageBitmap5 = new WriteableBitmap(640, 480, 96, 96, PixelFormats.Bgr32, null);
-
-                this.ColorImageElement1.Source = this._colorImageBitmap1;
-                this.ColorImageElement2.Source = this._colorImageBitmap2;
-                this.ColorImageElement3.Source = this._colorImageBitmap3;
-                this.ColorImageElement4.Source = this._colorImageBitmap4;
-                this.ColorImageElement5.Source = this._colorImageBitmap5;
-                //this.ColorImageElement1.Source = kC.GetDifferenceBitmap();
-                
-                //this.ColorImageElement3.Source = kC.GetPic2Bitmap();
+                LiveImage.Source = new WriteableBitmap(640, 480, 96, 96, PixelFormats.Bgr32, null);
+                DiffImage.Source = new WriteableBitmap(640, 480, 96, 96, PixelFormats.Bgr32, null);
+                AreaImage.Source = new WriteableBitmap(640, 480, 96, 96, PixelFormats.Bgr32, null);
 
             }
             catch (Exception e)
@@ -74,68 +57,40 @@ namespace WpfApplication1
            //this.ColorImageElement6.Source = _kC.PollLiveColorImage();
         }
 
-        private void InitialCalibration(object sender, RoutedEventArgs e)
+        private void AutoCalibration(object sender, RoutedEventArgs e)
         {
-            IKinectBeamerCalibration kinectBeamerCalibration = new KinectBeamerCalibration();
-            kinectBeamerCalibration.CalibrateBeamerToKinect(new CalibrateEdgePoints());
-            kinectBeamerCalibration.ConvertKinectToRealWorld(new ConvertToRealWorldStrategy());
-            kinectBeamerCalibration.RealWorldToAreaEdge();
-            kinectBeamerOperation = kinectBeamerCalibration.CreateKinectBeamerOperation();
+            kinectBeamerOperation = new AutoKinectBeamerCalibration().StartAutoCalibration();
 
             const string height = "Area Height: ";
             const string width = "Area Width: ";
-            AreaHeight.Text = height + kinectBeamerOperation.GetAreaHeight();
-            AreaWidth.Text = width + kinectBeamerOperation.GetAreaWidth();
-            var kinectSpace = kinectBeamerOperation.GetKinectSpace();
-            ColorImageElement1.Source = kinectSpace;
+            //AreaHeight.Text = height + kinectBeamerOperation.GetAreaHeight();
+            //AreaWidth.Text = width + kinectBeamerOperation.GetAreaWidth();
 
-            //_kC.InitialCalibration();
-            ////this.ColorImageElement1.Source = _kC.GetPic1Bitmap();
-            ////this.ColorImageElement2.Source = _kC.GetPic2Bitmap();
-            ////this.ColorImageElement1.Source = _kC.GetPicKinP();
-            ////this.ColorImageElement3.Source = _kC.GetDifferenceBitmap();
+            //Deprecated trololo
+            //var kinectSpace = kinectBeamerOperation.GetKinectSpace();
+            //ColorImageElement1.Source = kinectBeamerOperation.GetKinectSpace();
 
-            //var pixelsKinP = _kC.GetPicKinP();
-            //this._colorImageBitmap1.WritePixels(this._colorImageBitmapRect, pixelsKinP, this._colorImageStride, 0);
-
-
-            //var pixels = _kC.GetDifferenceImage();
-            //this._colorImageBitmap3.WritePixels(this._colorImageBitmapRect, pixels, this._colorImageStride, 0);
-
-            //var h = "Area Height: ";
-            //var w = "Area Width: ";
-            //AreaHeight.Text = h + _kC.GetAreaHeight().ToString();
-            //AreaWidth.Text = w + _kC.GetAreaWidth().ToString();
-
-            //this.WindowState = WindowState.Minimized;
-            //this.WindowState = WindowState.Maximized;
         }
 
-        private void Obst(object sender, RoutedEventArgs e)
-        {
-            kinectBeamerOperation.CalculateObstacleCentroid();
-            //var diffImage = kinectBeamerOperation.GetObstacleDiffImage();
-            //this._colorImageBitmap2.WritePixels(this._colorImageBitmapRect, diffImage, this._colorImageStride, 0);
-
-            var x = "Obstacle x: ";
-            var y = "Obstacle y: ";
-            ObstacleX.Text = x + kinectBeamerOperation.GetObstacleCentroidX();
-            ObstacleY.Text = y + kinectBeamerOperation.GetObstacleCentroidY();
-        }
-
-        private void dsplArea(object sender, RoutedEventArgs e)
+        private void ObstacleToBeamer(object sender, RoutedEventArgs e)
         {
             kinectBeamerOperation.ColorizeObstacle();
         }
 
-        private void dsplBlank(object sender, RoutedEventArgs e)
+        private void ObstacleToArea(object sender, RoutedEventArgs e)
         {
-            kinectBeamerOperation.DisplayBlank();
+            AreaImage.Source = kinectBeamerOperation.ObstacleToArea();
         }
 
-        private void CalibBeamer(object sender, RoutedEventArgs e)
+        private void MeasureCentroid(object sender, RoutedEventArgs e)
         {
-            ColorImageElement1.Source = kinectBeamerOperation.ObstacleToArea();
+            kinectBeamerOperation.CalculateObstacleCentroid();
+
+            var x = "Obstacle x: ";
+            var y = "Obstacle y: ";
+            //ObstacleX.Text = x + kinectBeamerOperation.GetObstacleCentroidX();
+            //ObstacleY.Text = y + kinectBeamerOperation.GetObstacleCentroidY();
+            
         }
 
         private void KinectUp(object sender, RoutedEventArgs e)
@@ -149,11 +104,12 @@ namespace WpfApplication1
             //_kC.LowerKinect();
         }
 
-        private void CompareZCalc(object sender, RoutedEventArgs e)
-        {
-            var diffPoints = kinectBeamerOperation.CompareZCalcStrategies(new CalculateToRealWorldStrategy());
-            this._colorImageBitmap1.WritePixels(this._colorImageBitmapRect, diffPoints, this._colorImageStride, 0);
-        }
+        //evtl. seperate??
+        //private void CompareZCalc(object sender, RoutedEventArgs e)
+        //{
+        //    var diffPoints = kinectBeamerOperation.CompareZCalcStrategies(new CalculateToRealWorldStrategy());
+        //    this._colorImageBitmap1.WritePixels(this._colorImageBitmapRect, diffPoints, this._colorImageStride, 0);
+        //}
     }
 
 }
