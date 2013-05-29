@@ -64,7 +64,6 @@ namespace KinectAutoCalibration.Beamer
             else
             {
                 throw new Exception("No Beamer found");
-                //screen = Screen.AllScreens[0];
             }
         }
     }
