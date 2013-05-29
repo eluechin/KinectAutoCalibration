@@ -22,12 +22,12 @@
         <TextBlock Text="Nasibisibusi" Grid.Row="2" Grid.Column="1" Height="20" Width="525" TextAlignment="Center"></TextBlock>
         <Image x:Name="DiffImage" Grid.Row="3" Grid.Column="0" Height="480" Width="640" Margin="58,0"/>
         <!--<Image x:Name="ColorImageElement5" Grid.Row="3" Grid.Column="1" Height="35" Width="525"/>-->
-        <StackPanel Height="50" Grid.Row="0" Grid.Column="3" Grid.RowSpan="4" Orientation="Vertical" Margin="0,133,0,132">
+        <StackPanel Grid.Row="1" Grid.Column="2" Grid.RowSpan="4" Orientation="Vertical" Margin="0,0,0,275">
             <Button Content="Start AutoCalibration" Click="AutoCalibration"></Button>
             <Button Content="Draw Obstacle To Beamer" Click="ObstacleToBeamer"></Button>
             <Button Content="Draw Obstacle To Area" Click="ObstacleToArea"></Button>
             <Button Content="Measure Centroid" Click="MeasureCentroid"></Button>
-            <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Vertical" Margin="0,270,0,275">
                 <Button Content="Kinect UP" Click="KinectUp"/>
                 <Button Content="Kinect DOWN" Click="KinectDown"/>
             </StackPanel>

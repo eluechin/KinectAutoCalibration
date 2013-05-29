@@ -90,6 +90,7 @@ namespace KinectAutoCalibration.Calibration
 
         public WriteableBitmap ObstacleToArea()
         {
+            areaSpace = new AreaPoint[areaWidth, areaHeight];
             beamerWindow.DisplayBlank();
             Thread.Sleep(KinectBeamerCalibration.THREAD_SLEEP);
             var obstacleImage = kinect.GetColorImage();
@@ -98,7 +99,6 @@ namespace KinectAutoCalibration.Calibration
 
             var kinectPoints = KinectPointArrayHelper.ExtractBlackPoints(diffImage);
 
-            var realWorldPoints = new List<RealWorldPoint>();
             var realWorldStrategy = new CalculateToRealWorldStrategy();
             var kinToReal = realWorldStrategy.TransformKinectToRealWorld(kinect, kinectPoints.ToList());
 
@@ -107,11 +107,13 @@ namespace KinectAutoCalibration.Calibration
             {
                 var realWorldPoint = kinToRealPair.Value;
                 var areaPoint = ChangeOfBasis.GetVectorInNewBasis(realWorldPoint.ToVector3D()).ToAreaPoint();
+                areaPoints.Add(areaPoint);
             }
 
             foreach (var areaPoint in areaPoints)
             {
-                areaSpace[areaPoint.X, areaPoint.Y] = areaPoint;
+                if(areaPoint.X>0 && areaPoint.Y>0&&areaPoint.X<GetAreaWidth()&&areaPoint.Y<GetAreaHeight())
+                    areaSpace[areaPoint.X, areaPoint.Y] = areaPoint;
             }
 
             return GetAreaSpace();
@@ -217,8 +219,8 @@ namespace KinectAutoCalibration.Calibration
         public WriteableBitmap GetAreaSpace()
         {
             var areaSpaceBmp = new WriteableBitmap(
-                640,
-                480,
+                GetAreaWidth(),
+                GetAreaHeight(),
                 96,
                 96,
                 PixelFormats.Bgr32,
