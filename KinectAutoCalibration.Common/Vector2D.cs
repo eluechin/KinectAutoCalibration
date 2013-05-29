@@ -64,6 +64,11 @@ namespace KinectAutoCalibration.Common
             return new KinectPoint{X=(int) X, Y = (int) Y};
         }
 
+        public AreaPoint ToAreaPoint()
+        {
+            return new AreaPoint {X = (int) X,Y = (int) Y};
+        }
+
         public bool Equals(Vector2D other)
         {
             if (other == null || GetType() != other.GetType())

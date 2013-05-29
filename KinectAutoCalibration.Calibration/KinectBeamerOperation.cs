@@ -24,13 +24,13 @@ namespace KinectAutoCalibration.Calibration
         private KinectPoint[,] kinectPoints;
         private KinectPoint[,] blankImage;
 
-        private AreaPoint[,] area;
+        private AreaPoint[,] areaSpace;
         private AreaPoint areaPointObstCentroid;
 
         public KinectBeamerOperation()
         {
             CalculateAreaDimensions();
-            area = new AreaPoint[areaWidth, areaHeight];
+            areaSpace = new AreaPoint[areaWidth, areaHeight];
 
             try
             {
@@ -51,17 +51,17 @@ namespace KinectAutoCalibration.Calibration
 
         public void ColorizePoint(int x, int y, Color color)
         {
-            area[x, y] = new AreaPoint { Color = color, X = x, Y = y };
+            areaSpace[x, y] = new AreaPoint { Color = color, X = x, Y = y };
         }
 
         public Color GetColorAtPoint(int x, int y)
         {
-            return area[x, y].Color;
+            return areaSpace[x, y].Color;
         }
 
         public void ColorizeObstacle()
         {
-            Thread.Sleep(500);
+            Thread.Sleep(KinectBeamerCalibration.THREAD_SLEEP);
             var obstacleImage = kinect.GetColorImage();
             var diffImage = kinect.GetDifferenceImage(obstacleImage, blankImage,
                                                       KinectBeamerCalibration.THRESHOLD);
@@ -73,7 +73,7 @@ namespace KinectAutoCalibration.Calibration
 
             foreach (var kinectPoint in kinectPoints)
             {
-                var x = 639 - kinectPoint.X;
+                var x = kinectPoint.X;
                 if (Calibration.KinectSpace[x, kinectPoint.Y] != null)
                 {
                     var tbeamerPoints = Calibration.KinectSpace[x, kinectPoint.Y];
@@ -86,6 +86,34 @@ namespace KinectAutoCalibration.Calibration
                 image.ColorizePoint(beamerPoint);
             }
             beamerWindow.DisplayContent(image.BeamerImage);
+        }
+
+        public WriteableBitmap ObstacleToArea()
+        {
+            Thread.Sleep(KinectBeamerCalibration.THREAD_SLEEP);
+            var obstacleImage = kinect.GetColorImage();
+            var diffImage = kinect.GetDifferenceImage(obstacleImage, blankImage,
+                                                      KinectBeamerCalibration.THRESHOLD);
+
+            var kinectPoints = KinectPointArrayHelper.ExtractBlackPoints(diffImage);
+
+            var realWorldPoints = new List<RealWorldPoint>();
+            var realWorldStrategy = new CalculateToRealWorldStrategy();
+            var kinToReal = realWorldStrategy.TransformKinectToRealWorld(kinect, kinectPoints.ToList());
+
+            var areaPoints = new List<AreaPoint>();
+            foreach (var kinToRealPair in kinToReal)
+            {
+                var realWorldPoint = kinToRealPair.Value;
+                var areaPoint = ChangeOfBasis.GetVectorInNewBasis(realWorldPoint.ToVector3D()).ToAreaPoint();
+            }
+
+            foreach (var areaPoint in areaPoints)
+            {
+                areaSpace[areaPoint.X, areaPoint.Y] = areaPoint;
+            }
+
+            return GetAreaSpace();
         }
 
         public void DisplayBlank()
@@ -158,9 +186,9 @@ namespace KinectAutoCalibration.Calibration
                 PixelFormats.Bgr32,
                 null);
 
-            for (var i = 0; i < 639; i++)
+            for (var i = 0; i < kinectSpace.Width; i++)
             {
-                for (var j = 0; j < 479; j++)
+                for (var j = 0; j < kinectSpace.Height; j++)
                 {
                     byte[] ColorData;
                     if (Calibration.KinectSpace[i, j] == null)
@@ -171,8 +199,6 @@ namespace KinectAutoCalibration.Calibration
                     {
                         ColorData = new byte[] { 255, 0, 0, 0 }; // B G R
                     }
-
-                    //ColorData = new byte[] { 255, 0, 0, 0 }; // B G R
 
                     Int32Rect rect = new Int32Rect(
                             i,
@@ -185,6 +211,43 @@ namespace KinectAutoCalibration.Calibration
             }
 
             return kinectSpace;
+        }
+
+        public WriteableBitmap GetAreaSpace()
+        {
+            var areaSpaceBmp = new WriteableBitmap(
+                640,
+                480,
+                96,
+                96,
+                PixelFormats.Bgr32,
+                null);
+
+            for (var i = 0; i < GetAreaWidth(); i++)
+            {
+                for (var j = 0; j < GetAreaHeight(); j++)
+                {
+                    byte[] ColorData;
+                    if (areaSpace[i, j] == null)
+                    {
+                        ColorData = new byte[] { 255, 255, 255, 0 }; // B G R
+                    }
+                    else
+                    {
+                        ColorData = new byte[] { 0, 255, 0, 0 }; // B G R
+                    }
+
+                    Int32Rect rect = new Int32Rect(
+                            i,
+                            j,
+                            1,
+                            1);
+
+                    areaSpaceBmp.WritePixels(rect, ColorData, 4, 0);
+                }
+            }
+
+            return areaSpaceBmp;
         }
 
         private void CalculateAreaDimensions()
@@ -230,7 +293,7 @@ namespace KinectAutoCalibration.Calibration
             {
                 int diff = p.Key.Z - p.Value.Z;
                 //diff positiv --> gegen weiss, diff negativ --> gegen schwarz
-   
+
                 if (diff == 0)
                 {
                     r = 0x00;

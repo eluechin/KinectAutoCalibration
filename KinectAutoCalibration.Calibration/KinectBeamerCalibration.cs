@@ -12,6 +12,8 @@ namespace KinectAutoCalibration.Calibration
         public const int THREAD_SLEEP = 1000;
         public const int THRESHOLD = 80;
 
+
+
         public void CalibrateBeamerToKinect(IBeamerToKinectStrategy beamerToKinectStrategy)
         {
             var newPoints = beamerToKinectStrategy.CalibrateBeamerToKinect(beamerWindow, kinect);

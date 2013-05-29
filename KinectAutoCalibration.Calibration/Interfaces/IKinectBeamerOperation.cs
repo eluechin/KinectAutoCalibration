@@ -18,6 +18,7 @@ namespace KinectAutoCalibration.Calibration
         void ColorizeObstacle();
 
         WriteableBitmap GetKinectSpace();
+        WriteableBitmap ObstacleToArea();
         void DisplayBlank();
         //byte[] GetObstacleDiffImage();
     }

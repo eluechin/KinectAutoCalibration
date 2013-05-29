@@ -41,8 +41,6 @@ namespace WpfApplication1
             InitializeComponent();
             try
             {
-                
-
                 CompositionTarget.Rendering += CompositionTarget_Rendering;
 
                 //_kC.InitialCalibration();
@@ -60,10 +58,6 @@ namespace WpfApplication1
                 this.ColorImageElement3.Source = this._colorImageBitmap3;
                 this.ColorImageElement4.Source = this._colorImageBitmap4;
                 this.ColorImageElement5.Source = this._colorImageBitmap5;
-
-                
-
-
                 //this.ColorImageElement1.Source = kC.GetDifferenceBitmap();
                 
                 //this.ColorImageElement3.Source = kC.GetPic2Bitmap();
@@ -127,24 +121,6 @@ namespace WpfApplication1
             var y = "Obstacle y: ";
             ObstacleX.Text = x + kinectBeamerOperation.GetObstacleCentroidX();
             ObstacleY.Text = y + kinectBeamerOperation.GetObstacleCentroidY();
-            
-
-            //old:
-            //_kC.GetObstacles();
-
-            //var pixelsObst = _kC.GetDifferenceImageObst();
-            //this._colorImageBitmap2.WritePixels(this._colorImageBitmapRect, pixelsObst, this._colorImageStride, 0);
-
-            //var pixelsArea = _kC.GetAreaArray();
-            //this._colorImageBitmap5.WritePixels(this._colorImageBitmapRect, pixelsArea, this._colorImageStride, 0);
-
-            //var x = "Obstacle x: ";
-            //var y = "Obstacle y: ";
-            //ObstacleX.Text = x+_kC.GetObstacleCentroidX().ToString();
-            //ObstacleY.Text = y+_kC.GetObstacleCentroidY().ToString();
-
-            //this.WindowState = WindowState.Minimized;
-            //this.WindowState = WindowState.Maximized;
         }
 
         private void dsplArea(object sender, RoutedEventArgs e)
@@ -159,10 +135,7 @@ namespace WpfApplication1
 
         private void CalibBeamer(object sender, RoutedEventArgs e)
         {
-            //_kC.CalibrateBeamer();
-            //this.ColorImageElement3.Source = _kC.GetDifferenceBitmap();
-            //this.WindowState = WindowState.Minimized;
-            //this.WindowState = WindowState.Maximized;
+            ColorImageElement1.Source = kinectBeamerOperation.ObstacleToArea();
         }
 
         private void KinectUp(object sender, RoutedEventArgs e)
