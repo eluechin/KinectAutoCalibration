@@ -8,48 +8,36 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="525" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-        <TextBlock Text="1" Grid.Row="0" Grid.Column="0" Height="20" Width="525" TextAlignment="Center" Margin="58,0"></TextBlock>
-        <TextBlock Text="Differenz-Bild [Gegenstand]" Grid.Row="0" Grid.Column="1" Height="20" Width="525" TextAlignment="Center"></TextBlock>
-        <TextBlock Text="Differenz-Bild [Feld]" Grid.Row="0" Grid.Column="2" Height="20" Width="525" TextAlignment="Center"/>
-        <Image x:Name="ColorImageElement1" Grid.Row="1" Grid.Column="0" Height="480" Width="640" Margin="0,0,1,0"/>
-        <Image x:Name="ColorImageElement2" Grid.Row="1" Grid.Column="1" Height="350" Width="525" Margin="0,65"/>
-        <Image x:Name="ColorImageElement3" Grid.Row="1" Grid.Column="2" Height="350" Width="525" Margin="0,65"/>
-        <TextBlock Text="4" Grid.Row="2" Grid.Column="0" Height="20" Width="525" TextAlignment="Center" Margin="58,0"></TextBlock>
-        <TextBlock Text="'interne' Area" Grid.Row="2" Grid.Column="1" Height="20" Width="525" TextAlignment="Center"></TextBlock>
-        <TextBlock Text="Live Bild" Grid.Row="2" Grid.Column="2" Height="20" Width="525" TextAlignment="Center"/>
-        <Image x:Name="ColorImageElement4" Grid.Row="3" Grid.Column="0" Height="35" Width="525" Margin="58,0"/>
-        <Image x:Name="ColorImageElement5" Grid.Row="3" Grid.Column="1" Height="35" Width="525"/>
-        <Image x:Name="ColorImageElement6" Grid.Row="3" Grid.Column="2" Height="35" Width="525"/>
-        <StackPanel Height="50" Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="0,133,0,132">
-            <Button Content="Start Calibration" Click="InitialCalibration"></Button>
-            <!--<Button Content="Obstacle Middle" Click="ObstMid"></Button>-->
-            <!--<Button Content="Obstacle TopLeft" Click="ObstTopLeft"></Button>
-            <Button Content="Obstacle TopRight" Click="ObstTopRight"></Button>
-            <Button Content="Obstacle BottomLeft" Click="ObstBtmLeft"></Button>
-            <Button Content="Obstacle BottomRight" Click="ObstBtmRight"></Button>-->
-            <Button Content="Obstacle" Click="Obst"></Button>
-            <Button Content="Display Area" Click="dsplArea"></Button>
-            <Button Content="Display Blank" Click="dsplBlank"></Button>
-            <Button Content="Calib Beamer" Click="CalibBeamer"></Button>
-            <Button Content="Compare Z Calc" Click="CompareZCalc"></Button>
+        <TextBlock Text="Live Image" Grid.Row="0" Grid.Column="0" Height="20" Width="525" TextAlignment="Center" Margin="58,0"></TextBlock>
+        <TextBlock Text="Area Image" Grid.Row="0" Grid.Column="1" Height="20" Width="525" TextAlignment="Center"></TextBlock>
+        <Image x:Name="LiveImage" Grid.Row="1" Grid.Column="0" Height="480" Width="640" Margin="0,0,1,0"/>
+        <Image x:Name="AreaImage" Grid.Row="1" Grid.Column="1" Height="480" Width="640" Margin="0,65"/>
+        <TextBlock Text="Difference Image" Grid.Row="2" Grid.Column="0" Height="20" Width="525" TextAlignment="Center" Margin="58,0"></TextBlock>
+        <TextBlock Text="Nasibisibusi" Grid.Row="2" Grid.Column="1" Height="20" Width="525" TextAlignment="Center"></TextBlock>
+        <Image x:Name="DiffImage" Grid.Row="3" Grid.Column="0" Height="480" Width="640" Margin="58,0"/>
+        <!--<Image x:Name="ColorImageElement5" Grid.Row="3" Grid.Column="1" Height="35" Width="525"/>-->
+        <StackPanel Height="50" Grid.Row="0" Grid.Column="3" Grid.RowSpan="4" Orientation="Vertical" Margin="0,133,0,132">
+            <Button Content="Start AutoCalibration" Click="AutoCalibration"></Button>
+            <Button Content="Draw Obstacle To Beamer" Click="ObstacleToBeamer"></Button>
+            <Button Content="Draw Obstacle To Area" Click="ObstacleToArea"></Button>
+            <Button Content="Measure Centroid" Click="MeasureCentroid"></Button>
             <StackPanel Orientation="Vertical">
                 <Button Content="Kinect UP" Click="KinectUp"/>
                 <Button Content="Kinect DOWN" Click="KinectDown"/>
             </StackPanel>
         </StackPanel>
 
-        <StackPanel Height="100" Grid.Row="4" Grid.Column="2" Orientation="Vertical" Margin="0,107,0,108">
+        <!--<StackPanel Height="100" Grid.Row="4" Grid.Column="2" Orientation="Vertical" Margin="0,107,0,108">
             <TextBlock Name="AreaWidth" Text="Area Width: " Height="20" Width="Auto" TextAlignment="Center" />
             <TextBlock Name="AreaHeight" Text="Area Height: " Height="20" Width="Auto" TextAlignment="Center" />
-            <TextBlock Name="ObstacleX" Text="Obstacle X: " Height="20" Width="Auto" TextAlignment="Center" />
-            <TextBlock Name="ObstacleY" Text="Obstacle Y: " Height="20" Width="Auto" TextAlignment="Center" />
-        </StackPanel>
+            <TextBlock Name="ObstacleX" Text="ObstacleToBeameracle X: " Height="20" Width="Auto" TextAlignment="Center" />
+            <TextBlock Name="ObstacleY" Text="ObstacleToBeameracle Y: " Height="20" Width="Auto" TextAlignment="Center" />
+        </StackPanel>-->
     </Grid>
 </Window>

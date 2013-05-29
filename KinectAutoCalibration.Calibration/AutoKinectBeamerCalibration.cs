@@ -23,9 +23,12 @@ namespace KinectAutoCalibration.Calibration
             kinectBeamerCalibration = new KinectBeamerCalibration();
         }
 
-        public void StartAutoCalibration()
+        public IKinectBeamerOperation StartAutoCalibration()
         {
-            throw new NotImplementedException();
+            kinectBeamerCalibration.CalibrateBeamerToKinect(new CalibrateEdgePoints());
+            kinectBeamerCalibration.ConvertKinectToRealWorld(new ConvertToRealWorldStrategy());
+            kinectBeamerCalibration.RealWorldToAreaEdge();
+            return kinectBeamerCalibration.CreateKinectBeamerOperation();
         }
     }
 }

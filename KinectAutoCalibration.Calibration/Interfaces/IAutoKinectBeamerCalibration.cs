@@ -2,6 +2,6 @@
 {
     public interface IAutoKinectBeamerCalibration : ICalibration
     {
-        void StartAutoCalibration();
+        IKinectBeamerOperation StartAutoCalibration();
     }
 }
